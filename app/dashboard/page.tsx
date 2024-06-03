@@ -16,6 +16,8 @@ export default function Dashboard() {
     setUserData(user);
     console.log("userSession", userData);
   }
+	// TODO : Mover la asociacion
+
   return (
     <pre className="flex min-h-screen flex-col items-center justify-between p-24">
       {JSON.stringify(userSession, null, 2)}

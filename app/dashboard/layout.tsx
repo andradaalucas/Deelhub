@@ -15,6 +15,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   const queryClient = new QueryClient();
+	// TODO : Eliminar el useEffect con la obtencion de la session del usuario
 
   useEffect(() => {
     return () => {

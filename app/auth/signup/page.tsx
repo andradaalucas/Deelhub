@@ -8,7 +8,7 @@ import { redirect } from 'next/navigation'
 
 export default async function LoginPage() {
 	const supabase = createClient()
-
+	// TODO : Cargar la session del usuario en un estado global unicamente desde aca 
 	const {
 		data: { user },
 	} = await supabase.auth.getUser()
