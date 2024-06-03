@@ -1,31 +1,42 @@
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-// import { , Package2Icon, PackageIcon, SearchIcon, TransactionsIcon, UsersIcon } from '@/public/assets/icons'
+import {
+	ArrowLeftRightIcon,
+	HomeIcon,
+	LandmarkIcon,
+	Package2Icon,
+	SearchIcon,
+	SettingsIcon,
+	UsersIcon,
+} from 'lucide-react'
 import Link from 'next/link'
-import { ArrowLeftRightIcon, LandmarkIcon, HomeIcon, UsersIcon, Package2Icon, SearchIcon } from 'lucide-react'
 
 export function SearchBar() {
 	const links = [
 		{
-			href: '/',
+			href: '/dashboard',
 			icon: HomeIcon,
 			label: 'Home',
 		},
 		{
-			href: '/transactions',
+			href: '/dashboard/transactions',
 			icon: ArrowLeftRightIcon,
 			label: 'Transactions',
 		},
 		{
-			href: '/banks_accounts',
+			href: '/dashboard/banks_accounts',
 			icon: LandmarkIcon,
 			label: 'Bank',
 		},
 		{
-			href: '/customers',
+			href: '/dashboard/customers',
 			icon: UsersIcon,
 			label: 'Customers',
+		},
+		{
+			href: '/dashboard/settings',
+			icon: SettingsIcon,
+			label: 'Settings',
 		},
 	]
 

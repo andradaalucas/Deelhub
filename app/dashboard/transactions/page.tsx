@@ -1,9 +1,11 @@
-import { FormTransactions } from '@/components/transactions/create-transactions'
+import { DataTable } from "@/components/transactions-table";
+import { Toaster } from "@/components/ui/toaster";
 
 export default async function Transaction() {
-	return (
-		<>
-			<FormTransactions />
-		</>
-	)
+  return (
+    <>
+      <DataTable />
+      <Toaster />
+    </>
+  );
 }

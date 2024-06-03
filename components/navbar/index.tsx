@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { ArrowLeftRightIcon, HomeIcon, LandmarkIcon, Package2Icon, UsersIcon, BellIcon } from 'lucide-react'
+import { ArrowLeftRightIcon, HomeIcon, LandmarkIcon, Package2Icon, UsersIcon, BellIcon, SettingsIcon } from 'lucide-react'
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -52,6 +52,11 @@ export function NavBar() {
 			href: '/dashboard/customers',
 			icon: UsersIcon,
 			label: 'Customers',
+		},
+		{
+			href: '/dashboard/settings',
+			icon: SettingsIcon,
+			label: 'Settings',
 		},
 	]
 	const [notificationsList, setNotificationsList] = useState(notifications)
