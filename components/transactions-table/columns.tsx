@@ -64,12 +64,12 @@ export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => {
-      return <div className="text-center">ID</div>;
+      return <div className="text-center">Transaction ID </div>;
     },
     cell: ({ row }) => (
       <>
         <div className="max-w-[100px] overflow-hidden whitespace-nowrap text-center">
-          <div className="truncate">{row.getValue("id")}</div>
+          <div className="truncate">#{row.getValue("id")}</div>
         </div>
       </>
     ),
@@ -140,7 +140,7 @@ export const columns: ColumnDef<Payment>[] = [
     cell: ({ row }) => (
       <div className="text-center">
         <p
-          className={`mx-auto inline-block rounded-lg border-opacity-10 px-2 text-center font-semibold capitalize ${getStatusStyles(
+          className={`mx-auto inline-block rounded-md border-1 border-opacity-10 px-2 text-center font-semibold capitalize ${getStatusStyles(
             row.getValue("status"),
           )}`}
         >
@@ -166,7 +166,7 @@ export const columns: ColumnDef<Payment>[] = [
     cell: ({ row }) => (
       <div className="text-center">
         <p
-          className={`mx-auto inline-block rounded-lg border-opacity-10 px-2 text-center font-semibold capitalize ${getTypeStyles(
+          className={`mx-auto inline-block rounded-md border-1 border-opacity-10 px-2 text-center font-semibold capitalize ${getTypeStyles(
             row.getValue("type"),
           )}`}
         >

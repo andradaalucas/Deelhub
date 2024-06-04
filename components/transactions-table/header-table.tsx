@@ -94,7 +94,7 @@ export function HeaderTable() {
         title: "Successfully created",
         description: dateNow.toString(),
       });
-      queryClient.invalidateQueries("transactions");
+      queryClient.invalidateQueries(["transactions"]);
     },
     onError(error) {
       toast({
@@ -136,17 +136,17 @@ export function HeaderTable() {
         onChange={(event) =>
           table.getColumn("description")?.setFilterValue(event.target.value)
         }
-        className="max-w-sm"
+        className="peer/input focus-visible:border-foreground-muted focus-visible:ring-background-control placeholder-foreground-muted border-control group box-border block w-full max-w-sm rounded-md border bg-foreground/[.026] px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]"
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="ml-auto rounded-xl">
+          <Button variant="outline" className="ml-auto rounded-md">
             Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <Dialog open={openDialog}>
+        <Dialog>
           <DialogTrigger asChild>
-            <Button className="ml-4 h-9 rounded-xl" onClick={handleOpenDialog}>
+            <Button className="ml-4 h-9 rounded-md" onClick={handleOpenDialog}>
               Create transaction
             </Button>
           </DialogTrigger>
@@ -171,6 +171,7 @@ export function HeaderTable() {
                             <Input
                               placeholder="Enter a amount"
                               type="number"
+                              className="peer/input focus-visible:border-foreground-muted focus-visible:ring-background-control placeholder-foreground-muted border-control group box-border block w-full rounded-md border bg-foreground/[.026] px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]"
                               {...field}
                             />
                           </FormControl>
@@ -190,7 +191,7 @@ export function HeaderTable() {
                                 <Button
                                   variant={"outline"}
                                   className={cn(
-                                    "w-full pl-3 text-left font-normal",
+                                    "peer/input focus-visible:border-foreground-muted focus-visible:ring-background-control placeholder-foreground-muted border-control group box-border w-full rounded-md border bg-foreground/[.026] px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]",
                                     !field.value && "text-muted-foreground",
                                   )}
                                 >
@@ -230,6 +231,7 @@ export function HeaderTable() {
                           <FormControl>
                             <Textarea
                               placeholder="Enter a description"
+                              className="peer/input focus-visible:border-foreground-muted focus-visible:ring-background-control placeholder-foreground-muted border-control group box-border block w-full rounded-md border bg-foreground/[.026] px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]"
                               {...field}
                             />
                           </FormControl>
@@ -250,7 +252,7 @@ export function HeaderTable() {
                             defaultValue={field.value}
                           >
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger className="peer/input focus-visible:border-foreground-muted focus-visible:ring-background-control placeholder-foreground-muted border-control group box-border w-full rounded-md border bg-foreground/[.026] px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]">
                                 <SelectValue placeholder="Select type" />
                               </SelectTrigger>
                             </FormControl>
@@ -274,7 +276,7 @@ export function HeaderTable() {
                             defaultValue={field.value}
                           >
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger className="peer/input focus-visible:border-foreground-muted focus-visible:ring-background-control placeholder-foreground-muted border-control group box-border w-full rounded-md border bg-foreground/[.026] px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]">
                                 <SelectValue placeholder="Select status" />
                               </SelectTrigger>
                             </FormControl>
@@ -306,7 +308,7 @@ export function HeaderTable() {
                             defaultValue={field.value}
                           >
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger className="peer/input focus-visible:border-foreground-muted focus-visible:ring-background-control placeholder-foreground-muted border-control group box-border w-full rounded-md border bg-foreground/[.026] px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]">
                                 <SelectValue placeholder="Choose a currency" />
                               </SelectTrigger>
                             </FormControl>
@@ -344,14 +346,7 @@ export function HeaderTable() {
                     />
                   </div>
                 </CardContent>
-                <CardFooter className="flex justify-end gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleOpenDialog}
-                  >
-                    Close
-                  </Button>
+                <CardFooter className="flex justify-end gap-2 rounded-lg pt-6">
                   <Button type="submit">Submit</Button>
                 </CardFooter>
               </form>

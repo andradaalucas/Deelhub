@@ -1,33 +1,28 @@
+"use client";
 import { cn } from "@/lib/utils";
-import { createClient } from "@/utils/supabase/server";
-import { Inter as FontSans } from "next/font/google";
+import { NextUIProvider } from "@nextui-org/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
 import "./globals.css";
-import { redirect } from "next/navigation";
 
-const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
-
-export default async function HomeLayout({
+export default function HomeLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createClient()
-	const {
-		data: { user },
-	} = await supabase.auth.getUser()
-	!user && redirect('/auth/login')
+  const queryClient = new QueryClient();
+
   return (
     <html lang="en">
       <body
-        className={cn(
+        className={`${cn(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
-        )}
+        )} ${GeistSans.variable} ${GeistMono.variable}`}
       >
-        {children}
+        <QueryClientProvider client={queryClient}>
+          <NextUIProvider>{children}</NextUIProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );
