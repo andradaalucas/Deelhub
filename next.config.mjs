@@ -1,15 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    experimental: {
-        turbo: {
-            rules: {
-                '*.svg': {
-                    loaders: ['@svgr/webpack'],
-                    as: '*.js',
-                },
-            },
-        },
-    },
+    redirects(){
+        return [
+            {
+                source: '/',
+                destination: '/in/dashboard',
+                permanent: false
+            }
+        ]
+    }
 }
 
 export default nextConfig

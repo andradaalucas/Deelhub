@@ -1,22 +1,33 @@
-import './globals.css'
-import { Inter as FontSans } from 'next/font/google'
-import { cn } from '@/lib/utils'
-
-const fontSans = FontSans({
-	subsets: ['latin'],
-	variable: '--font-sans',
-})
-
-
+"use client";
+import { cn } from "@/lib/utils";
+import { NextUIProvider } from "@nextui-org/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
+import Head from "next/head";
+import "./globals.css";
 
 export default function HomeLayout({
-	children, // will be a page or nested layout
+  children,
 }: {
-	children: React.ReactNode
+  children: React.ReactNode;
 }) {
-	return (
-		<html lang='en'>
-			<body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>{children}</body>
-		</html>
-	)
+  const queryClient = new QueryClient();
+
+  return (
+    <html lang="en">
+      <body
+        className={`${cn(
+          "min-h-screen bg-background font-sans antialiased",
+        )} ${GeistSans.variable} ${GeistMono.variable}`}
+      >
+        <Head>
+          <title>Deelfy Inc</title>
+        </Head>
+        <QueryClientProvider client={queryClient}>
+          <NextUIProvider>{children}</NextUIProvider>
+        </QueryClientProvider>
+      </body>
+    </html>
+  );
 }
