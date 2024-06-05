@@ -60,12 +60,12 @@ export function SearchBar() {
         </SheetContent>
       </Sheet>
 
-      <div className="w-auto flex-1 lg:w-auto">
+      <div className="lg:w-auto">
         <form>
           <div className="relative">
             <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
             <Input
-              className="w-full max-w-sm appearance-none bg-white pl-8 shadow-none lg:w-1/3"
+              className="w-full max-w-full appearance-none bg-white pl-12 shadow-none lg:w-[60%]"
               placeholder="Smart search"
               type="search"
             />
