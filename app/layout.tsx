@@ -6,6 +6,7 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import Head from "next/head";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function HomeLayout({
   children,
@@ -25,7 +26,9 @@ export default function HomeLayout({
           <title>Deelfy Inc</title>
         </Head>
         <QueryClientProvider client={queryClient}>
-          <NextUIProvider>{children}</NextUIProvider>
+          <NextUIProvider>{children}
+          <Toaster />
+          </NextUIProvider>
         </QueryClientProvider>
       </body>
     </html>

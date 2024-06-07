@@ -28,9 +28,9 @@ const getStatusStyles = (status: any) => {
 const getTypeStyles = (type: any) => {
   switch (type.toLowerCase()) {
     case "income":
-      return "bg-[#e6eddd] text-[#56663e]";
+      return "bg-[#ebebeb] text-[#1a1a1a]";
     case "expense":
-      return "bg-[#f2d5cd] text-[#6f260e]";
+      return "bg-[#ebebeb] text-[#1a1a1a]";
     default:
       return "bg-[#ebebeb] text-[#1a1a1a]";
   }
@@ -166,7 +166,7 @@ export const columns: ColumnDef<Payment>[] = [
     cell: ({ row }) => (
       <div className="text-center">
         <p
-          className={`mx-auto inline-block rounded-md border-1 border-opacity-10 px-2 text-center font-semibold capitalize ${getTypeStyles(
+          className={`mx-auto inline-block rounded-md border-1 border-black px-2 text-center font-semibold capitalize ${getTypeStyles(
             row.getValue("type"),
           )}`}
         >
