@@ -65,7 +65,7 @@ export function SearchBar() {
           <div className="relative">
             <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
             <Input
-              className="w-full max-w-full appearance-none bg-white pl-12 shadow-none lg:w-[60%]"
+              className="w-full max-w-full appearance-none bg-white pl-12 shadow-none"
               placeholder="Smart search"
               type="search"
             />

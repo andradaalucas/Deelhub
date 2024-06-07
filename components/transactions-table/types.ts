@@ -1,8 +1,16 @@
 import { z } from "zod";
 
-export interface InputFormProps {
-  handleOpenDialog: () => void;
-}
+
+export type Payment = {
+  id: string;
+  amount: number;
+  description: string;
+  status: "confirmed" | "pending" | "canceled" | "rejected";
+  date: string;
+  category: string;
+  type: "income" | "expense";
+};
+
 export const FormSchema = z.object({
   amount: z.preprocess((val) => {
     if (typeof val === "string") {
@@ -19,15 +27,4 @@ export const FormSchema = z.object({
   type: z.string(),
   status: z.string(),
   currency: z.string(),
-  user_id: z.string(),
 });
-
-export type Payment = {
-  id: string;
-  amount: number;
-  description: string;
-  status: "confirmed" | "pending" | "canceled" | "rejected";
-  date: string;
-  category: string;
-  type: "income" | "expense";
-};

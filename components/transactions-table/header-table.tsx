@@ -1,4 +1,3 @@
-import { FormSchema } from "@/components/transactions-table/types";
 import {
   CardContent,
   CardDescription,
@@ -30,6 +29,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { createTransaction, getAllTransactions } from "@/services/transactions";
+import { createClient } from "@/utils/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -43,7 +43,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { CalendarIcon, ChevronDownIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -51,16 +51,13 @@ import { z } from "zod";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { useToast } from "../ui/use-toast";
 import { columns } from "./columns";
+import { FormSchema } from "./types";
+
+
 
 export function HeaderTable() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -69,7 +66,7 @@ export function HeaderTable() {
   const [rowSelection, setRowSelection] = useState({});
   const [openDialog, setOpenDialog] = useState(false);
   const [dateNow, setDateNow] = useState<Date>(new Date());
-
+  const supabase = createClient();
   const handleOpenDialog = () => {
     openDialog ? setOpenDialog(false) : setOpenDialog(true);
   };
@@ -103,9 +100,18 @@ export function HeaderTable() {
       });
     },
   });
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    addTransaction.mutate(data);
-    handleOpenDialog();
+  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user !== null) {
+      const enrichedData = {
+        ...values,
+        user_id: user.id,
+      };
+      addTransaction.mutate(enrichedData);
+      handleOpenDialog();
+    }
   };
 
   const table = useReactTable({
@@ -127,7 +133,7 @@ export function HeaderTable() {
     },
   });
   return (
-    <div className="flex items-center py-4 justify-between">
+    <div className="flex items-center justify-between py-4">
       <Input
         placeholder="Filter by description..."
         value={
@@ -138,7 +144,7 @@ export function HeaderTable() {
         }
         className="peer/input focus-visible:border-foreground-muted focus-visible:ring-background-control placeholder-foreground-muted border-control group box-border block w-full max-w-sm rounded-md border bg-foreground/[.026] px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]"
       />
-      <Dialog>
+      <Dialog open={openDialog} onOpenChange={handleOpenDialog}>
         <DialogTrigger asChild>
           <Button className="ml-4 h-9 rounded-md" onClick={handleOpenDialog}>
             Create transaction

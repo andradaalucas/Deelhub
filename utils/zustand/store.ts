@@ -1,16 +1,11 @@
 import create from 'zustand';
 
-interface UserStore {
-  userData: any;
-  setUserData: (newUserData: any) => void;
+interface StoreState {
+  data: any;
+  setData: (newData: any) => void;
 }
 
-export const useUserStore = create<UserStore>((set) => ({
-  userData: {},
-  setUserData: (newUserData) => set((state) => {
-    if (newUserData !== state.userData) {
-      return { userData: newUserData };
-    }
-    return state;
-  }),
+export const useStore = create<StoreState>((set) => ({
+  data: null, // Inicialmente no hay datos
+  setData: (newData: any) => set({ data: newData }),
 }));

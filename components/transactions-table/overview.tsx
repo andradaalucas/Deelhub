@@ -6,6 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   ArrowUpRightIcon,
   FlipVerticalIcon,
@@ -19,11 +20,11 @@ export function OverviewTransactions() {
   const [overviewOptions, setOverviewOptions] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const queryClient = useQueryClient();
   const handleRefreshTable = () => {
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+    queryClient.invalidateQueries(["transactions"]);
+    setIsLoading(false);
   };
   return (
     <div className="mx-auto grid w-full max-w-5xl gap-6 p-2 md:grid-cols-2">
