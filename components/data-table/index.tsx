@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ColumnDef,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
@@ -12,7 +13,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -21,30 +21,27 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getAllTransactions } from "@/services/transactions";
-import { useQuery } from "@tanstack/react-query";
-import { InfoIcon } from "lucide-react";
-import { useMemo, useState } from "react";
-import { columns } from "./columns";
-import { HeaderTable } from "./header-table";
+import { useState } from "react";
+import { HeaderTable } from "./data-table-header";
 import { DataTablePagination } from "./data-table-pagination";
 
-export function DataTable() {
+interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  Component?: React.ReactNode;
+  Filters?: React.ReactNode;
+}
+
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+  Component,
+  Filters,
+}: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
-
-  const {
-    isLoading,
-    data: transactions,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["transactions"],
-    queryFn: getAllTransactions,
-  });
-  const data = useMemo(() => transactions ?? [], [transactions]);
 
   const table = useReactTable({
     data,
@@ -69,7 +66,10 @@ export function DataTable() {
     <>
       <div className="mx-auto grid w-full max-w-5xl grid-cols-2 gap-6 p-2">
         <div className="col-span-2">
-          <HeaderTable />
+          <HeaderTable
+            Component={Component}
+            Filters={Filters}
+          />
           <div className="rounded-md border shadow-lg">
             <Table>
               <TableHeader>
@@ -120,30 +120,6 @@ export function DataTable() {
               </TableBody>
             </Table>
           </div>
-          {/* <div className="flex items-center justify-end space-x-2 py-4">
-          <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div>
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next
-            </Button>
-          </div>
-        </div> */}
         </div>
       </div>
       <DataTablePagination table={table} />

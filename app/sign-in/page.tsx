@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { login } from "./actions";
 import Link from "next/link";
-import DotPattern from "@/components/magicui/dot-pattern";
 
 export default async function LoginPage() {
   return (
@@ -41,7 +40,6 @@ export default async function LoginPage() {
           </span>
         </form>
       </div>
-      <DotPattern />
     </>
   );
 }

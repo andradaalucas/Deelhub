@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 import { NextUIProvider } from "@nextui-org/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import Head from "next/head";
@@ -26,8 +27,10 @@ export default function HomeLayout({
           <title>Deelfy Inc</title>
         </Head>
         <QueryClientProvider client={queryClient}>
-          <NextUIProvider>{children}
-          <Toaster />
+          <NextUIProvider>
+            {children}
+            <Toaster />
+            <ReactQueryDevtools />
           </NextUIProvider>
         </QueryClientProvider>
       </body>

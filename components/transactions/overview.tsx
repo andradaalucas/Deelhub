@@ -6,7 +6,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useQueryClient } from "@tanstack/react-query";
+import { getAllTransactions } from "@/services/transactions";
+import { calculateBalance } from "@/utils/operationals/overview";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowUpRightIcon,
   FlipVerticalIcon,
@@ -14,25 +16,47 @@ import {
   RefreshCwIcon,
   Share2,
 } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 export function OverviewTransactions() {
   const [overviewOptions, setOverviewOptions] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [dateNow, setDateNow] = useState<Date>(new Date());
+  const [totalAmount, setTotalAmount] = useState<number>(0);
   const queryClient = useQueryClient();
   const handleRefreshTable = () => {
     setIsLoading(true);
     queryClient.invalidateQueries(["transactions"]);
     setIsLoading(false);
   };
+
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      throw new Error("Fecha inválida");
+    }
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    const formattedDate = date.toLocaleDateString("en-US", options);
+    return formattedDate;
+  };
+
+  const { data: transactions } = useQuery({
+    queryKey: ["transactions"],
+    queryFn: getAllTransactions,
+  });
+  const data = useMemo(() => transactions ?? [], [transactions]);
+  const response = calculateBalance(data);
   return (
     <div className="mx-auto grid w-full max-w-5xl gap-6 p-2 md:grid-cols-2">
       <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-950">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold">Transaction Details</h2>
           <div className="border-foreground-muted rounded-md border border-[#a9a9a9] bg-[#f8f8f8] p-4 px-2 py-1 text-sm text-gray-500 dark:bg-gray-800 dark:text-gray-400">
-            June 23, 2022
+            {formatDate(dateNow.toDateString())}
           </div>
         </div>
         <div className="grid gap-4">
@@ -45,9 +69,7 @@ export function OverviewTransactions() {
             </div>
             <div className="text-right">
               <h3 className="text-sm font-medium">Total Amount</h3>
-              <p className="text-gray-500 dark:text-gray-400">
-                $423,423,423.00
-              </p>
+              <p className="text-gray-500 dark:text-gray-400">{totalAmount}</p>
             </div>
           </div>
           <div className="flex items-center justify-between">

@@ -18,6 +18,7 @@ import {
   BellIcon,
   SettingsIcon,
 } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -62,6 +63,9 @@ export function NavBar() {
       label: "Settings",
     },
   ];
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [notificationsList, setNotificationsList] = useState(notifications);
 
   const confirmNotification = (notificationId: any) => {
@@ -69,12 +73,15 @@ export function NavBar() {
       if (notification.id === notificationId) {
         return { ...notification, active: notification.active ? false : true };
       }
+
       return notification;
     });
     setNotificationsList(updatedNotifications);
   };
 
-  useEffect(() => {}, [notificationsList]);
+  useEffect(() => {
+    console.log("ROUTER", pathname);
+  }, []);
   return (
     <div className="hidden border-r bg-gray-100/40 lg:block">
       <div className="flex h-full max-h-screen flex-col gap-2">
@@ -120,7 +127,7 @@ export function NavBar() {
           <nav className="grid items-start px-4 text-sm font-medium">
             {links.map((link, index) => (
               <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-3 text-gray-500 transition-all hover:bg-[#f2f2f2] hover:text-gray-900"
+                className={`${pathname == link.href && "bg-[#f2f2f2] text-gray-900"} flex hover:text-gray-900 items-center gap-3 rounded-lg px-3 py-3 text-gray-500 transition-all hover:bg-[#f2f2f2]`}
                 href={link.href}
                 key={index}
               >
@@ -134,3 +141,5 @@ export function NavBar() {
     </div>
   );
 }
+
+// ${pathname == "/in/dashboard" && "bg-gray-100/40"}
