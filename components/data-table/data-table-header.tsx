@@ -1,13 +1,15 @@
+"use client";
+import { CreateForm } from "../transactions/create-form";
+
 interface HeaderTableProps {
-  Component?: React.ReactNode;
   Filters?: React.ReactNode;
 }
 
-export function HeaderTable({ Component, Filters }: HeaderTableProps) {
+export function HeaderTable({ Filters }: HeaderTableProps) {
   return (
     <div className="flex items-center justify-between py-4">
       {Filters}
-      {Component}
+      <CreateForm />
     </div>
   );
 }

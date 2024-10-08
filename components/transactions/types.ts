@@ -5,10 +5,10 @@ export type Payment = {
   id: string;
   amount: number;
   description: string;
-  status: "confirmed" | "pending" | "canceled" | "rejected";
+  // status: "confirmed" | "pending" | "canceled" | "rejected";
   date: string;
-  category: string;
-  type: "income" | "expense";
+  // category: string;
+  // type: "income" | "expense";
 };
 
 export const FormSchema = z.object({

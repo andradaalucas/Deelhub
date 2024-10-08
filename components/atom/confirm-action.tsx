@@ -16,19 +16,18 @@ export function ConfirmAction({
   setIsOpen,
   actionToExcecuteFunction,
 }: ConfirmAction) {
-  useEffect(() => {
-  }, [actionExcecuteData]);
+  useEffect(() => {}, [actionExcecuteData]);
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-      <DialogContent className="">
-        <CardHeader className="">
+      <DialogContent className="p-0">
+        <CardHeader className="py-8">
           <CardTitle className="flex items-center justify-between text-lg">
             Are you sure you want to {actionExcecuteData.action}
           </CardTitle>
         </CardHeader>
-        <CardFooter className="flex justify-end gap-2 rounded-lg pt-6">
+        <CardFooter className="flex justify-end gap-2 rounded-b-lg border bg-[#fafafa] py-6">
           <Button variant="outline" onClick={() => setIsOpen(false)}>
-            Close
+            Cancel
           </Button>
           <Button onClick={actionToExcecuteFunction}>Accept</Button>
         </CardFooter>

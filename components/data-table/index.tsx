@@ -67,7 +67,6 @@ export function DataTable<TData, TValue>({
       <div className="mx-auto grid w-full max-w-5xl grid-cols-2 gap-6 p-2">
         <div className="col-span-2">
           <HeaderTable
-            Component={Component}
             Filters={Filters}
           />
           <div className="rounded-md border shadow-lg">

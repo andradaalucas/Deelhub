@@ -23,7 +23,7 @@ import { toast } from "../ui/use-toast";
 const getStatusStyles = (status: any) => {
   switch (status.toLowerCase()) {
     case "pending":
-      return "bg-[#ebebeb] text-[#1a1a1a]";
+      return "bg-[#fdefca] text-[#805e0c]";
     case "confirmed":
       return "bg-[#e6eddd] text-[#56663e]";
     case "rejected":
@@ -222,21 +222,21 @@ export const columns: ColumnDef<Payment>[] = [
       <div className="text-left lowercase">{row.getValue("date")}</div>
     ),
   },
-  {
-    accessorKey: "type",
-    header: ({ column }) => {
-      return <div className="text-left">Type</div>;
-    },
-    cell: ({ row }) => (
-      <div className="text-left">
-        <span
-          className={`${getTypeStyles(row.getValue("type"))} border-foreground-muted rounded-md border border-[#a9a9a9] p-4 px-2 py-1 text-sm capitalize`}
-        >
-          {row.getValue("type")}
-        </span>
-      </div>
-    ),
-  },
+  // {
+  //   accessorKey: "status",
+  //   header: ({ column }) => {
+  //     return <div className="text-left">Status</div>;
+  //   },
+  //   cell: ({ row }) => (
+  //     <div className="text-left">
+  //       <span
+  //         className={`${getStatusStyles(row.getValue("status"))} border-foreground-muted rounded-md border border-[#a9a9a9] p-4 px-2 py-1 text-sm capitalize`}
+  //       >
+  //         {row.getValue("status")}
+  //       </span>
+  //     </div>
+  //   ),
+  // },
   {
     accessorKey: "id",
     header: ({ column }) => {

@@ -6,8 +6,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { getAllTransactions } from "@/services/transactions";
-import { calculateBalance } from "@/utils/operationals/overview";
+import {
+  extractResumeOfTransactions,
+  getAllTransactions,
+} from "@/services/transactions";
+// import { calculateBalance } from "@/utils/operationals/overview";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowUpRightIcon,
@@ -19,7 +22,6 @@ import {
 import { useMemo, useState } from "react";
 
 export function OverviewTransactions() {
-  const [overviewOptions, setOverviewOptions] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [dateNow, setDateNow] = useState<Date>(new Date());
   const [totalAmount, setTotalAmount] = useState<number>(0);
@@ -44,12 +46,11 @@ export function OverviewTransactions() {
     return formattedDate;
   };
 
-  const { data: transactions } = useQuery({
-    queryKey: ["transactions"],
-    queryFn: getAllTransactions,
+  const { data: resume } = useQuery({
+    queryKey: ["resume"],
+    queryFn: extractResumeOfTransactions,
   });
-  const data = useMemo(() => transactions ?? [], [transactions]);
-  const response = calculateBalance(data);
+  const data = useMemo(() => resume ?? [], [resume]);
   return (
     <div className="mx-auto grid w-full max-w-5xl gap-6 p-2 md:grid-cols-2">
       <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-950">
@@ -69,7 +70,9 @@ export function OverviewTransactions() {
             </div>
             <div className="text-right">
               <h3 className="text-sm font-medium">Total Amount</h3>
-              <p className="text-gray-500 dark:text-gray-400">{totalAmount}</p>
+              <p className="text-gray-500 dark:text-gray-400">
+                {data && data.netTotal}
+              </p>
             </div>
           </div>
           <div className="flex items-center justify-between">

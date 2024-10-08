@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FilterIcon, PlusIcon, RefreshCwIcon, XIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface Filter {
   column: string;
@@ -25,6 +25,16 @@ interface Filter {
 export function FilterTransactions({ onChange }: any) {
   const [filters, setFilters] = useState<Filter[]>([]);
   const [showAddFilter, setShowAddFilter] = useState(true);
+  const [descriptionFilter, setDescriptionFilter] = useState(""); // Nuevo estado para el input
+
+  // Actualiza el filtro de descripción cada vez que cambia el input
+  useEffect(() => {
+    const newFilters = filters.filter(f => f.column !== 'description');
+    if (descriptionFilter) {
+      newFilters.push({ column: 'description', operator: 'contains', value: descriptionFilter });
+    }
+    onChange(newFilters);
+  }, [descriptionFilter, filters]);
 
   const addFilter = () => {
     setFilters([...filters, { column: "", operator: "", value: "" }]);
@@ -49,13 +59,18 @@ export function FilterTransactions({ onChange }: any) {
 
   const resetFilters = () => {
     setFilters([]);
+    setDescriptionFilter(''); // Resetea el filtro de descripción
     onChange([]); // Reset filters and fetch all data
   };
 
-
   return (
     <div className="flex w-full justify-between">
-      <Input placeholder="Filter emails..." className="max-w-sm" />
+      <Input
+        placeholder="Filter description..."
+        className="max-w-sm"
+        value={descriptionFilter}
+        onChange={(e) => setDescriptionFilter(e.target.value)} // Actualiza el filtro de descripción
+      />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="gap-2">
@@ -67,7 +82,7 @@ export function FilterTransactions({ onChange }: any) {
           align="end"
           className="w-full max-w-md rounded-lg border bg-background p-4 shadow"
         >
-          {filters.length === 0 ? (
+          {filters.length === 0 && !descriptionFilter ? (
             <p className="mb-4 text-sm text-muted-foreground">
               No filters applied to this view
             </p>
@@ -91,7 +106,7 @@ export function FilterTransactions({ onChange }: any) {
                     <SelectContent>
                       <SelectItem value="description">Description</SelectItem>
                       <SelectItem value="amount">Amount</SelectItem>
-                      <SelectItem value="status">Status</SelectItem>
+                      {/* <SelectItem value="status">Status</SelectItem> */}
                     </SelectContent>
                   </Select>
                   <Select

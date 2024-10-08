@@ -10,23 +10,28 @@ import { FilterTransactions } from "@/components/transactions/filter-transaction
 
 export default function Dashboard() {
   const [filters, setFilters] = useState<any[]>([]);
-  const { data: transactions, isLoading, isError } = useQuery(
+  const {
+    data: transactions,
+    isLoading,
+    isError,
+  } = useQuery(
     ["transactions", filters], // Include filters in the queryKey to refetch on change
     () => getAllTransactions(filters), // Pass filters to the query function
     {
       enabled: !!filters, // Ensure the query runs only when filters exist
-    }
+    },
   );
 
   const data = useMemo(() => transactions ?? [], [transactions]);
+  data && console.log("data desde page.tsx", data);
+
   return (
     <div>
       <OverviewTransactions />
       <DataTable
         columns={columns}
         data={data}
-        Component={<CreateForm/>}
-        Filters={<FilterTransactions onChange={setFilters}  />}
+        Filters={<FilterTransactions onChange={setFilters} />}
       />
     </div>
   );

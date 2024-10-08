@@ -48,9 +48,9 @@ export function NavBar() {
       label: "Home",
     },
     {
-      href: "/in/banks_accounts",
+      href: "/in/billing",
       icon: LandmarkIcon,
-      label: "Bank",
+      label: "Billing",
     },
     {
       href: "/in/customers",

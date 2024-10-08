@@ -1,5 +1,3 @@
-"use client";
-
 import {
   CardContent,
   CardDescription,
@@ -30,14 +28,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { updateTransactions } from "@/services/transactions";
+import { createTransactions } from "@/services/transactions";
 import { createClient } from "@/utils/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { CalendarIcon, DollarSign } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormSchema } from "../transactions/types";
@@ -47,42 +45,32 @@ import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { useToast } from "../ui/use-toast";
-import { parse } from "date-fns";
 
 // TODO: Crear validacion para que los numeros del monto sean mayores a 0
 
-type DetailsProps = {
-  rowData: any;
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-};
-
-export function Edit({ rowData, isOpen, setIsOpen }: DetailsProps) {
+export function CreateForm() {
   const [dateNow, setDateNow] = useState<Date>(new Date());
   const [openDialog, setOpenDialog] = useState(false);
 
   const { toast } = useToast();
   const supabase = createClient();
 
-  const defaultValues = {
-    amount: rowData?.amount,
-    date: parse(rowData?.date, "yyyy-MM-dd", new Date()),
-    description: rowData?.description,
-    // type: rowData?.type,
-    // status: rowData?.status,
-    // currency: rowData?.currency,
+  const handleOpenDialog = () => {
+    openDialog ? setOpenDialog(false) : setOpenDialog(true);
   };
   const form = useForm<z.infer<typeof FormSchema>>({
-    defaultValues,
+    defaultValues: {
+      amount: 0,
+    },
     resolver: zodResolver(FormSchema),
   });
   const queryClient = useQueryClient();
-  const updateTransaction = useMutation({
-    mutationFn: updateTransactions,
+  const createTransaction = useMutation({
+    mutationFn: createTransactions,
     onSuccess: () => {
       queryClient.invalidateQueries(["transactions"]);
       toast({
-        title: "Successfully updated",
+        title: "Successfully created",
         description: dateNow.toString(),
       });
     },
@@ -93,11 +81,6 @@ export function Edit({ rowData, isOpen, setIsOpen }: DetailsProps) {
       });
     },
   });
-
-  const handleOpenDialog = () => {
-    openDialog ? setOpenDialog(false) : setOpenDialog(true);
-  };
-
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     const {
       data: { user },
@@ -106,39 +89,37 @@ export function Edit({ rowData, isOpen, setIsOpen }: DetailsProps) {
       const enrichedData = {
         ...values,
         user_id: user.id,
-        id: rowData?.id,
       };
-      updateTransaction.mutate(enrichedData);
+      createTransaction.mutate(enrichedData);
       form.reset();
-      () => setIsOpen(false);
+      handleOpenDialog();
     } else {
       toast({
         title: "Unauthenticated user",
         description: "Log in and try again",
       });
-      () => setIsOpen(false);
+      handleOpenDialog();
     }
-    handleOpenDialog();
   };
 
-  useEffect(() => {
-    isOpen && setOpenDialog(isOpen);
-  }, [isOpen]);
   return (
     <Dialog open={openDialog} onOpenChange={handleOpenDialog}>
-      <DialogContent className="p-0">
+      <DialogTrigger asChild>
+        <Button className="ml-4 h-9 rounded-md" onClick={handleOpenDialog}>
+          Create transaction
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <CardHeader>
-              <div className="px-4 pt-4">
-                <CardTitle className="text-lg">Edit transaction</CardTitle>
-                <CardDescription>
-                  Please enter the details of your transaction.
-                </CardDescription>
-              </div>
+            <CardHeader className="">
+              <CardTitle className="text-lg">Create transaction</CardTitle>
+              <CardDescription>
+                Please enter the details of your transaction.
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4 px-4">
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="amount"
@@ -153,7 +134,7 @@ export function Edit({ rowData, isOpen, setIsOpen }: DetailsProps) {
                             <Input
                               placeholder="Enter a amount"
                               type="number"
-                              className="box-border block w-full rounded-md border px-4 py-2 pl-8 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]"
+                              className="peer/input focus-visible:border-foreground-muted focus-visible:ring-background-control placeholder-foreground-muted border-control group box-border block w-full rounded-md border bg-foreground/[.026] px-4 py-2 pl-8 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]"
                               {...field}
                             />
                           </div>
@@ -175,7 +156,7 @@ export function Edit({ rowData, isOpen, setIsOpen }: DetailsProps) {
                             <Button
                               variant={"outline"}
                               className={cn(
-                                "box-border w-full rounded-md border px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]",
+                                "peer/input focus-visible:border-foreground-muted focus-visible:ring-background-control placeholder-foreground-muted border-control group box-border w-full rounded-md border bg-foreground/[.026] px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]",
                                 !field.value && "text-muted-foreground",
                               )}
                             >
@@ -202,7 +183,7 @@ export function Edit({ rowData, isOpen, setIsOpen }: DetailsProps) {
                   )}
                 />
               </div>
-              <div className="px-4">
+              <div>
                 <FormField
                   control={form.control}
                   name="description"
@@ -212,7 +193,7 @@ export function Edit({ rowData, isOpen, setIsOpen }: DetailsProps) {
                       <FormControl>
                         <Textarea
                           placeholder="Enter a description"
-                          className="box-border w-full resize-none rounded-md border px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]"
+                          className="peer/input focus-visible:border-foreground-muted focus-visible:ring-background-control placeholder-foreground-muted border-control group box-border w-full resize-none rounded-md border bg-foreground/[.026] px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]"
                           {...field}
                         />
                       </FormControl>
@@ -221,7 +202,7 @@ export function Edit({ rowData, isOpen, setIsOpen }: DetailsProps) {
                   )}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4 px-4">
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="type"
@@ -233,7 +214,7 @@ export function Edit({ rowData, isOpen, setIsOpen }: DetailsProps) {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger className="box-border w-full rounded-md border px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]">
+                          <SelectTrigger className="peer/input focus-visible:border-foreground-muted focus-visible:ring-background-control placeholder-foreground-muted border-control group box-border w-full rounded-md border bg-foreground/[.026] px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]">
                             <SelectValue placeholder="Select type" />
                           </SelectTrigger>
                         </FormControl>
@@ -257,7 +238,7 @@ export function Edit({ rowData, isOpen, setIsOpen }: DetailsProps) {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger className="box-border w-full rounded-md border px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]">
+                          <SelectTrigger className="peer/input focus-visible:border-foreground-muted focus-visible:ring-background-control placeholder-foreground-muted border-control group box-border w-full rounded-md border bg-foreground/[.026] px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]">
                             <SelectValue placeholder="Select status" />
                           </SelectTrigger>
                         </FormControl>
@@ -273,7 +254,7 @@ export function Edit({ rowData, isOpen, setIsOpen }: DetailsProps) {
                   )}
                 />
               </div>
-              <div className="px-4">
+              <div>
                 <FormField
                   control={form.control}
                   name="currency"
@@ -285,7 +266,7 @@ export function Edit({ rowData, isOpen, setIsOpen }: DetailsProps) {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger className="box-border w-full rounded-md border px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]">
+                          <SelectTrigger className="peer/input focus-visible:border-foreground-muted focus-visible:ring-background-control placeholder-foreground-muted border-control group box-border w-full rounded-md border bg-foreground/[.026] px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]">
                             <SelectValue placeholder="Choose a currency" />
                           </SelectTrigger>
                         </FormControl>
@@ -323,15 +304,8 @@ export function Edit({ rowData, isOpen, setIsOpen }: DetailsProps) {
                 />
               </div>
             </CardContent>
-            <CardFooter className="flex justify-end gap-2 rounded-b-lg border bg-[#fafafa] py-6">
-              <Button
-                variant="outline"
-                onClick={() => setIsOpen(false)}
-                type="button"
-              >
-                Cancel
-              </Button>
-              <Button type="submit">Edit</Button>
+            <CardFooter className="flex justify-end gap-2 rounded-lg pt-6">
+              <Button type="submit">Submit</Button>
             </CardFooter>
           </form>
         </Form>
