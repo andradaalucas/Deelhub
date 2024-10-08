@@ -34,7 +34,8 @@ export function FilterTransactions({ onChange }: any) {
       newFilters.push({ column: 'description', operator: 'contains', value: descriptionFilter });
     }
     onChange(newFilters);
-  }, [descriptionFilter, filters]);
+  }, [descriptionFilter, filters, onChange]);
+  
 
   const addFilter = () => {
     setFilters([...filters, { column: "", operator: "", value: "" }]);

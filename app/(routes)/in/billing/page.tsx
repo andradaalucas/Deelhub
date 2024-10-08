@@ -1,5 +1,14 @@
 "use client";
 
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,9 +31,27 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { getAllCountries, getStateByCountry } from "@/services/countries";
 import { Textarea } from "@/components/ui/textarea";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// Validaciones para la marca (nombre de la compañía)
+const formSchemaBrand = z.object({
+  name: z.string().min(2, "Name should have at least 2 characters").max(50),
+});
+
+// Validaciones para la dirección de facturación
+const formSchemaAddress = z.object({
+  addressLine1: z.string().min(2, "Address is too short").max(50),
+  addressLine2: z.string().min(2, "Address is too short").max(50),
+  city: z.string().min(2, "City is too short").max(50),
+  country: z.string().min(2, "Please select a country").max(50),
+  state: z.string().min(2, "Please select a state").max(50),
+  postalCode: z.string().min(2, "Postal code is too short").max(10),
+  description: z.string().min(2, "Description is too short").max(255),
+});
 
 export default function Billing() {
-  const [companyName, setCompanyName] = useState("");
   const [address, setAddress] = useState({
     line1: "",
     line2: "",
@@ -41,8 +68,34 @@ export default function Billing() {
     },
   });
 
-  const handleCompanyNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCompanyName(e.target.value);
+  // Inicialización del formulario de la marca
+  const formBrand = useForm<z.infer<typeof formSchemaBrand>>({
+    resolver: zodResolver(formSchemaBrand),
+    defaultValues: {
+      name: "",
+    },
+  });
+
+  // Inicialización del formulario de la dirección
+  const formAddress = useForm<z.infer<typeof formSchemaAddress>>({
+    resolver: zodResolver(formSchemaAddress),
+    defaultValues: {
+      addressLine1: "",
+      addressLine2: "",
+      city: "",
+      country: "",
+      state: "",
+      postalCode: "",
+      description: "",
+    },
+  });
+
+  const handleCompanyNameChange = (values: z.infer<typeof formSchemaBrand>) => {
+    console.log("Company Name:", values);
+  };
+
+  const handleBillingAddress = (values: z.infer<typeof formSchemaAddress>) => {
+    console.log("Billing Address:", values);
   };
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,21 +123,21 @@ export default function Billing() {
           currency: selectedCountry.currency,
           phoneCode: selectedCountry.phoneCode,
           flag: selectedCountry.flag,
-          state_url: selectedCountry.state_url, // Esto es un placeholder para la URL del estado
+          state_url: selectedCountry.state_url,
         },
       }));
     }
-    console.log("selectedCountry", selectedCountry);
   };
 
+  // Obtener lista de países y estados
   const { data: countriesData } = useQuery({
     queryKey: ["countries"],
     queryFn: getAllCountries,
   });
   const { data: statesCountryData } = useQuery({
     queryKey: ["states", address.country.state_url],
-    queryFn: () => getStateByCountry(address.country.state_url), // Pasa una función en lugar de ejecutar directamente
-    enabled: !!address.country.state_url, // Solo ejecuta la query si hay una URL para los estados
+    queryFn: () => getStateByCountry(address.country.state_url),
+    enabled: !!address.country.state_url,
   });
 
   const countries = useMemo(() => countriesData ?? [], [countriesData]);
@@ -92,148 +145,203 @@ export default function Billing() {
     () => statesCountryData ?? [],
     [statesCountryData],
   );
+
   useEffect(() => {
     console.log(statesCountry);
   }, [countries, statesCountry]);
 
   return (
     <div className="mx-auto w-full max-w-2xl space-y-8">
+      {/* Formulario para el nombre de la compañía */}
       <Card>
-        <CardHeader>
+        <CardHeader className="px-8">
           <CardTitle>Company Name</CardTitle>
           <CardDescription>
-            By default, your {"team's"} name appears on the invoice. If you want
-            to display a custom name, enter it here.
+            By default, your teams name appears on the invoice. If you want to
+            display a custom name, enter it here.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="companyName">Company Name</Label>
-              <Input
-                id="companyName"
-                value={companyName}
-                onChange={handleCompanyNameChange}
-                placeholder="Enter company name"
+        <CardContent className="p-0">
+          <Form {...formBrand}>
+            <form
+              className="grid w-full items-center gap-4"
+              onSubmit={formBrand.handleSubmit(handleCompanyNameChange)}
+            >
+              <FormField
+                control={formBrand.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem className="px-8">
+                    <FormControl>
+                      <Input type="text" placeholder="Acme Inc." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-          </div>
+              <CardFooter className="flex justify-end border bg-[#fafafa] py-2">
+                <Button type="submit" size="default" className="mx-2">
+                  Save
+                </Button>
+              </CardFooter>
+            </form>
+          </Form>
         </CardContent>
-        <CardFooter className="border bg-[#fafafa] py-2">
-          <p className="mr-auto text-sm text-muted-foreground">
-            Please use a maximum of 64 characters.
-          </p>
-          <Button size="sm">Save</Button>
-        </CardFooter>
       </Card>
 
+      {/* Formulario para la dirección de facturación */}
       <Card>
-        <CardHeader>
+        <CardHeader className="px-8">
           <CardTitle>Billing Address</CardTitle>
           <CardDescription>
-            If {"you'd"} like to add a mailing address to each invoice, enter it
+            If youd like to add a mailing address to each invoice, enter it
             here.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="line1">Address Line 1</Label>
-              <Input
-                id="line1"
-                name="line1"
-                value={address.line1}
-                onChange={handleAddressChange}
-                placeholder="Street and number"
+        <CardContent className="p-0">
+          <Form {...formAddress}>
+            <form
+              className="grid w-full items-center gap-4"
+              onSubmit={formAddress.handleSubmit(handleBillingAddress)}
+            >
+              <FormField
+                control={formAddress.control}
+                name="addressLine1"
+                render={({ field }) => (
+                  <FormItem className="px-8">
+                    <FormLabel>Address Line 1</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Street and number" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="line2">Address Line 2</Label>
-              <Input
-                id="line2"
-                name="line2"
-                value={address.line2}
-                onChange={handleAddressChange}
-                placeholder="Apartment, suite, etc."
+
+              <FormField
+                control={formAddress.control}
+                name="addressLine2"
+                render={({ field }) => (
+                  <FormItem className="px-8">
+                    <FormLabel>Address Line 2</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Apartment, suite, etc." />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="city">City</Label>
-              <Input
-                id="city"
+
+              <FormField
+                control={formAddress.control}
                 name="city"
-                value={address.city}
-                onChange={handleAddressChange}
-                placeholder="City"
+                render={({ field }) => (
+                  <FormItem className="px-8">
+                    <FormLabel>City</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="City" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="country">Country</Label>
-              <Select onValueChange={handleCountryChange}>
-                <SelectTrigger id="country">
-                  <SelectValue placeholder="Select a country" />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  {countries.map((country) => (
-                    <SelectItem
-                      key={country.name}
-                      value={country.name.toLowerCase()}
-                    >
-                      {country.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="state">State</Label>
-                <Select
-                  onValueChange={handleStateChange}
-                  disabled={statesCountry.length === 0}
-                >
-                  <SelectTrigger id="state">
-                    <SelectValue placeholder="Select a state" />
-                  </SelectTrigger>
-                  <SelectContent position="popper">
-                    {statesCountry.map((states: any) => (
-                      <SelectItem
-                        key={states.name}
-                        value={states.name.toLowerCase()}
-                      >
-                        {states.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="postalCode">Postal Code</Label>
-                <Input
-                  id="postalCode"
-                  name="postalCode"
-                  value={address.postalCode}
-                  onChange={handleAddressChange}
-                  placeholder="Postal Code"
+              <div className="grid grid-cols-2 gap-4 px-8">
+                <FormField
+                  control={formAddress.control}
+                  name="country"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Country</FormLabel>
+                      <FormControl>
+                        <Select onValueChange={handleCountryChange}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a country" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {countries.map((country: any) => (
+                              <SelectItem
+                                key={country.name}
+                                value={country.name}
+                              >
+                                {country.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={formAddress.control}
+                  name="state"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>State</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={handleStateChange}
+                          disabled={statesCountry.length === 0}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a state" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {statesCountry.map((state: any) => (
+                              <SelectItem key={state.name} value={state.name}>
+                                {state.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
               </div>
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                placeholder="If you would like to add any additional billing information"
-                className="w-full resize-none"
+
+              <FormField
+                control={formAddress.control}
+                name="postalCode"
+                render={({ field }) => (
+                  <FormItem className="px-8">
+                    <FormLabel>Postal Code</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Postal Code" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-          </div>
+
+              <FormField
+                control={formAddress.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="px-8">
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        {...field}
+                        placeholder="Additional billing information"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <CardFooter className="flex justify-end border bg-[#fafafa] py-2">
+                <Button type="submit" size="default" className="mx-2">
+                  Save
+                </Button>
+              </CardFooter>
+            </form>
+          </Form>
         </CardContent>
-        <CardFooter className="border bg-[#fafafa] py-2">
-          <p className="mr-auto text-sm text-muted-foreground">
-            Feel free to complete only the fields you wish to fill out.
-          </p>
-          <Button size="sm">Save</Button>
-        </CardFooter>
       </Card>
     </div>
   );

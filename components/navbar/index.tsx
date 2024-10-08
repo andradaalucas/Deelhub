@@ -79,9 +79,6 @@ export function NavBar() {
     setNotificationsList(updatedNotifications);
   };
 
-  useEffect(() => {
-    console.log("ROUTER", pathname);
-  }, []);
   return (
     <div className="hidden border-r bg-gray-100/40 lg:block">
       <div className="flex h-full max-h-screen flex-col gap-2">

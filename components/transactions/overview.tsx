@@ -71,7 +71,9 @@ export function OverviewTransactions() {
             <div className="text-right">
               <h3 className="text-sm font-medium">Total Amount</h3>
               <p className="text-gray-500 dark:text-gray-400">
-                {data && data.netTotal}
+                {data && "netTotal" in data
+                  ? data.netTotal
+                  : "No data available"}
               </p>
             </div>
           </div>
