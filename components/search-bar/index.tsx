@@ -1,7 +1,14 @@
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
-  ArrowLeftRightIcon,
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
+
+import {
   HomeIcon,
   LandmarkIcon,
   Package2Icon,
@@ -18,7 +25,6 @@ export function SearchBar() {
       icon: HomeIcon,
       label: "Home",
     },
-
     {
       href: "/in/customers",
       icon: UsersIcon,
@@ -44,6 +50,10 @@ export function SearchBar() {
           <span className="sr-only">Home</span>
         </SheetTrigger>
         <SheetContent side="left">
+          <SheetHeader className="hidden">
+            <SheetTitle>Navigation Menu</SheetTitle>
+            <SheetDescription>Navigation Menu</SheetDescription>
+          </SheetHeader>
           <div className="flex-1 overflow-auto py-2">
             <nav className="grid items-start text-sm font-medium">
               {links.map((link, index) => (

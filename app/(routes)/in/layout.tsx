@@ -21,7 +21,7 @@ export default async function InLayout({
     redirect("/sign-in");
   }
   return (
-    <section className="grid min-h-screen lg:grid-cols-[280px_1fr]">
+    <div className="grid min-h-screen lg:grid-cols-[280px_1fr]">
       <NavBar />
       <div className="">
         <SearchBar />
@@ -29,6 +29,6 @@ export default async function InLayout({
           {children}
         </main>
       </div>
-    </section>
+    </div>
   );
 }
