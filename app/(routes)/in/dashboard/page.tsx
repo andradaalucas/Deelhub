@@ -1,38 +1,27 @@
 "use client";
-import { DataTable } from "@/components/data-table";
-import { OverviewTransactions } from "@/components/transactions/overview";
-import { columns } from "@/components/transactions/columns";
+import { DataTable } from "@/components/transactions/table-transactions";
+import { columns } from "@/components/transactions/table-transactions/columns";
+import { FilterTransactions } from "@/components/transactions/table-transactions/filter-transactions";
 import { getAllTransactions } from "@/services/transactions";
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { CreateForm } from "@/components/transactions/create-form";
-import { FilterTransactions } from "@/components/transactions/filter-transactions";
+import { useState } from "react";
 
 export default function Dashboard() {
-  const [filters, setFilters] = useState<any[]>([]);
   const {
     data: transactions,
     isLoading,
     isError,
   } = useQuery(
-    ["transactions", filters], // Include filters in the queryKey to refetch on change
-    () => getAllTransactions(filters), // Pass filters to the query function
-    {
-      enabled: !!filters, // Ensure the query runs only when filters exist
-    },
+    ["transactions"], // Include filters in the queryKey to refetch on change
+    () => getAllTransactions(), // Pass filters to the query function
   );
 
-  const data = useMemo(() => transactions ?? [], [transactions]);
-  data && console.log("data desde page.tsx", data);
-
   return (
-    <div>
-      <OverviewTransactions />
-      <DataTable
-        columns={columns}
-        data={data}
-        Filters={<FilterTransactions onChange={setFilters} />}
-      />
-    </div>
+    <DataTable
+      columns={columns}
+      data={transactions || []}
+      isLoading={isLoading}
+      isError={isError}
+    />
   );
 }

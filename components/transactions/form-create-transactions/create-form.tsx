@@ -12,10 +12,11 @@ import {
 } from "@/components/ui/dialog";
 import { useRef } from "react";
 import { FormTransactions } from "./form-transactions";
-import { TableProducts } from "./table-products";
+import { FormProducts } from "./form-products";
 import { createClient } from "@/utils/supabase/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTransactions } from "@/services/transactions";
+import { toast } from "@/components/ui/use-toast";
 
 export function CreateForm() {
   const formRef = useRef<any>(null);
@@ -36,12 +37,15 @@ export function CreateForm() {
     const {
       data: { user },
     } = await supabase.auth.getUser();
+    const products = tableProductsRef.current.getProducts();
+
     if (formRef.current && tableProductsRef.current) {
       formRef.current.submitForm((dataTransaction: any) => {
-        const products = tableProductsRef.current.getProducts(); // Obtener los productos
         const datTransactionEnriched = {
           customers: dataTransaction.customers, // Solo los campos deseados
           description: dataTransaction.description,
+          date: dataTransaction.date,
+          status: dataTransaction.status,
           amount: products.total,
           user_id: user?.id, // Asegúrate de tener acceso al usuario
         };
@@ -49,13 +53,21 @@ export function CreateForm() {
           transactions: datTransactionEnriched,
           products: products.products,
         };
-        createTransaction.mutate(allDataForm);
+        console.log("dataTransaction", dataTransaction);
+        if (!products.products.length) {
+          toast({
+            title: "Add at least one product",
+          });
+        } else {
+          
+          
+          createTransaction.mutate(allDataForm);
+          toast({
+            title: "Transaction created successfully",
+          });
+        }
       });
     }
-  };
-
-  const handleSubmitFormTransactions = (data: any) => {
-    console.log("Datos enviados desde el formulario:", data);
   };
 
   return (
@@ -73,11 +85,8 @@ export function CreateForm() {
           </DialogDescription>
         </DialogHeader>
         <div className="flex justify-between px-8 pt-4">
-          <FormTransactions
-            ref={formRef}
-            onSubmit={handleSubmitFormTransactions}
-          />
-          <TableProducts ref={tableProductsRef} />
+          <FormTransactions ref={formRef} />
+          <FormProducts ref={tableProductsRef} />
         </div>
 
         <DialogFooter className="flex justify-end gap-2 rounded-b-lg border bg-[#fafafa] px-8 py-6">

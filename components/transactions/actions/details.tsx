@@ -6,7 +6,7 @@ import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { CalendarIcon, DollarSign } from "lucide-react";
 import Image from "next/image";
-import { CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,10 +14,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 type DetailsProps = {
   rowData: any;
   isOpen: boolean;

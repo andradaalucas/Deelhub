@@ -9,16 +9,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CaretSortIcon, DotsVerticalIcon } from "@radix-ui/react-icons";
-import { ColumnDef } from "@tanstack/react-table";
-import { Payment } from "./types";
-import { Details } from "./details";
-import { useState } from "react";
-import { Edit } from "./edit";
-import { ConfirmAction } from "../atom/confirm-action";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "@/components/ui/use-toast";
 import { deleteTransactions } from "@/services/transactions";
-import { toast } from "../ui/use-toast";
+import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ColumnDef } from "@tanstack/react-table";
+import { useState } from "react";
+import { ConfirmAction } from "../../atom/confirm-action";
+import { Details } from "../actions/details";
+// import { Edit } from "../actions/edit";
+import { Transactions } from "../types";
 
 const getStatusStyles = (status: any) => {
   switch (status.toLowerCase()) {
@@ -32,25 +32,15 @@ const getStatusStyles = (status: any) => {
       return "bg-[#ebebeb] text-[#1a1a1a]";
   }
 };
-const getTypeStyles = (type: any) => {
-  switch (type.toLowerCase()) {
-    case "income":
-      return "border-[#a9a9a9] bg-[#e6eddd]";
-    case "expense":
-      return "border-[#a9a9a9] bg-[#f2d5cd]";
-    default:
-      return "bg-[#ebebeb] text-[#1a1a1a]";
-  }
-};
 
 const ActionsCell = ({ row }: any) => {
-  const rowData = row.original;
   const [isOpenDetails, setIsOpenDetails] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [actionExcecuteData, setActionExcecuteData] = useState({
-    action: "delete this payment",
-    rowData: rowData,
+    title: "delete this payment",
+    description: "This action will permanently delete the transactions's data.",
+    rowData: row.original,
   });
 
   const queryClient = useQueryClient();
@@ -84,7 +74,7 @@ const ActionsCell = ({ row }: any) => {
   });
 
   const actionToExcecuteFunction = () => {
-    deleteTransaction.mutate(rowData.id);
+    deleteTransaction.mutate(row.original.id);
     setIsOpenDelete(false);
   };
 
@@ -127,7 +117,7 @@ const ActionsCell = ({ row }: any) => {
             </DropdownMenuItem>
             <DropdownMenuItem
               className="cursor-pointer"
-              onClick={() => handleCopyClipboard(rowData)}
+              onClick={() => handleCopyClipboard(row.original)}
             >
               Copy ID payment
             </DropdownMenuItem>
@@ -140,16 +130,16 @@ const ActionsCell = ({ row }: any) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      {isOpenDetails && (
+      {/* {isOpenDetails && (
         <Details
           isOpen={isOpenDetails}
           setIsOpen={setIsOpenDetails}
           rowData={rowData}
         />
-      )}
-      {isOpenEdit && (
+      )} */}
+      {/* {isOpenEdit && (
         <Edit isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} rowData={rowData} />
-      )}
+      )} */}
       {isOpenDelete && (
         <ConfirmAction
           isOpen={isOpenDelete}
@@ -162,7 +152,7 @@ const ActionsCell = ({ row }: any) => {
   );
 };
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Transactions>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -222,21 +212,6 @@ export const columns: ColumnDef<Payment>[] = [
       <div className="text-left lowercase">{row.getValue("date")}</div>
     ),
   },
-  // {
-  //   accessorKey: "status",
-  //   header: ({ column }) => {
-  //     return <div className="text-left">Status</div>;
-  //   },
-  //   cell: ({ row }) => (
-  //     <div className="text-left">
-  //       <span
-  //         className={`${getStatusStyles(row.getValue("status"))} border-foreground-muted rounded-md border border-[#a9a9a9] p-4 px-2 py-1 text-sm capitalize`}
-  //       >
-  //         {row.getValue("status")}
-  //       </span>
-  //     </div>
-  //   ),
-  // },
   {
     accessorKey: "id",
     header: ({ column }) => {

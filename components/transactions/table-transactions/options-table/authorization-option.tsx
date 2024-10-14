@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -6,31 +7,31 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ConfirmActionType } from "./types";
+import { toast } from "@/components/ui/use-toast";
+import { exportTransactionsOnSheet } from "@/services/transactions";
 
-export function ConfirmAction({
-  actionExcecuteData,
-  isOpen,
-  setIsOpen,
-  actionToExcecuteFunction,
-}: ConfirmActionType) {
+export function AuthorizationOption({ isOpen, setIsOpen }: any) {
+  const handleExport = async () => {
+    await exportTransactionsOnSheet();
+    toast({
+      title: "Successfully exported",
+    });
+    setIsOpen(false);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogContent className="p-0">
         <DialogHeader className="px-6 py-8">
           <DialogTitle className="flex items-center justify-between text-lg">
-            Are you sure you want to {actionExcecuteData.title}
+            Are you sure you want to export this data?
           </DialogTitle>
           <DialogDescription>
-            {actionExcecuteData.description}
+            This action will export the transactions data to a sheet.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-end gap-2 rounded-b-lg border bg-[#fafafa] px-8 py-4">
-          <Button onClick={actionToExcecuteFunction} variant="destructive">
-            Accept
-          </Button>
+          <Button onClick={handleExport}>Accept</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

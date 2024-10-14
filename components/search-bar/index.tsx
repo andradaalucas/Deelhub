@@ -18,15 +18,16 @@ export function SearchBar() {
       icon: HomeIcon,
       label: "Home",
     },
-    {
-      href: "/in/billing",
-      icon: LandmarkIcon,
-      label: "Billing",
-    },
+
     {
       href: "/in/customers",
       icon: UsersIcon,
       label: "Customers",
+    },
+    {
+      href: "/in/billing",
+      icon: LandmarkIcon,
+      label: "Billing",
     },
     {
       href: "/in/settings",

@@ -92,9 +92,6 @@ export function BillingPresets() {
     () => statesCountryData ?? [],
     [statesCountryData],
   );
-  useEffect(() => {
-    console.log(statesCountry);
-  }, [countries, statesCountry]);
 
   return (
     <div className="mx-auto w-full max-w-2xl space-y-8">

@@ -49,28 +49,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "@/components/ui/form";
 import { forwardRef, useImperativeHandle } from "react";
-
-// Definición de tipos de producto
-export type Product = {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-};
-
-const formSchema = z.object({
-  name: z.string().min(2).max(50),
-  price: z.preprocess(
-    (a) => parseInt(z.string().parse(a), 10),
-    z.number().min(0),
-  ),
-  quantity: z.preprocess(
-    (a) => parseInt(z.string().parse(a), 10),
-    z.number().min(0),
-  ),
-});
+import { formSchemaProducts } from "../schemas";
+import { Product } from "../types";
 
 const ActionsCell = ({ row }: any) => {
   return (
@@ -136,14 +118,14 @@ export const columns: ColumnDef<Product>[] = [
 ];
 
 // Componente de tabla de productos
-export const TableProducts = forwardRef((props, ref) => {
+export const FormProducts = forwardRef((props, ref) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [allDataProducts, setAllDataProducts] = useState<any>({
     products: [],
     total: 0,
   });
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof formSchemaProducts>>({
+    resolver: zodResolver(formSchemaProducts),
     defaultValues: {
       name: "",
       price: 0,
@@ -159,7 +141,6 @@ export const TableProducts = forwardRef((props, ref) => {
     pageSize: 2,
   });
 
-  
   const table = useReactTable({
     data: products,
     columns,
@@ -181,7 +162,7 @@ export const TableProducts = forwardRef((props, ref) => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = (data: z.infer<typeof formSchemaProducts>) => {
     const newProduct = {
       id: `${products.length + 1}`,
       name: data.name,
@@ -194,9 +175,12 @@ export const TableProducts = forwardRef((props, ref) => {
     form.reset(); // Reset the form after submission
   };
 
-  const subtotal = products.reduce((acc, product) => acc + product.price * product.quantity, 0);
+  const subtotal = products.reduce(
+    (acc, product) => acc + product.price * product.quantity,
+    0,
+  );
   const total = subtotal;
-  
+
   useImperativeHandle(ref, () => ({
     getProducts: () => {
       // Actualizar el estado correctamente
@@ -215,7 +199,7 @@ export const TableProducts = forwardRef((props, ref) => {
               onSubmit={form.handleSubmit(onSubmit)}
             >
               <div className="mb-4 flex items-center gap-4">
-                <h2 className="text-lg font-semibold">Products</h2>
+                <h2 className="text-base font-medium">Products</h2>
                 <div className="flex-1" />
                 <Button size="sm" type="submit">
                   Add product
@@ -280,7 +264,12 @@ export const TableProducts = forwardRef((props, ref) => {
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
                       <TableHead key={header.id}>
-                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
                       </TableHead>
                     ))}
                   </TableRow>
@@ -289,17 +278,26 @@ export const TableProducts = forwardRef((props, ref) => {
               <TableBody>
                 {table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => (
-                    <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell key={cell.id}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
                         </TableCell>
                       ))}
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={columns.length} className="h-24 text-center">
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
                       No hay resultados.
                     </TableCell>
                   </TableRow>
@@ -309,13 +307,24 @@ export const TableProducts = forwardRef((props, ref) => {
           </div>
           <div className="flex items-center justify-end space-x-2 py-4">
             <div className="flex-1 text-sm text-muted-foreground">
-              {table.getFilteredSelectedRowModel().rows.length} de {table.getFilteredRowModel().rows.length} fila(s) seleccionada(s).
+              {table.getFilteredSelectedRowModel().rows.length} de{" "}
+              {table.getFilteredRowModel().rows.length} fila(s) seleccionada(s).
             </div>
             <div className="space-x-2">
-              <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
                 Anterior
               </Button>
-              <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
                 Siguiente
               </Button>
             </div>
@@ -339,4 +348,4 @@ export const TableProducts = forwardRef((props, ref) => {
   );
 });
 
-TableProducts.displayName = "TableProducts";
+FormProducts.displayName = "FormProducts";
