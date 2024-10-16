@@ -92,7 +92,7 @@ const ActionsCell = ({ row }: any) => {
             className="cursor-pointer"
             onClick={() => handleCopyClipboard(row)}
           >
-            Copy Client ID
+            Copy ID
           </DropdownMenuItem>
           <DropdownMenuItem
             className="cursor-pointer text-red-500"
