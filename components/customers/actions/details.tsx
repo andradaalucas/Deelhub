@@ -21,7 +21,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { FormSchemaCustomers } from "../schemas";
+import { formSchema } from "../schemas";
 import { DetailsProps } from "../types";
 
 export function DetailsCustomers({ rowData, isOpen, setIsOpen }: DetailsProps) {
@@ -32,22 +32,22 @@ export function DetailsCustomers({ rowData, isOpen, setIsOpen }: DetailsProps) {
     email: rowData?.email || "",
   };
 
-  const formCustomers = useForm<z.infer<typeof FormSchemaCustomers>>({
+  const formCustomers = useForm<z.infer<typeof formSchema>>({
     defaultValues,
-    resolver: zodResolver(FormSchemaCustomers),
+    resolver: zodResolver(formSchema),
   });
 
+  const handleOpenDialog = () => {
+    setIsOpen(!isOpen);
+  };
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogContent className="max-w rounded-xl p-0">
         <DialogHeader className="px-8 pt-8">
           <DialogTitle className="text-2xl font-bold">
-            <div>Details Customers</div>
-            <div className="text-xs font-normal text-slate-600">
-              {rowData?.id}
-            </div>
+            Details Customers
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="sr-only">
             Make changes to your profile here. Click save when youe done.
           </DialogDescription>
         </DialogHeader>
@@ -63,10 +63,6 @@ export function DetailsCustomers({ rowData, isOpen, setIsOpen }: DetailsProps) {
                     <FormControl>
                       <Input type="text" readOnly {...field} />
                     </FormControl>
-                    {/* <FormDescription>
-                      Enter the customer{"'"}s full name. This will be
-                      associated with their transaction details.
-                    </FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -80,10 +76,6 @@ export function DetailsCustomers({ rowData, isOpen, setIsOpen }: DetailsProps) {
                     <FormControl>
                       <Input type="text" readOnly {...field} />
                     </FormControl>
-                    {/* <FormDescription>
-                      The invoice and all transaction-related communications
-                      will be sent to this email address.
-                    </FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -92,24 +84,19 @@ export function DetailsCustomers({ rowData, isOpen, setIsOpen }: DetailsProps) {
                 control={formCustomers.control}
                 name="description"
                 render={({ field }) => (
-                  <FormItem className="px-8">
+                  <FormItem className="px-8 pb-4">
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Textarea className="resize-none" readOnly {...field} />
                     </FormControl>
-                    {/* <FormDescription>
-                      Provide a brief description of the transaction, such as
-                      the purpose or any key details.
-                    </FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <DialogFooter className="flex justify-end gap-2 rounded-b-lg border bg-[#fafafa] px-8 py-6">
-                {/* <DialogClose>
-                  <div>Cancel</div>
-                </DialogClose> */}
-                <Button type="button">Close</Button>
+                <Button type="button" onClick={handleOpenDialog}>
+                  Close
+                </Button>
               </DialogFooter>
             </form>
           </Form>

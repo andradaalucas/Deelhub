@@ -27,7 +27,9 @@ export function DropAndDrag({ isOpen, setIsOpen }: any) {
     onSuccess: () => {
       queryClient.invalidateQueries(["customers"]);
     },
-    onError() {},
+    onError: () => {
+      queryClient.invalidateQueries(["customers"]);
+    },
   });
 
   // Función para parsear el CSV y validar campos faltantes
