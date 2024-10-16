@@ -13,3 +13,9 @@ export interface DataTableProps<TData, TValue> {
   isLoading: boolean;
   isError: boolean;
 }
+
+export type DetailsProps = {
+  rowData: any;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+};

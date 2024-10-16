@@ -11,10 +11,14 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
@@ -23,12 +27,16 @@ import { cn } from "@/lib/utils";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { formSchemaTransactions } from "../schemas";
-
+import { getAllCustomers } from "@/services/customers";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 // Definir el tipo del ref que será expuesto
 interface FormTransactionsRef {
@@ -48,6 +56,12 @@ export const FormTransactions = forwardRef<FormTransactionsRef>(
         notifyByEmail: false,
       },
     });
+    const router = useRouter();
+    const {
+      data: customers,
+      isLoading,
+      isError,
+    } = useQuery(["customers"], () => getAllCustomers());
 
     // Exponer el handleSubmit al componente padre con un callback
     useImperativeHandle(ref, () => ({
@@ -71,6 +85,12 @@ export const FormTransactions = forwardRef<FormTransactionsRef>(
       setTermsAndConditions(!termsAndConditions);
     };
 
+    const handleAddCustomer = () => {
+      console.log("Add customer");
+      
+      router.push("/in/customers"); // Redirige a la página para agregar clientes
+    };
+
     return (
       <div className="h-full w-full max-w-md">
         <Form {...form}>
@@ -82,7 +102,28 @@ export const FormTransactions = forwardRef<FormTransactionsRef>(
                 <FormItem>
                   <FormLabel>Customer</FormLabel>
                   <FormControl>
-                    <Input type="text" {...field} />
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a customer" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {customers &&
+                            customers.map((customer) => (
+                              <SelectItem key={customer.id} value={customer.id}>
+                                {customer.name}
+                              </SelectItem>
+                            ))}
+                          <div
+                          className="text-sm p-2 cursor-pointer hover:bg-#f4f4f5"
+                            key="go-to-add-customer"
+                            onClick={handleAddCustomer}
+                          >
+                            + add customer
+                          </div>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormDescription>
                     Billing for the transaction will be sent to this email

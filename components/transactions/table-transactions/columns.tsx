@@ -9,7 +9,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { toast } from "@/components/ui/use-toast";
 import { deleteTransactions } from "@/services/transactions";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -19,6 +18,7 @@ import { ConfirmAction } from "../../atom/confirm-action";
 import { Details } from "../actions/details";
 // import { Edit } from "../actions/edit";
 import { Transactions } from "../types";
+import { Toaster, toast } from "sonner";
 
 const getStatusStyles = (status: any) => {
   switch (status.toLowerCase()) {
@@ -48,30 +48,33 @@ const ActionsCell = ({ row }: any) => {
     mutationFn: deleteTransactions,
     onSuccess: () => {
       queryClient.invalidateQueries(["transactions"]);
-      toast({
-        title: "Successfully deleted",
-      });
+      toast.success("Successfully deleted");
     },
     onError() {
-      toast({
-        title: "Error An error occurred while delete the transaction",
-      });
+      // toast({
+      //   title: "Error An error occurred while delete the transaction",
+      // });
+      toast.error("Error An error occurred while delete the transaction");
     },
   });
-  const editTransaction = useMutation({
-    mutationFn: deleteTransactions,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["transactions"]);
-      toast({
-        title: "Successfully deleted",
-      });
-    },
-    onError() {
-      toast({
-        title: "Error An error occurred while delete the transaction",
-      });
-    },
-  });
+  // const editTransaction = useMutation({
+  //   mutationFn: deleteTransactions,
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries(["transactions"]);
+  //     toast({
+  //       title: "Successfully deleted",
+  //     });
+  //   },
+  //   onError() {
+  //     toast({
+  //       title: "Error An error occurred while delete the transaction",
+  //     });
+  //   },
+  // });
+  const promise = () =>
+    new Promise((resolve) =>
+      setTimeout(() => resolve({ name: "Sonner" }), 2000),
+    );
 
   const actionToExcecuteFunction = () => {
     deleteTransaction.mutate(row.original.id);
@@ -87,10 +90,19 @@ const ActionsCell = ({ row }: any) => {
   const handleDelete = () => {
     setIsOpenDelete(!isOpenDelete);
   };
+
   const handleCopyClipboard = (rowData: any) => {
     navigator.clipboard.writeText(rowData?.id);
-    toast({
-      title: "Copied to clipboard",
+    toast.success("Copied to clipboard");
+  };
+  const handleGeneratePDF = () => {
+    console.log("entro");
+    toast.promise(promise, {
+      loading: "Generating PDF",
+      success: (data) => {
+        return `PDF generated successfully `;
+      },
+      error: "Error",
     });
   };
 
@@ -119,10 +131,16 @@ const ActionsCell = ({ row }: any) => {
               className="cursor-pointer"
               onClick={() => handleCopyClipboard(row.original)}
             >
-              Copy ID payment
+              Copy ID
             </DropdownMenuItem>
             <DropdownMenuItem
-              className="cursor-pointer text-danger hover:text-danger"
+              className="cursor-pointer"
+              onClick={handleGeneratePDF}
+            >
+              Generate PDF
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="text-danger hover:text-danger cursor-pointer"
               onClick={handleDelete}
             >
               Delete
@@ -130,16 +148,6 @@ const ActionsCell = ({ row }: any) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      {/* {isOpenDetails && (
-        <Details
-          isOpen={isOpenDetails}
-          setIsOpen={setIsOpenDetails}
-          rowData={rowData}
-        />
-      )} */}
-      {/* {isOpenEdit && (
-        <Edit isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} rowData={rowData} />
-      )} */}
       {isOpenDelete && (
         <ConfirmAction
           isOpen={isOpenDelete}

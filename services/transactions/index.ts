@@ -52,7 +52,9 @@ const supabase = createClient();
 // };
 export const getAllTransactions = async () => {
   try {
-    const { data, error } = await supabase.from("transactions").select();
+    const { data, error } = await supabase.from("transactions").select("*, transaction_product(*)");
+    console.log("data", data);
+    
     return data;
   } catch (error) {
     console.log("Error on create customer", error);

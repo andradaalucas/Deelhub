@@ -170,8 +170,6 @@ export const FormProducts = forwardRef((props, ref) => {
       quantity: data.quantity,
     };
     setProducts((prev) => [...prev, newProduct]);
-    console.log("Product added:", newProduct);
-
     form.reset(); // Reset the form after submission
   };
 

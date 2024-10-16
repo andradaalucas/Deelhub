@@ -40,7 +40,12 @@ export const createCustomers = async (data: any) => {
 
 export const updateCustomers = async (data: any) => {
   try {
-    const { error } = await supabase.from("customers").upsert(data);
+    const user_id = await getUserSession();
+    const enrichedData = {
+      ...data,
+      user_id,
+    };
+    const { error } = await supabase.from("customers").update(enrichedData).eq('id', data.id);
     !error && "Customer updated successfully";
   } catch (error) {
     console.log("Error on update customer", error);

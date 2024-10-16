@@ -16,16 +16,19 @@ import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCustomers } from "@/services/customers";
+import { EditCustomers } from "../actions/edit";
+import { DetailsCustomers } from "../actions/details";
 import { ConfirmAction } from "@/components/atom/confirm-action";
 
 const ActionsCell = ({ row }: any) => {
+  const [isOpenDetails, setIsOpenDetails] = useState(false);
   const [isOpenDelete, setIsOpenDelete] = useState(false);
+  const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [actionExcecuteData, setActionExcecuteData] = useState({
     title: "delete this payment",
     description: "This action will permanently delete the user's data.",
     rowData: row.original,
   });
-
 
   const queryClient = useQueryClient();
 
@@ -48,8 +51,14 @@ const ActionsCell = ({ row }: any) => {
     setIsOpenDelete(false);
   };
 
+  const handleDetails = () => {
+    setIsOpenDetails(!isOpenDetails);
+  };
   const handleDelete = () => {
     setIsOpenDelete(!isOpenDelete);
+  };
+  const handleEdit = () => {
+    setIsOpenEdit(!isOpenEdit);
   };
 
   const handleCopyClipboard = (row: any) => {
@@ -69,17 +78,22 @@ const ActionsCell = ({ row }: any) => {
         <DropdownMenuContent align="end" className="rounded-lg font-medium">
           <DropdownMenuLabel>Options</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer">
+          <DropdownMenuItem className="cursor-pointer" onClick={handleDetails}>
             Details
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Edit</DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer" onClick={handleEdit}>
+            Edit
+          </DropdownMenuItem>
           <DropdownMenuItem
             className="cursor-pointer"
             onClick={() => handleCopyClipboard(row)}
           >
             Copy Client ID
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer text-danger hover:text-danger" onClick={handleDelete}>
+          <DropdownMenuItem
+            className="text-red-500  cursor-pointer"
+            onClick={handleDelete}
+          >
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -90,6 +104,20 @@ const ActionsCell = ({ row }: any) => {
           setIsOpen={setIsOpenDelete}
           actionExcecuteData={actionExcecuteData}
           actionToExcecuteFunction={actionToExcecuteFunction}
+        />
+      )}
+      {isOpenEdit && (
+        <EditCustomers
+          isOpen={isOpenEdit}
+          setIsOpen={setIsOpenEdit}
+          rowData={row.original}
+        />
+      )}
+      {isOpenDetails && (
+        <DetailsCustomers
+          isOpen={isOpenDetails}
+          setIsOpen={setIsOpenDetails}
+          rowData={row.original}
         />
       )}
     </div>

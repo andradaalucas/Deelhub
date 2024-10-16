@@ -17,6 +17,7 @@ import {
   UsersIcon,
   BellIcon,
   SettingsIcon,
+  BookOpenIcon,
 } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -120,23 +121,40 @@ export function NavBar() {
           </DropdownMenu>
         </div>
 
-        <div className="flex-1 overflow-auto py-2">
-          <nav className="grid items-start px-4 text-sm font-medium">
-            {links.map((link, index) => (
+        <div className="flex flex-1 flex-col overflow-auto py-2">
+          <nav className="flex flex-1 flex-col items-start px-4 text-sm font-medium">
+            {/* Sección con los links */}
+            <div className="w-full">
+              {links.map((link, index) => (
+                <div key={index}>
+                  <Link
+                    className={`${
+                      pathname == link.href && "bg-[#f2f2f2] text-gray-900"
+                    } flex items-center gap-3 rounded-lg px-3 py-3 text-gray-500 transition-all hover:bg-[#f2f2f2] hover:text-gray-900`}
+                    href={link.href}
+                  >
+                    <link.icon className="h-4 w-4" />
+                    {link.label}
+                  </Link>
+                </div>
+              ))}
+            </div>
+
+            {/* Sección "Get Started" al fondo */}
+            <div className="mt-auto w-full">
               <Link
-                className={`${pathname == link.href && "bg-[#f2f2f2] text-gray-900"} flex hover:text-gray-900 items-center gap-3 rounded-lg px-3 py-3 text-gray-500 transition-all hover:bg-[#f2f2f2]`}
-                href={link.href}
-                key={index}
+                className={`${
+                  pathname == "/in/get-started" && "bg-[#f2f2f2] text-gray-900"
+                } flex items-center gap-3 rounded-lg px-3 py-3 text-gray-500 transition-all hover:bg-[#f2f2f2] hover:text-gray-900`}
+                href="/in/get-started"
               >
-                <link.icon className="h-4 w-4" />
-                {link.label}
+                <BookOpenIcon className="h-4 w-4" />
+                Introduction
               </Link>
-            ))}
+            </div>
           </nav>
         </div>
       </div>
     </div>
   );
 }
-
-// ${pathname == "/in/dashboard" && "bg-gray-100/40"}

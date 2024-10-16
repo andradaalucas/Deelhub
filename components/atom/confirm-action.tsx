@@ -23,14 +23,16 @@ export function ConfirmAction({
           <DialogTitle className="flex items-center justify-between text-lg">
             Are you sure you want to {actionExcecuteData.title}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="flex">
             {actionExcecuteData.description}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-end gap-2 rounded-b-lg border bg-[#fafafa] px-8 py-4">
-          <Button onClick={actionToExcecuteFunction} variant="destructive">
-            Accept
-          </Button>
+          <div className="flex justify-end">
+            <Button onClick={actionToExcecuteFunction} variant="destructive">
+              Accept
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

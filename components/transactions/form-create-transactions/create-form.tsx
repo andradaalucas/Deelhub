@@ -20,10 +20,9 @@ import { toast } from "@/components/ui/use-toast";
 
 export function CreateForm() {
   const formRef = useRef<any>(null);
-  const tableProductsRef = useRef<any>(null); // Referencia para obtener productos
+  const tableProductsRef = useRef<any>(null);
 
   const supabase = createClient();
-
   const queryClient = useQueryClient();
   const createTransaction = useMutation({
     mutationFn: createTransactions,
@@ -34,37 +33,28 @@ export function CreateForm() {
   });
 
   const handleCreateTransaction = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
     const products = tableProductsRef.current.getProducts();
 
     if (formRef.current && tableProductsRef.current) {
       formRef.current.submitForm((dataTransaction: any) => {
         const datTransactionEnriched = {
-          customers: dataTransaction.customers, // Solo los campos deseados
+          customers: dataTransaction.customers,
           description: dataTransaction.description,
           date: dataTransaction.date,
           status: dataTransaction.status,
           amount: products.total,
-          user_id: user?.id, // Asegúrate de tener acceso al usuario
+          user_id: user?.id,
         };
         const allDataForm = {
           transactions: datTransactionEnriched,
           products: products.products,
         };
-        console.log("dataTransaction", dataTransaction);
         if (!products.products.length) {
-          toast({
-            title: "Add at least one product",
-          });
+          toast({ title: "Add at least one product" });
         } else {
-          
-          
           createTransaction.mutate(allDataForm);
-          toast({
-            title: "Transaction created successfully",
-          });
+          toast({ title: "Transaction created successfully" });
         }
       });
     }
@@ -77,14 +67,14 @@ export function CreateForm() {
       </DialogTrigger>
       <DialogContent className="max-w-6xl rounded-xl p-0">
         <DialogHeader className="px-8 pt-8">
-          <DialogTitle className="text-2xl font-bold">
-            Create Transactions
-          </DialogTitle>
+          <DialogTitle className="text-2xl font-bold">Create Transactions</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when youe done.
+            Make changes to your profile here. Click save when you{"'"}re done.
           </DialogDescription>
         </DialogHeader>
-        <div className="flex justify-between px-8 pt-4">
+
+        {/* Responsive Flexbox: Stacking on small screens */}
+        <div className="flex flex-col gap-4 px-8 pt-4 sm:flex-col md:flex-col lg:flex-row lg:justify-between">
           <FormTransactions ref={formRef} />
           <FormProducts ref={tableProductsRef} />
         </div>
