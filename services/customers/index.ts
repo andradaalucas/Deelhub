@@ -15,7 +15,7 @@ export const createCustomersFromCsv = async (data: any) => {
   try {
     const user_id = await getUserSession();
     const enrichedData = data.map((customer: any) => {
-      const { id, ...rest } = customer; 
+      const { id, ...rest } = customer;
       return {
         ...rest,
         user_id,
@@ -32,16 +32,22 @@ export const createCustomersFromCsv = async (data: any) => {
       .in("email", emails);
 
     if (fetchError) {
-      throw new Error(fetchError.message || "Failed to check existing customers");
+      throw new Error(
+        fetchError.message || "Failed to check existing customers",
+      );
     }
 
     // Filtramos los nuevos datos para no insertar los ya existentes
     const newCustomers = enrichedData.filter((customer: any) => {
-      return !existingCustomers.some((existing: any) => existing.email === customer.email);
+      return !existingCustomers.some(
+        (existing: any) => existing.email === customer.email,
+      );
     });
 
     if (newCustomers.length > 0) {
-      const { error: insertError } = await supabase.from("customers").insert(newCustomers);
+      const { error: insertError } = await supabase
+        .from("customers")
+        .insert(newCustomers);
 
       if (insertError) {
         throw new Error(insertError.message || "Failed to insert customers");
@@ -57,7 +63,6 @@ export const createCustomersFromCsv = async (data: any) => {
   }
 };
 
-
 export const createCustomers = async (data: any): Promise<string> => {
   try {
     const user_id = await getUserSession();
@@ -65,13 +70,13 @@ export const createCustomers = async (data: any): Promise<string> => {
       ...data,
       user_id,
     };
-    
+
     const { error } = await supabase.from("customers").insert(enrichedData);
-    
+
     if (error) {
       throw new Error(error.message || "Failed to create customer");
     }
-    
+
     return "Customer created successfully";
   } catch (error) {
     console.error("Error on create customer", error);
@@ -86,12 +91,24 @@ export const updateCustomers = async (data: any) => {
       ...data,
       user_id,
     };
-    const { error } = await supabase.from("customers").update(enrichedData).eq('id', data.id);
-    !error && "Customer updated successfully";
+
+    const { error } = await supabase
+      .from("customers")
+      .update(enrichedData)
+      .eq("id", data.id);
+
+    // Verificamos si hay error y arrojamos un throw
+    if (error) {
+      throw new Error(`Error updating customer: ${error.message}`);
+    }
+
+    return "Customer updated successfully"; // Retornamos un mensaje de éxito
   } catch (error) {
-    console.log("Error on update customer", error);
+    // Capturamos y arrojamos el error para que sea manejado por el código que llama a esta función
+    throw new Error(`Error on update customer: ${error}`);
   }
 };
+
 export const deleteCustomers = async (id: any): Promise<string> => {
   try {
     const { error } = await supabase.from("customers").delete().eq("id", id);
@@ -125,7 +142,7 @@ export const exportCustomerOnSheet = async () => {
       link.click();
       document.body.removeChild(link);
 
-      return { message: "Customers exported successfully" };  // Devolvemos un mensaje de éxito
+      return { message: "Customers exported successfully" }; // Devolvemos un mensaje de éxito
     } else {
       throw new Error("No data available to export.");
     }

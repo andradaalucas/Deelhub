@@ -20,18 +20,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { FormSchemaCustomers } from "../schemas";
+import { formSchemaEdit } from "../schemas";
 import { updateCustomers } from "@/services/customers";
 import { DetailsProps } from "../types";
-
+import { toast } from "sonner";
 
 export function EditCustomers({ rowData, isOpen, setIsOpen }: DetailsProps) {
-  const { toast } = useToast();
   const defaultValues = {
     id: rowData?.id || "",
     name: rowData?.name || "",
@@ -39,33 +37,34 @@ export function EditCustomers({ rowData, isOpen, setIsOpen }: DetailsProps) {
     email: rowData?.email || "",
   };
 
-  const formCustomers = useForm<z.infer<typeof FormSchemaCustomers>>({
+  const formCustomers = useForm<z.infer<typeof formSchemaEdit>>({
     defaultValues,
-    resolver: zodResolver(FormSchemaCustomers),
+    resolver: zodResolver(formSchemaEdit),
   });
   const queryClient = useQueryClient();
   const updateCustomer = useMutation({
     mutationFn: updateCustomers,
     onSuccess: () => {
       queryClient.invalidateQueries(["customers"]);
-      toast({
-        title: "Successfully updated",
-      });
     },
-    onError() {
-      toast({
-        title: "Error An error occurred while edit the customer",
-      });
+    onError: () => {
+      queryClient.invalidateQueries(["customers"]);
     },
   });
-  const handleOpenDialog = () => {
-    setIsOpen(!isOpen);
+
+  const onSubmit = async (values: z.infer<typeof formSchemaEdit>) => {
+    const promise = updateCustomer.mutateAsync(values);
+    toast.promise(promise, {
+      loading: "Uploading customers...",
+      success: () => {
+        return "Customer updated successfully";
+      },
+      error: "Failed to updated customers. Please try again.",
+    });
+    promise.then(() => formCustomers.reset());
+    promise.then(() => setIsOpen(false));
   };
-  const onSubmit = async (values: z.infer<typeof FormSchemaCustomers>) => {
-    updateCustomer.mutate(values);
-    formCustomers.reset();
-    handleOpenDialog();
-  };
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogContent className="max-w rounded-xl p-0">
