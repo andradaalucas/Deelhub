@@ -14,27 +14,68 @@ export const getAllCustomers = async (filters?: any) => {
 export const createCustomersFromCsv = async (data: any) => {
   try {
     const user_id = await getUserSession();
-    const enrichedData = data.map((customer: any) => ({
-      ...customer,
-      user_id,
-    }));
-    const { error } = await supabase.from("customers").insert(enrichedData);
-    !error && "Customer created successfully";
+    const enrichedData = data.map((customer: any) => {
+      const { id, ...rest } = customer; 
+      return {
+        ...rest,
+        user_id,
+      };
+    });
+
+    // Obtenemos una lista de correos (o cualquier otra clave única)
+    const emails = enrichedData.map((customer: any) => customer.email);
+
+    // Verificamos si ya existen registros con estos correos
+    const { data: existingCustomers, error: fetchError } = await supabase
+      .from("customers")
+      .select("email")
+      .in("email", emails);
+
+    if (fetchError) {
+      throw new Error(fetchError.message || "Failed to check existing customers");
+    }
+
+    // Filtramos los nuevos datos para no insertar los ya existentes
+    const newCustomers = enrichedData.filter((customer: any) => {
+      return !existingCustomers.some((existing: any) => existing.email === customer.email);
+    });
+
+    if (newCustomers.length > 0) {
+      const { error: insertError } = await supabase.from("customers").insert(newCustomers);
+
+      if (insertError) {
+        throw new Error(insertError.message || "Failed to insert customers");
+      }
+
+      return `${newCustomers.length} customer(s) created successfully, ${existingCustomers.length} already existed.`;
+    } else {
+      return "No new customers to insert, all already exist.";
+    }
   } catch (error) {
     console.log("Error on create customer", error);
+    throw new Error("An error occurred while creating customers: " + error);
   }
 };
-export const createCustomers = async (data: any) => {
+
+
+export const createCustomers = async (data: any): Promise<string> => {
   try {
     const user_id = await getUserSession();
     const enrichedData = {
       ...data,
       user_id,
     };
+    
     const { error } = await supabase.from("customers").insert(enrichedData);
-    !error && "Customer created successfully";
+    
+    if (error) {
+      throw new Error(error.message || "Failed to create customer");
+    }
+    
+    return "Customer created successfully";
   } catch (error) {
-    console.log("Error on create customer", error);
+    console.error("Error on create customer", error);
+    throw new Error("An error occurred while creating the customer");
   }
 };
 
@@ -51,12 +92,18 @@ export const updateCustomers = async (data: any) => {
     console.log("Error on update customer", error);
   }
 };
-export const deleteCustomers = async (id: any) => {
+export const deleteCustomers = async (id: any): Promise<string> => {
   try {
     const { error } = await supabase.from("customers").delete().eq("id", id);
-    !error && "Customer deleted successfully";
+
+    if (error) {
+      throw new Error(error.message || "Failed to delete customer");
+    }
+
+    return "Customer deleted successfully";
   } catch (error) {
-    console.log("Error on update customer", error);
+    console.log("Error on delete customer", error);
+    throw new Error("An error occurred while deleting customer: " + error);
   }
 };
 
@@ -65,8 +112,7 @@ export const exportCustomerOnSheet = async () => {
     const { data, error } = await supabase.from("customers").select().csv();
 
     if (error) {
-      console.error("Error on fetching customers", error);
-      return;
+      throw new Error("Error on fetching customers: " + error.message);
     }
 
     if (data) {
@@ -78,10 +124,12 @@ export const exportCustomerOnSheet = async () => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+
+      return { message: "Customers exported successfully" };  // Devolvemos un mensaje de éxito
     } else {
-      console.log("No data available to export.");
+      throw new Error("No data available to export.");
     }
   } catch (error) {
-    console.error("Error on export customer", error);
+    throw new Error("Error on exporting customers: " + error); // Lanzamos un error para que sea manejado
   }
 };

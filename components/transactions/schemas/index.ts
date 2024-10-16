@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const formSchemaTransactions = z.object({
-  customers: z.string().email(),
+  customers: z.string(),
   description: z.string().optional(),
   termsAndConditions: z.string().optional(),
   notifyByEmail: z.boolean().optional(),

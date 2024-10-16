@@ -1,14 +1,5 @@
-"use client"
+"use client";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -19,25 +10,36 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { createCustomers } from "@/services/customers";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormSchemaCustomers } from "../schemas";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export function CreateForm() {
-  const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
+
   const createCustomer = useMutation({
-    mutationFn: createCustomers,
+    mutationFn: (data: any) => createCustomers(data),
     onSuccess: () => {
       queryClient.invalidateQueries(["customers"]);
     },
-    onError() {},
+    onError: () => {
+      queryClient.invalidateQueries(["customers"]);
+    },
   });
+
   const formCustomers = useForm<z.infer<typeof FormSchemaCustomers>>({
     resolver: zodResolver(FormSchemaCustomers),
     defaultValues: {
@@ -46,93 +48,59 @@ export function CreateForm() {
       description: "",
     },
   });
-  const onSubmit = (data: z.infer<typeof FormSchemaCustomers>) => {
-    createCustomer.mutate(data);
-    formCustomers.reset();
-    handleOpenDialog();
+
+  const onSubmit = async (data: z.infer<typeof FormSchemaCustomers>) => {
+    // const promise = createCustomer.mutateAsync(data); // Usamos mutateAsync para una promesa
+    // toast.promise(promise, {
+    //   loading: "Creating customer...",
+    //   success: "Customer created successfully!",
+    //   error: "An error occurred while creating the customer",
+    // });
+    // await promise; // Esperamos a que la promesa se resuelva
+    // formCustomers.reset(); // Reseteamos el formulario solo si fue exitoso
+    // handleOpenDialog(); // Cerrar el diálogo después de la operación
+    console.log("<data value=></data>");
   };
-  const handleOpenDialog = () => {
-    setIsOpen(!isOpen);
-  };
+
   return (
     <div>
-      <Button className="ml-4 h-9 rounded-md" onClick={handleOpenDialog}>
-        Create customer
-      </Button>
-      <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button className="ml-4 h-9 rounded-md">Create customer</Button>
+        </DialogTrigger>
         <DialogContent className="max-w rounded-xl p-0">
           <DialogHeader className="px-8 pt-8">
             <DialogTitle className="text-2xl font-bold">
               Create Customers
             </DialogTitle>
             <DialogDescription>
-              Make changes to your profile here. Click save when youe done.
+              Make changes to your profile here. Click save when you’re done.
             </DialogDescription>
           </DialogHeader>
-          <div>
-            <Form {...formCustomers}>
-              <form onSubmit={formCustomers.handleSubmit(onSubmit)}>
-                {/* Name Field */}
-                <FormField
-                  control={formCustomers.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem className="px-8">
-                      <FormLabel>Name</FormLabel>
-                      <FormControl>
-                        <Input type="text" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Enter the customer{"'"}s full name. This will be associated
-                        with their transaction details.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={formCustomers.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem className="px-8">
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input type="text" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        The invoice and all transaction-related communications
-                        will be sent to this email address.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={formCustomers.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem className="px-8">
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Textarea className="resize-none" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Provide a brief description of the transaction, such as
-                        the purpose or any key details.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <DialogFooter className="flex justify-end gap-2 rounded-b-lg border bg-[#fafafa] px-8 py-6">
-                  <DialogClose>
-                    <div>Cancel</div>
-                  </DialogClose>
-                  <Button type="submit">Create customer</Button>
-                </DialogFooter>
-              </form>
-            </Form>
-          </div>
+          <Form {...formCustomers}>
+            <form
+              onSubmit={formCustomers.handleSubmit(onSubmit)}
+              className="space-y-8"
+            >
+              <FormField
+                control={formCustomers.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input placeholder="shadcn" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      This is your public display name.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Submit</Button>
+            </form>
+          </Form>
         </DialogContent>
       </Dialog>
     </div>

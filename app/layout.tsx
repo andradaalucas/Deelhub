@@ -7,7 +7,7 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import Head from "next/head";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
 
 export default function HomeLayout({
   children,
@@ -17,10 +17,10 @@ export default function HomeLayout({
   const queryClient = new QueryClient();
 
   return (
-    <html lang="en" className="light"> {/* Forzar tema claro */}
+    <html lang="en" className="light">
       <body
         className={`${cn(
-          "min-h-screen bg-background font-sans antialiased light",
+          "light min-h-screen bg-background font-sans antialiased",
         )} ${GeistSans.variable} ${GeistMono.variable}`}
       >
         <Head>
@@ -29,7 +29,7 @@ export default function HomeLayout({
         <QueryClientProvider client={queryClient}>
           <NextUIProvider>
             {children}
-            <Toaster richColors closeButton/>
+            <Toaster richColors closeButton />
             <ReactQueryDevtools />
           </NextUIProvider>
         </QueryClientProvider>

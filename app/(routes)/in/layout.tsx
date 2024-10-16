@@ -2,11 +2,11 @@ import { NavBar } from "@/components/navbar";
 import { SearchBar } from "@/components/search-bar";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { Metadata } from 'next'
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Deelfy Inc',
-}
+  title: "Deelfy Inc",
+};
 
 export default async function InLayout({
   children,

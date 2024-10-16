@@ -8,7 +8,7 @@ import {
   DialogFooter,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { createCustomersFromCsv } from "@/services/customers";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { File, Upload, X } from "lucide-react";
@@ -40,16 +40,14 @@ export function DropAndDrag({ isOpen, setIsOpen }: any) {
 
         // Verificar si alguna fila tiene 'name' o 'email' vacíos
         const incompleteRows = data.filter(
-          (row: any) => !row.name || !row.email
+          (row: any) => !row.name || !row.email,
         );
 
         if (incompleteRows.length > 0) {
           setRowsWithMissingFields(incompleteRows);
-          toast({
-            title: "Warning",
-            description: `${incompleteRows.length} row(s) have missing name or email fields. You will be able to edit them later.`,
-            variant: "destructive",
-          });
+          toast.warning(
+            `${incompleteRows.length} row(s) have missing name or email fields. You will be able to edit them later.`,
+          );
         }
 
         setParsedData(data);
@@ -76,16 +74,19 @@ export function DropAndDrag({ isOpen, setIsOpen }: any) {
   });
 
   const handleUploadCustomers = async () => {
-    // Crear los clientes con los datos cargados (incluso si tienen campos vacíos)
-    createCustomer.mutate(parsedData);
-    toast({
-      title: "Successfully imported",
-      description:
-        rowsWithMissingFields.length > 0
+    const promise = createCustomer.mutateAsync(parsedData);
+
+    toast.promise(promise, {
+      loading: "Uploading customers...",
+      success: (data) => {
+        return rowsWithMissingFields.length > 0
           ? `${rowsWithMissingFields.length} customers have missing fields. Please edit them later.`
-          : "All customers imported successfully!",
+          : "All customers imported successfully!";
+      },
+      error: "Failed to upload customers. Please try again.",
     });
-    setIsOpen(false);
+
+    promise.then(() => setIsOpen(false));
   };
 
   const removeFile = () => {

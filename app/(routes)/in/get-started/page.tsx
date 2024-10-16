@@ -17,14 +17,14 @@ export default function Page() {
             <li className="text-gray-700">
               <span className="font-medium">
                 <Keyword>Sign Up</Keyword>:
-              </span>{" "}
+              </span>
               Create your account by clicking the {"Sign Up"} button on the
               homepage.
             </li>
             <li className="text-gray-700">
               <span className="font-medium">
                 <Keyword>Login</Keyword>:
-              </span>{" "}
+              </span>
               Once your account is created, log in using your credentials.
             </li>
             <li className="text-gray-700">
@@ -37,14 +37,14 @@ export default function Page() {
             <li className="text-gray-700">
               <span className="font-medium">
                 <Keyword>Create a Project</Keyword>:
-              </span>{" "}
+              </span>
               Click on the {"New Project"} button to create your first project.
             </li>
             <li className="text-gray-700">
               <span className="font-medium">
                 <Keyword>Add Tasks</Keyword>:
-              </span>{" "}
-              Within your project, you can start adding tasks by clicking{" "}
+              </span>
+              Within your project, you can start adding tasks by clicking
               {"Add Task"}.
             </li>
           </ol>
@@ -58,7 +58,7 @@ export default function Page() {
                 <Keyword>Task Management</Keyword>
               </h3>
               <p className="text-gray-600">
-                Create, assign, and track tasks easily. Set{" "}
+                Create, assign, and track tasks easily. Set
                 <Keyword>due dates</Keyword>, <Keyword>priorities</Keyword>, and
                 add descriptions to keep everyone informed.
               </p>
@@ -70,7 +70,7 @@ export default function Page() {
               </h3>
               <p className="text-gray-600">
                 Invite team members, assign tasks, and communicate within the
-                app using <Keyword>comments</Keyword> and{" "}
+                app using <Keyword>comments</Keyword> and
                 <Keyword>mentions</Keyword>.
               </p>
             </div>
@@ -80,8 +80,8 @@ export default function Page() {
                 <Keyword>Progress Tracking</Keyword>
               </h3>
               <p className="text-gray-600">
-                View project progress at a glance with our intuitive{" "}
-                <Keyword>dashboards</Keyword> and <Keyword>reports</Keyword>.
+                View project progress at a glance with our intuitive
+                <Keyword>dashboards</Keyword> and reports.
               </p>
             </div>
 

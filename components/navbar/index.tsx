@@ -18,6 +18,7 @@ import {
   BellIcon,
   SettingsIcon,
   BookOpenIcon,
+  PackageIcon,
 } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -52,6 +53,11 @@ export function NavBar() {
       href: "/in/customers",
       icon: UsersIcon,
       label: "Customers",
+    },
+    {
+      href: "/in/products",
+      icon: PackageIcon,
+      label: "Products",
     },
     {
       href: "/in/billing",

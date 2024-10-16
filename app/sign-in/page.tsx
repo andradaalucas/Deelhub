@@ -32,9 +32,9 @@ export default async function LoginPage() {
             Log in
           </Button>
           <span className="mt-4 text-sm">
-            {"Don't have an account?"}{" "}
+            {"Don't have an account?"}
             <Link href="/sign-up" className="underline">
-              {" "}
+              
               Sign Up Now
             </Link>
           </span>

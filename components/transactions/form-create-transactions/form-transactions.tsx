@@ -67,17 +67,10 @@ export const FormTransactions = forwardRef<FormTransactionsRef>(
     useImperativeHandle(ref, () => ({
       submitForm: (callback: (data: any) => void) => {
         form.handleSubmit((data) => {
-          handleFormSubmit(data);
           callback(data); // Pasar los datos al padre mediante el callback
         })();
       },
     }));
-
-    // Manejo del envío del formulario
-    const handleFormSubmit = (data: z.infer<typeof formSchemaTransactions>) => {
-      console.log("Form data:", data);
-      // Lógica del manejo del formulario (ya no se necesita `onSubmit`)
-    };
 
     const [termsAndConditions, setTermsAndConditions] = useState(false);
 
@@ -87,7 +80,7 @@ export const FormTransactions = forwardRef<FormTransactionsRef>(
 
     const handleAddCustomer = () => {
       console.log("Add customer");
-      
+
       router.push("/in/customers"); // Redirige a la página para agregar clientes
     };
 
@@ -115,7 +108,7 @@ export const FormTransactions = forwardRef<FormTransactionsRef>(
                               </SelectItem>
                             ))}
                           <div
-                          className="text-sm p-2 cursor-pointer hover:bg-#f4f4f5"
+                            className="hover:bg-#f4f4f5 cursor-pointer p-2 text-sm"
                             key="go-to-add-customer"
                             onClick={handleAddCustomer}
                           >

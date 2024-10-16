@@ -7,14 +7,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { exportCustomerOnSheet } from "@/services/customers";
 
 export function AuthorizationOption({ isOpen, setIsOpen }: any) {
   const handleExport = async () => {
-    await exportCustomerOnSheet();
-    toast({
-      title: "Successfully exported",
+    const promise = exportCustomerOnSheet();
+    toast.promise(promise, {
+      loading: 'Loading...',
+      success: () => {
+        return `Data exported successfully`;
+      },
+      error: 'Error',
     });
     setIsOpen(false);
   };

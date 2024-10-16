@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCustomers } from "@/services/customers";
@@ -33,19 +33,25 @@ const ActionsCell = ({ row }: any) => {
   const queryClient = useQueryClient();
 
   const deleteCustomer = useMutation({
-    mutationFn: deleteCustomers,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["customer"]);
-      toast({
-        title: "Successfully deleted",
+    mutationFn: (id: any) => deleteCustomers(id),  // Se asegura de pasar el `id`
+    onMutate: async (id) => {
+      const promise = deleteCustomers(id);
+      toast.promise(promise, {
+        loading: 'Deleting customer...',
+        success: () => 'Customer deleted successfully!',
+        error: 'An error occurred while deleting the customer',
       });
+  
+      return promise;  // Retornar la promesa para que react-query la maneje
     },
-    onError() {
-      toast({
-        title: "Error An error occurred while delete the transaction",
-      });
+    onSuccess: () => {
+      queryClient.invalidateQueries(["customers"]);
+    },
+    onError: () => {
+      queryClient.invalidateQueries(["customers"]); // Para asegurarse de actualizar el estado en caso de error también
     },
   });
+  
   const actionToExcecuteFunction = () => {
     deleteCustomer.mutate(row.original.id);
     setIsOpenDelete(false);
@@ -63,9 +69,7 @@ const ActionsCell = ({ row }: any) => {
 
   const handleCopyClipboard = (row: any) => {
     navigator.clipboard.writeText(row?.id);
-    toast({
-      title: "Copied to clipboard",
-    });
+    toast.success("Copied to clipboard");
   };
   return (
     <div className="flex justify-center">
@@ -91,7 +95,7 @@ const ActionsCell = ({ row }: any) => {
             Copy Client ID
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="text-red-500  cursor-pointer"
+            className="cursor-pointer text-red-500"
             onClick={handleDelete}
           >
             Delete
