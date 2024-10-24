@@ -26,7 +26,7 @@ export function ConfirmAction({
             {actionExcecuteData.description}
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="flex justify-end gap-2 rounded-b-lg border bg-[#fafafa] px-8 py-4">
+        <DialogFooter className="flex justify-end gap-2 rounded-b-lg border bg-zinc-100/75 dark:bg-zinc-900/75 px-8 py-4">
           <div className="flex justify-end">
             <Button onClick={actionToExcecuteFunction} variant="destructive">
               Accept

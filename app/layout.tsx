@@ -8,6 +8,7 @@ import { GeistSans } from "geist/font/sans";
 import Head from "next/head";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 export default function HomeLayout({
   children,
@@ -17,10 +18,10 @@ export default function HomeLayout({
   const queryClient = new QueryClient();
 
   return (
-    <html lang="en" className="light">
+    <html lang="en">
       <body
         className={`${cn(
-          "light min-h-screen bg-background font-sans antialiased",
+          "min-h-screen bg-background font-sans antialiased",
         )} ${GeistSans.variable} ${GeistMono.variable}`}
       >
         <Head>

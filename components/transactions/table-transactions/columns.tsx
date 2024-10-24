@@ -15,7 +15,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 import { ConfirmAction } from "../../atom/confirm-action";
-import { Details } from "../actions/details";
 // import { Edit } from "../actions/edit";
 import { Transactions } from "../types";
 import { Toaster, toast } from "sonner";
@@ -44,41 +43,28 @@ const ActionsCell = ({ row }: any) => {
   });
 
   const queryClient = useQueryClient();
+
+
   const deleteTransaction = useMutation({
-    mutationFn: deleteTransactions,
+    mutationFn: (id: any) => deleteTransactions(id), // Se asegura de pasar el `id`
     onSuccess: () => {
       queryClient.invalidateQueries(["transactions"]);
-      toast.success("Successfully deleted");
     },
-    onError() {
-      // toast({
-      //   title: "Error An error occurred while delete the transaction",
-      // });
-      toast.error("Error An error occurred while delete the transaction");
+    onError: () => {
+      queryClient.invalidateQueries(["transactions"]); // Para asegurarse de actualizar el estado en caso de error también
     },
   });
-  // const editTransaction = useMutation({
-  //   mutationFn: deleteTransactions,
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries(["transactions"]);
-  //     toast({
-  //       title: "Successfully deleted",
-  //     });
-  //   },
-  //   onError() {
-  //     toast({
-  //       title: "Error An error occurred while delete the transaction",
-  //     });
-  //   },
-  // });
-  const promise = () =>
-    new Promise((resolve) =>
-      setTimeout(() => resolve({ name: "Sonner" }), 2000),
-    );
 
   const actionToExcecuteFunction = () => {
-    deleteTransaction.mutate(row.original.id);
-    setIsOpenDelete(false);
+    const promise = deleteTransaction.mutateAsync(row.original.id);
+    toast.promise(promise, {
+      loading: "Deleting transaction...",
+      success: () => {
+        return "Transaction deleted successfully!";
+      },
+      error: "Failed to delete transaction. Please try again.",
+    });
+    promise.then(() => setIsOpenDelete(!isOpenDelete));
   };
 
   const handleDetails = () => {
@@ -95,16 +81,7 @@ const ActionsCell = ({ row }: any) => {
     navigator.clipboard.writeText(rowData?.id);
     toast.success("Copied to clipboard");
   };
-  const handleGeneratePDF = () => {
-    console.log("entro");
-    toast.promise(promise, {
-      loading: "Generating PDF",
-      success: (data) => {
-        return `PDF generated successfully `;
-      },
-      error: "Error",
-    });
-  };
+  const handleGeneratePDF = () => {};
 
   return (
     <>
@@ -135,12 +112,18 @@ const ActionsCell = ({ row }: any) => {
             </DropdownMenuItem>
             <DropdownMenuItem
               className="cursor-pointer"
-              onClick={handleGeneratePDF}
+              onClick={() => handleCopyClipboard(row.original)}
             >
-              Generate PDF
+              Copy Access Token
             </DropdownMenuItem>
             <DropdownMenuItem
-              className="text-danger hover:text-danger cursor-pointer"
+              className="cursor-pointer"
+              onClick={handleGeneratePDF}
+            >
+              Download PDF
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="cursor-pointer text-red-500"
               onClick={handleDelete}
             >
               Delete
@@ -201,7 +184,7 @@ export const columns: ColumnDef<Transactions>[] = [
       return <div className="">Amount</div>;
     },
     cell: ({ row }) => {
-      const Monto = parseFloat(row.getValue("amount"));
+      const Monto = parseFloat(row.getValue("total "));
 
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",

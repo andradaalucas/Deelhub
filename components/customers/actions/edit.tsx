@@ -69,7 +69,7 @@ export function EditCustomers({ rowData, isOpen, setIsOpen }: DetailsProps) {
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogContent className="max-w rounded-xl p-0">
         <DialogHeader className="px-8 pt-8">
-          <DialogTitle className="text-2xl font-bold">
+          <DialogTitle className="text-2xl font-semibold">
             Edit Customers
           </DialogTitle>
           <DialogDescription>
@@ -130,7 +130,7 @@ export function EditCustomers({ rowData, isOpen, setIsOpen }: DetailsProps) {
                   </FormItem>
                 )}
               />
-              <DialogFooter className="flex justify-end gap-2 rounded-b-lg border bg-[#fafafa] px-8 py-6">
+              <DialogFooter className="flex justify-end gap-2 rounded-b-lg border bg-zinc-100/75 dark:bg-zinc-900/75 px-8 py-6 mt-4">
                 <DialogClose>
                   <div>Cancel</div>
                 </DialogClose>

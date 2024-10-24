@@ -116,9 +116,9 @@ export function BillingPresets() {
             </div>
           </div>
         </CardContent>
-        <CardFooter className="border bg-[#fafafa] py-2">
+        <CardFooter className="border bg-zinc-100/75 dark:bg-zinc-900/75 py-2">
           <p className="mr-auto text-sm text-muted-foreground">
-            Please use a maximum of 64 characters.
+            Please use a maximum of 64 charactesrs.
           </p>
           <Button size="sm">Save</Button>
         </CardFooter>
@@ -225,7 +225,7 @@ export function BillingPresets() {
             </div>
           </div>
         </CardContent>
-        <CardFooter className="border bg-[#fafafa] py-2">
+        <CardFooter className="border bg-zinc-100/75 dark:bg-zinc-900/75 py-2">
           <p className="mr-auto text-sm text-muted-foreground">
             Feel free to complete only the fields you wish to fill out.
           </p>

@@ -33,17 +33,7 @@ const ActionsCell = ({ row }: any) => {
   const queryClient = useQueryClient();
 
   const deleteCustomer = useMutation({
-    mutationFn: (id: any) => deleteCustomers(id),  // Se asegura de pasar el `id`
-    onMutate: async (id) => {
-      const promise = deleteCustomers(id);
-      toast.promise(promise, {
-        loading: 'Deleting customer...',
-        success: () => 'Customer deleted successfully!',
-        error: 'An error occurred while deleting the customer',
-      });
-  
-      return promise;  // Retornar la promesa para que react-query la maneje
-    },
+    mutationFn: (id: any) => deleteCustomers(id), // Se asegura de pasar el `id`
     onSuccess: () => {
       queryClient.invalidateQueries(["customers"]);
     },
@@ -51,10 +41,17 @@ const ActionsCell = ({ row }: any) => {
       queryClient.invalidateQueries(["customers"]); // Para asegurarse de actualizar el estado en caso de error también
     },
   });
-  
+
   const actionToExcecuteFunction = () => {
-    deleteCustomer.mutate(row.original.id);
-    setIsOpenDelete(false);
+    const promise = deleteCustomer.mutateAsync(row.original.id);
+    toast.promise(promise, {
+      loading: "Deleting customer...",
+      success: () => {
+        return "Customer deleted successfully!";
+      },
+      error: "Failed to delete customer. Please try again.",
+    });
+    promise.then(() => setIsOpenDelete(false));
   };
 
   const handleDetails = () => {

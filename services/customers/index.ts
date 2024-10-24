@@ -58,8 +58,7 @@ export const createCustomersFromCsv = async (data: any) => {
       return "No new customers to insert, all already exist.";
     }
   } catch (error) {
-    console.log("Error on create customer", error);
-    throw new Error("An error occurred while creating customers: " + error);
+    throw new Error("An error occurred when obtaining the product." + error);
   }
 };
 

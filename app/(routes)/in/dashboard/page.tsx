@@ -1,10 +1,17 @@
 "use client";
 import { DataTable } from "@/components/transactions/table-transactions";
 import { columns } from "@/components/transactions/table-transactions/columns";
-import { FilterTransactions } from "@/components/transactions/table-transactions/filter-transactions";
 import { getAllTransactions } from "@/services/transactions";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ShoppingBag } from "lucide-react";
+import { Sparkle } from "lucide-react";
 
 export default function Dashboard() {
   const {
@@ -17,11 +24,43 @@ export default function Dashboard() {
   );
 
   return (
-    <DataTable
-      columns={columns}
-      data={transactions || []}
-      isLoading={isLoading}
-      isError={isError}
-    />
+    <>
+      <Card className="col-span-full mx-auto grid w-full max-w-5xl">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <div>AI-Powered Recommendations</div>
+          </CardTitle>
+          <CardDescription>
+            Products and services tailored for you
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {[1, 2, 3].map((item) => (
+              <div
+                key={item}
+                className="flex items-center space-x-4 rounded-lg border p-4"
+              >
+                <div className="flex-shrink-0 rounded-full bg-gray-100 p-3 dark:bg-gray-900">
+                  <ShoppingBag className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold">Product {item}</h3>
+                  <p className="text-sm text-gray-400 dark:text-gray-300">
+                    Recommended based on your spending habits
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+      <DataTable
+        columns={columns}
+        data={transactions || []}
+        isLoading={isLoading}
+        isError={isError}
+      />
+    </>
   );
 }

@@ -1,16 +1,16 @@
 import { z } from "zod";
 
 export const formSchemaTransactions = z.object({
-  customers: z.string(),
+  customers: z.string().optional(),
   description: z.string().optional(),
-  termsAndConditions: z.string().optional(),
-  notifyByEmail: z.boolean().optional(),
-  status: z.string().optional(),
-  date: z.date({
-    required_error: "Required",
-    invalid_type_error: "date must be a date format",
-  }),
+  startDate: z.date(),
+  expirationDate: z.date().optional() || null,
+  currency: z.enum(["USD", "EUR", "GBP"]),
+  taxRate: z.number().min(0).max(100, "Tax rate must be between 0 and 100"),
 });
+
+export type FormSchemaTransactions = z.infer<typeof formSchemaTransactions>;
+
 
 export const formSchemaProducts = z.object({
   name: z.string().min(2).max(50),

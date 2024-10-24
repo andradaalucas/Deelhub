@@ -194,7 +194,7 @@ export function UserPresetsBilling() {
                   </FormItem>
                 )}
               />
-              <CardFooter className="flex justify-end border bg-[#fafafa] py-2">
+              <CardFooter className="flex justify-end border bg-zinc-100/75 dark:bg-zinc-900/75 py-2 rounded-b-lg ">
                 <Button
                   type="submit"
                   size="default"
@@ -370,7 +370,7 @@ export function UserPresetsBilling() {
                 )}
               />
 
-              <CardFooter className="flex justify-end border bg-[#fafafa] py-2">
+              <CardFooter className="flex justify-end border bg-zinc-100/75 dark:bg-zinc-900/75 py-2 rounded-b-lg">
                 <Button type="submit" size="default" className="mx-2">
                   Save
                 </Button>
