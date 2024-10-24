@@ -50,7 +50,7 @@ const items = [
     icon: LandmarkIcon,
   },
   {
-    title: "Insights",
+    title: "Insights AI",
     url: "/in/insights",
     icon: BarChart2Icon,
   },

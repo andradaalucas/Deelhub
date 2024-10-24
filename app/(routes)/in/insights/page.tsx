@@ -43,13 +43,10 @@ const predictionData = [
 
 export default function Component() {
   return (
-    <div className="space-y-6 p-6 dark:bg-gray-900">
+    <div className="mx-auto w-full max-w-5xl grid-cols-2 gap-6 space-y-6 p-2 ">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-          Predictive Billing Analysis
-        </h2>
         <span className="text-sm text-gray-500 dark:text-gray-400">
-          Powered by AI
+          Powered by Anthropic AI
         </span>
       </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
