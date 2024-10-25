@@ -41,7 +41,7 @@ export default function Dashboard() {
                 key={item}
                 className="flex items-center space-x-4 rounded-lg border p-4"
               >
-                <div className="flex-shrink-0 rounded-full bg-gray-100 p-3 dark:bg-gray-900">
+                <div className="flex-shrink-0 rounded-full bg-gray-100 p-3 dark:bg-[#27272a]">
                   <ShoppingBag className="h-6 w-6 text-primary" />
                 </div>
                 <div>

@@ -45,14 +45,14 @@ const items = [
     icon: UsersIcon,
   },
   {
-    title: "Billing",
-    url: "/in/billing",
-    icon: LandmarkIcon,
-  },
-  {
     title: "Insights AI",
     url: "/in/insights",
     icon: BarChart2Icon,
+  },
+  {
+    title: "Billing",
+    url: "/in/billing",
+    icon: LandmarkIcon,
   },
   {
     title: "Settings",
@@ -127,7 +127,7 @@ export async function AppSidebar() {
                   <span className="cursor-pointer">Account</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                 <span className="cursor-pointer">Theme</span>
+                  <span className="cursor-pointer">Theme</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

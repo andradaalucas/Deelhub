@@ -12,6 +12,15 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -25,6 +34,7 @@ import { useState } from "react";
 import { DataTableProps } from "../types";
 import { HeaderTable } from "./data-table-header";
 import { DataTablePagination } from "./data-table-pagination";
+import { ArrowUpIcon } from "lucide-react";
 
 export function DataTable<TData, TValue>({
   columns,
@@ -57,7 +67,129 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <>
+    <div className="mx-auto w-full max-w-5xl grid-cols-2 gap-6 space-y-6 p-2">
+      <div className="grid gap-6 lg:grid-cols-2">
+
+        <div className="grid grid-cols-2 gap-6">
+          <Card className="flex flex-col justify-between shadow-md">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">
+                Total Customers
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="px-6 font-mono text-2xl font-semibold">1,234</div>
+              <div className="mt-2 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
+                <p className="flex items-center font-mono text-xs text-muted-foreground">
+                  <ArrowUpIcon className="mr-1 h-4 w-4 text-green-500" />
+                  +5.2% last month
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="flex flex-col justify-between shadow-md">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">
+                Average Spend
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="px-6 font-mono text-2xl font-semibold">$345</div>
+              <div className="mt-2 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
+                <p className="flex items-center font-mono text-xs text-muted-foreground">
+                <ArrowUpIcon className="mr-1 h-4 w-4 text-green-500" />
+                  Per customer
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="flex flex-col justify-between shadow-md">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">
+                Customer Retention
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="px-6 font-mono text-2xl font-semibold">78%</div>
+              <div className="mt-2 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
+                <p className="flex items-center font-mono text-xs text-muted-foreground">
+                  <ArrowUpIcon className="mr-1 h-4 w-4 text-green-500" />
+                  +2.5% last quarter
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="flex flex-col justify-between shadow-md">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">
+                New Customers
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="px-6 font-mono text-2xl font-semibold">89</div>
+              <div className="mt-2 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
+                <p className="flex items-center font-mono text-xs text-muted-foreground">
+                <ArrowUpIcon className="mr-1 h-4 w-4 text-green-500" />
+                  This month
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Sección derecha con el listado de Top Spenders */}
+        <div className="lg:col-span-1">
+          <Card className="flex flex-col justify-between shadow-md ">
+            <CardHeader>
+              <CardTitle className="text-sm font-medium">
+                Top Spenders
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Customers with highest total spend
+              </CardDescription>
+            </CardHeader>
+            <CardContent >
+              <div className="space-y-4">
+                {[
+                  "Frank Miller",
+                  "Grace Lee",
+                  "Henry Wilson",
+                  "Ivy Chen",
+                  "Jack Taylor",
+                ].map((name, index) => (
+                  <div key={name} className="flex items-center">
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage
+                        src={`/placeholder.svg?height=36&width=36`}
+                        alt={name}
+                      />
+                      <AvatarFallback>
+                        {name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="ml-4 space-y-1">
+                      <p className="text-sm font-medium leading-none">{name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        ${(5000 - index * 500).toLocaleString()}
+                      </p>
+                    </div>
+                    <Badge className="ml-auto" variant="secondary">
+                      Top {index + 1}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
       <div className="mx-auto grid w-full max-w-5xl grid-cols-2 gap-6 p-2">
         <div className="col-span-2">
           <div className="flex items-center justify-between py-4">
@@ -166,6 +298,6 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
       <DataTablePagination table={table} />
-    </>
+    </div>
   );
 }
