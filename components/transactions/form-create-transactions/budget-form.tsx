@@ -172,7 +172,7 @@ export function BudgetCreator() {
   const selectedCurrency = form.watch("currency");
 
   return (
-    <div className="flex h-screen flex-col p-4 md:p-8">
+    <div className="flex h-screen flex-col p-4 md:p-8 overflow-y-auto">
       <div className="flex-grow">
         <Form {...form}>
           <form
@@ -181,7 +181,7 @@ export function BudgetCreator() {
           >
             <div className="space-y-4">
               {/* Cliente */}
-              <div className="flex flex-col items-end space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+              <div className="flex  items-end space-y-4 flex-row md:space-x-4 md:space-y-0">
                 {customers && (
                   <FormField
                     control={form.control}
@@ -370,7 +370,7 @@ export function BudgetCreator() {
               {/* Tabs para productos y servicios */}
               <div className="mt-4 flex-grow">
                 <Tabs defaultValue="product">
-                  <TabsList className="grid w-full grid-cols-1 md:grid-cols-2">
+                  <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="product">Producto</TabsTrigger>
                     <TabsTrigger value="service">Servicio</TabsTrigger>
                   </TabsList>
@@ -388,7 +388,7 @@ export function BudgetCreator() {
                       </Button>
                     </div>
                     {activeTable && (
-                      <div className="mt-4 h-48 overflow-y-auto rounded-lg border">
+                      <div className="h-22 mt-4 overflow-y-auto rounded-lg border lg:h-48">
                         <ScrollArea className="w-full overflow-x-auto">
                           <div className="w-full whitespace-nowrap">
                             {/* Tabla de Productos */}
@@ -479,7 +479,7 @@ export function BudgetCreator() {
                       </Button>
                     </div>
                     {activeTable && (
-                      <div className="h-48 overflow-y-auto rounded-lg border">
+                      <div className="h-22 overflow-y-auto rounded-lg border lg:h-48">
                         <Table>
                           <TableHeader>
                             <TableRow>
@@ -573,7 +573,10 @@ export function BudgetCreator() {
                 </div>
               </div>
               <div className="mt-4 flex items-end justify-end">
-                <Button type="submit" className="px-4 py-2 bg-blue hover:bg-hoverBlue text-white font-semibold">
+                <Button
+                  type="submit"
+                  className="bg-blue hover:bg-hoverBlue px-4 py-2 font-semibold text-white"
+                >
                   Create Budget
                 </Button>
               </div>
