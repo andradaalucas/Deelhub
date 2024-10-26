@@ -217,7 +217,7 @@ export function BudgetCreator() {
               </div>
 
               {/* Fechas */}
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="grid gap-4 grid-cols-2">
                 <FormField
                   control={form.control}
                   name="startDate"
@@ -291,7 +291,7 @@ export function BudgetCreator() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="grid grid-cols-2 gap-4 ">
                 <FormField
                   control={form.control}
                   name="currency"
