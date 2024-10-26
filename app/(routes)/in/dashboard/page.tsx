@@ -11,9 +11,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ShoppingBag } from "lucide-react";
-import { Sparkle } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function Dashboard() {
+  const [isLoadingOverview, setIsLoadingOverview] = useState(true);
   const {
     data: transactions,
     isLoading,
@@ -22,6 +23,12 @@ export default function Dashboard() {
     ["transactions"], // Include filters in the queryKey to refetch on change
     () => getAllTransactions(), // Pass filters to the query function
   );
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoadingOverview(false);
+    }, 2000);
+  }, []);
 
   return (
     <>
@@ -45,10 +52,19 @@ export default function Dashboard() {
                   <ShoppingBag className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Product {item}</h3>
-                  <p className="text-sm text-gray-400 dark:text-gray-300">
-                    Recommended based on your spending habits
-                  </p>
+                  {isLoadingOverview ? (
+                    <>
+                      <div className="h-6 w-24 mb-2 animate-pulse bg-[#2b2b2b]" />
+                      <div className="h-8 w-48 animate-pulse bg-[#2b2b2b]" />
+                    </>
+                  ) : (
+                    <>
+                      <h3 className="font-semibold">Product {item}</h3>
+                      <p className="text-sm text-gray-400 dark:text-gray-300">
+                        Recommended based on your spending habits
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
             ))}

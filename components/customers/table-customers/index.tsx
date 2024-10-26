@@ -30,7 +30,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DataTableProps } from "../types";
 import { HeaderTable } from "./data-table-header";
 import { DataTablePagination } from "./data-table-pagination";
@@ -46,6 +46,7 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
+  const [isLoadingOverview, setIsLoadingOverview] = useState(true);
 
   const table = useReactTable({
     data,
@@ -88,6 +89,11 @@ export function DataTable<TData, TValue>({
       description: "This month",
     },
   ];
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoadingOverview(false);
+    }, 2000);
+  }, []);
 
   return (
     <div className="mx-auto w-full max-w-5xl grid-cols-2 gap-6 space-y-6 p-2">
@@ -105,7 +111,11 @@ export function DataTable<TData, TValue>({
               </CardHeader>
               <CardContent className="p-0">
                 <div className="px-6 font-mono text-2xl font-semibold">
-                  {card.value}
+                  {isLoadingOverview ? (
+                    <div className="h-8 w-24 animate-pulse bg-[#2b2b2b]" />
+                  ) : (
+                    card.value
+                  )}
                 </div>
                 <div className="mt-2 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
                   <p className="flex items-center whitespace-nowrap font-mono text-xs text-muted-foreground">
