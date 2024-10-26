@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { ChevronRight } from "lucide-react";
 
 const Keyword = ({ children }: { children: React.ReactNode }) => (
@@ -9,7 +10,7 @@ const Keyword = ({ children }: { children: React.ReactNode }) => (
 
 export default function Page() {
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen">
       <main className="mx-auto max-w-3xl px-6 py-12">
         <section id="getting-started" className="mb-12">
           <h2 className="mb-4 text-2xl font-semibold">Getting Started</h2>
@@ -53,7 +54,7 @@ export default function Page() {
         <section id="key-features" className="mb-12">
           <h2 className="mb-4 text-2xl font-semibold">Key Features</h2>
           <div className="grid grid-cols-2 gap-6">
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-6">
+            <Card className="rounded-lg border p-6">
               <h3 className="mb-2 text-lg font-medium">
                 <Keyword>Task Management</Keyword>
               </h3>
@@ -62,20 +63,20 @@ export default function Page() {
                 <Keyword>due dates</Keyword>, <Keyword>priorities</Keyword>, and
                 add descriptions to keep everyone informed.
               </p>
-            </div>
+            </Card>
 
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-6">
+            <div className="rounded-lg border p-6">
               <h3 className="mb-2 text-lg font-medium">
                 <Keyword>Team Collaboration</Keyword>
               </h3>
               <p className="text-gray-600">
                 Invite team members, assign tasks, and communicate within the
-                app using <Keyword>comments</Keyword> and
+                app using <Keyword>comments</Keyword> and {" "}
                 <Keyword>mentions</Keyword>.
               </p>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-6">
+            <div className="rounded-lg border p-6">
               <h3 className="mb-2 text-lg font-medium">
                 <Keyword>Progress Tracking</Keyword>
               </h3>
@@ -85,7 +86,7 @@ export default function Page() {
               </p>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-6">
+            <div className="rounded-lg border p-6">
               <h3 className="mb-2 text-lg font-medium">
                 <Keyword>File Sharing</Keyword>
               </h3>
@@ -119,16 +120,22 @@ export default function Page() {
         </section>
 
         <section className="mb-12">
-          <div className="rounded-lg border border-gray-200 bg-gray-50 p-6">
-            <h2 className="mb-2 text-xl font-semibold">Need More Help?</h2>
-            <p className="mb-4 text-gray-600">
-              Our support team is always here to assist you.
-            </p>
-            <Button>
-              Contact Support
-              <ChevronRight className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
+          <Card>
+            <CardHeader >
+              Need More Help?
+            </CardHeader>
+            <CardContent>
+              <p>
+                Our support team is always here to assist you.
+              </p>
+              <CardFooter>
+                <Button>
+                  Contact Support
+                  <ChevronRight className="ml-2 h-4 w-4" />
+                </Button>
+              </CardFooter>
+            </CardContent>
+          </Card>
         </section>
       </main>
     </div>
