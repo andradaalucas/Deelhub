@@ -2,7 +2,8 @@ import { ColumnDef } from "@tanstack/react-table";
 
 export type Transactions = {
   id: string;
-  amount: number;
+  total: number;
+  status: string;
   description: string;
   date: string;
 };

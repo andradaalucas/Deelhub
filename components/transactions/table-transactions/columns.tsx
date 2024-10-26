@@ -17,10 +17,10 @@ import { useState } from "react";
 import { ConfirmAction } from "../../atom/confirm-action";
 // import { Edit } from "../actions/edit";
 import { Transactions } from "../types";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
 const getStatusStyles = (status: any) => {
-  switch (status.toLowerCase()) {
+  switch (status) {
     case "pending":
       return "bg-[#fdefca] text-[#805e0c]";
     case "confirmed":
@@ -43,7 +43,6 @@ const ActionsCell = ({ row }: any) => {
   });
 
   const queryClient = useQueryClient();
-
 
   const deleteTransaction = useMutation({
     mutationFn: (id: any) => deleteTransactions(id), // Se asegura de pasar el `id`
@@ -169,22 +168,12 @@ export const columns: ColumnDef<Transactions>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "description",
-    header: ({ column }) => {
-      return <div className="text-left">Description</div>;
-    },
-    cell: ({ row }) => (
-      <div className="text-left">{row.getValue("description")}</div>
-    ),
-    enableSorting: false,
-  },
-  {
-    accessorKey: "amount",
+    accessorKey: "total",
     header: ({ column }) => {
       return <div className="">Amount</div>;
     },
     cell: ({ row }) => {
-      const Monto = parseFloat(row.getValue("total "));
+      const Monto = parseFloat(row.getValue("total"));
 
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
@@ -195,12 +184,12 @@ export const columns: ColumnDef<Transactions>[] = [
     },
   },
   {
-    accessorKey: "date",
+    accessorKey: "startDate",
     header: ({ column }) => {
       return <div className="text-left">Date</div>;
     },
     cell: ({ row }) => (
-      <div className="text-left lowercase">{row.getValue("date")}</div>
+      <div className="text-left lowercase">{row.getValue("startDate")} {row.getValue("expirationDate")}</div>
     ),
   },
   {
@@ -212,6 +201,27 @@ export const columns: ColumnDef<Transactions>[] = [
       <>
         <div className="max-w-[100px] overflow-hidden whitespace-nowrap text-left">
           <div className="truncate">#{row.getValue("id")}</div>
+        </div>
+      </>
+    ),
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => {
+      return <div className="text-left">Status</div>;
+    },
+    
+    
+    cell: ({ row }) => (
+      <>
+        <div className="max-w-[100px] overflow-hidden whitespace-nowrap text-left">
+          <div
+            className={`${getStatusStyles(row.getValue("status"))} truncate rounded-sm text-center`}
+          >
+            {row.getValue("status")}
+          </div>
         </div>
       </>
     ),
