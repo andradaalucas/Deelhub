@@ -100,13 +100,11 @@ export async function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton>
-              <SidebarMenuButton asChild>
-                <a href="get-started">
-                  <LifeBuoy />
-                  <span>Help</span>
-                </a>
-              </SidebarMenuButton>
+            <SidebarMenuButton asChild>
+              <a href="get-started">
+                <LifeBuoy />
+                <span>Help</span>
+              </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
