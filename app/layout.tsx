@@ -24,16 +24,23 @@ export default function HomeLayout({
           "min-h-screen bg-background font-sans antialiased",
         )} ${GeistSans.variable} ${GeistMono.variable}`}
       >
-        <Head>
-          <title>Deelfy Inc</title>
-        </Head>
-        <QueryClientProvider client={queryClient}>
-          <NextUIProvider>
-            {children}
-            <Toaster richColors closeButton />
-            <ReactQueryDevtools />
-          </NextUIProvider>
-        </QueryClientProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Head>
+            <title>Deelfy Inc</title>
+          </Head>
+          <QueryClientProvider client={queryClient}>
+            <NextUIProvider>
+              {children}
+              <Toaster richColors closeButton />
+              <ReactQueryDevtools />
+            </NextUIProvider>
+          </QueryClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

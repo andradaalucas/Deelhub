@@ -129,10 +129,7 @@ export async function AppSidebar() {
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel>Preferences</DropdownMenuLabel>
                 <DropdownMenuItem>
-                  <span className="cursor-pointer">Account</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span className="cursor-pointer">Theme</span>
+                  <ModeToggle />
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
