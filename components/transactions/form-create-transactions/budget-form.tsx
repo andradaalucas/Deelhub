@@ -573,7 +573,7 @@ export function BudgetCreator() {
                 </div>
               </div>
               <div className="mt-4 flex items-end justify-end">
-                <Button type="submit" className="px-4 py-2">
+                <Button type="submit" className="px-4 py-2 bg-blue hover:bg-hoverBlue text-white font-semibold">
                   Create Budget
                 </Button>
               </div>

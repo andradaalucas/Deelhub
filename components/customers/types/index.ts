@@ -4,6 +4,7 @@ export type Customers = {
   id: string;
   name: string;
   description: string;
+  status: string;
   user_id: string;
 };
 

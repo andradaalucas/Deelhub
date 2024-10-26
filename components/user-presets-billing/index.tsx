@@ -198,7 +198,7 @@ export function UserPresetsBilling() {
                 <Button
                   type="submit"
                   size="default"
-                  className="mx-2"
+                  className="mx-2 px-4 py-2 bg-blue hover:bg-hoverBlue text-white font-semibold"
                   disabled={isLoading}
                 >
                   {isUpdatingPresets ? "Saving..." : "Save"}
@@ -371,7 +371,7 @@ export function UserPresetsBilling() {
               />
 
               <CardFooter className="flex justify-end border bg-zinc-100/75 dark:bg-zinc-900/75 py-2 rounded-b-lg">
-                <Button type="submit" size="default" className="mx-2">
+                <Button type="submit" className="mx-2 px-4 py-2 bg-blue hover:bg-hoverBlue text-white font-semibold">
                   Save
                 </Button>
               </CardFooter>

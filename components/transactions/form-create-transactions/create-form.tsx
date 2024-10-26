@@ -14,7 +14,7 @@ export function CreateForm() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button className="ml-4 h-9 rounded-md">Create Budget</Button>
+        <Button className="ml-4 h-9 rounded-md bg-blue hover:bg-hoverBlue text-white font-semibold">Create Budget</Button>
       </SheetTrigger>
       <SheetContent className="w-full min-w-[600px] p-0 ">
         <SheetHeader className="sr-only">

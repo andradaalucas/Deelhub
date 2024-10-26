@@ -11,6 +11,24 @@ export const getAllCustomers = async (filters?: any) => {
     console.log("Error on create customer", error);
   }
 };
+export const getCustomerById = async (id: any) => {
+  try {
+    const { data, error } = await supabase
+      .from("customers")
+      .select()
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      throw new Error(error.message || "Failed to get customer");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error on get customer", error);
+    throw new Error("An error occurred while obtaining the customer");
+  }
+}
 export const createCustomersFromCsv = async (data: any) => {
   try {
     const user_id = await getUserSession();

@@ -66,7 +66,7 @@ export function CreateForm() {
   };
   return (
     <div>
-      <Button className="ml-4 h-9 rounded-md" onClick={handleOpenDialog}>
+      <Button className="ml-4 h-9 bg-blue hover:bg-hoverBlue text-white font-semibold" onClick={handleOpenDialog}>
         Create customer
       </Button>
       <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
@@ -131,10 +131,7 @@ export function CreateForm() {
                 )}
               />
               <DialogFooter className="flex justify-end gap-2 rounded-b-lg border bg-zinc-100/75 dark:bg-zinc-900/75 px-8 py-6 mt-4">
-                <DialogClose>
-                  <div>Cancel</div>
-                </DialogClose>
-                <Button type="submit">Create customer</Button>
+                <Button type="submit" className="px-4 py-2 bg-blue hover:bg-hoverBlue text-white font-semibold">Create customer</Button>
               </DialogFooter>
             </form>
           </Form>

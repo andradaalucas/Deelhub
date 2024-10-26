@@ -18,6 +18,7 @@ import { ConfirmAction } from "../../atom/confirm-action";
 // import { Edit } from "../actions/edit";
 import { Transactions } from "../types";
 import { toast } from "sonner";
+import { getCustomerById } from "@/services/customers";
 
 const getStatusStyles = (status: any) => {
   switch (status) {
@@ -142,6 +143,22 @@ const ActionsCell = ({ row }: any) => {
   );
 };
 
+const CustomerName = (id: any) => {
+  // const queryClient = useQueryClient();
+  // const getCustomerByID = useMutation({
+  //   mutationFn: (id: any) => getCustomerById(id), // Se asegura de pasar el `id`
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries(["transactions"]);
+  //   },
+  //   onError: () => {
+  //     queryClient.invalidateQueries(["transactions"]); // Para asegurarse de actualizar el estado en caso de error también
+  //   },
+  // });
+  // const promise = getCustomerByID.mutateAsync(id);
+  // console.log("getCustomerByID", promise);
+  return <div>No Name</div>;
+};
+
 export const columns: ColumnDef<Transactions>[] = [
   {
     id: "select",
@@ -168,6 +185,16 @@ export const columns: ColumnDef<Transactions>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "customer",
+    header: ({ column }) => {
+      return <div className="">Customer</div>;
+    },
+    cell: ({ row }) => {
+      const id = row.original.id;
+      return <CustomerName row={id} />;
+    },
+  },
+  {
     accessorKey: "total",
     header: ({ column }) => {
       return <div className="">Amount</div>;
@@ -186,10 +213,12 @@ export const columns: ColumnDef<Transactions>[] = [
   {
     accessorKey: "startDate",
     header: ({ column }) => {
-      return <div className="text-left">Date</div>;
+      return <div className="w-full text-left">Date</div>; // Ajusta el ancho al completo
     },
     cell: ({ row }) => (
-      <div className="text-left lowercase">{row.getValue("startDate")} {row.getValue("expirationDate")}</div>
+      <div className="flex w-full justify-between whitespace-nowrap text-left lowercase">
+        {row.getValue("startDate")} {row.getValue("expirationDate")}
+      </div>
     ),
   },
   {
@@ -212,13 +241,12 @@ export const columns: ColumnDef<Transactions>[] = [
     header: ({ column }) => {
       return <div className="text-left">Status</div>;
     },
-    
-    
+
     cell: ({ row }) => (
       <>
         <div className="max-w-[100px] overflow-hidden whitespace-nowrap text-left">
           <div
-            className={`${getStatusStyles(row.getValue("status"))} truncate rounded-sm text-center`}
+            className={`${getStatusStyles(row.getValue("status"))} truncate rounded-sm border px-2 text-center text-xs font-semibold uppercase`}
           >
             {row.getValue("status")}
           </div>

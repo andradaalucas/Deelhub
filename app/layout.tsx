@@ -21,7 +21,7 @@ export default function HomeLayout({
     <html lang="en">
       <body
         className={`${cn(
-          "dark min-h-screen bg-background font-sans antialiased",
+          "min-h-screen bg-background font-sans antialiased",
         )} ${GeistSans.variable} ${GeistMono.variable}`}
       >
         <Head>

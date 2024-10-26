@@ -112,7 +112,7 @@ export function DataTable<TData, TValue>({
               <CardContent className="p-0">
                 <div className="px-6 font-mono text-2xl font-semibold">
                   {isLoadingOverview ? (
-                    <div className="h-8 w-24 animate-pulse bg-[#2b2b2b]" />
+                    <div className="h-8 w-24 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
                   ) : (
                     card.value
                   )}

@@ -29,6 +29,8 @@ const config = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+        blue: "var(--personal-blue)",
+        hoverBlue: "var(--personal-blue-hover)",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {

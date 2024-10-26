@@ -183,6 +183,21 @@ export const columns: ColumnDef<Customers>[] = [
     enableHiding: true,
   },
   {
+    accessorKey: "status",
+    header: ({ column }) => {
+      return <div className="text-left">Status</div>;
+    },
+    cell: ({ row }) => (
+      <>
+        <div className="max-w-[100px] overflow-hidden whitespace-nowrap text-left">
+          <div>{row.getValue("status")}</div>
+        </div>
+      </>
+    ),
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
     id: "actions",
     enableHiding: false,
     header: ({ column }) => {

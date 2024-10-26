@@ -54,14 +54,19 @@ export const getAllTransactions = async () => {
   try {
     const { data, error } = await supabase
       .from("transactions")
-      .select("*, transaction_product(*)");
-    console.log("data", data);
+      .select("*, transaction_product(*), customer_transaction(*, customers(name))");
 
+    if (error) {
+      throw error;
+    }
+
+    console.log("data", data);
     return data;
   } catch (error) {
     console.log("Error on create customer", error);
   }
 };
+
 // export const createTransactions = async (data: any) => {
 //   console.log("data desde create transaction", data);
 

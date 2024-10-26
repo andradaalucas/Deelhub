@@ -8,6 +8,7 @@ import {
   Tags,
   User2,
   UsersIcon,
+  Workflow,
 } from "lucide-react";
 import {
   Sidebar,
@@ -56,14 +57,14 @@ const items = [
     icon: BarChart2Icon,
   },
   {
+    title: "Automation",
+    url: "/in/automation",
+    icon: SettingsIcon,
+  },
+  {
     title: "Billing",
     url: "/in/billing",
     icon: LandmarkIcon,
-  },
-  {
-    title: "Settings",
-    url: "/in/settings",
-    icon: SettingsIcon,
   },
 ];
 

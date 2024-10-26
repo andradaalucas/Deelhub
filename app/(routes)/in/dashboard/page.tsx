@@ -54,8 +54,8 @@ export default function Dashboard() {
                 <div>
                   {isLoadingOverview ? (
                     <>
-                      <div className="h-6 w-24 mb-2 animate-pulse bg-[#2b2b2b]" />
-                      <div className="h-8 w-48 animate-pulse bg-[#2b2b2b]" />
+                      <div className="h-6 w-24 mb-2 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
+                      <div className="h-8 w-48 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
                     </>
                   ) : (
                     <>
