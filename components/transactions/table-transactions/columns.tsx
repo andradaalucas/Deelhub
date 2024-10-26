@@ -22,14 +22,14 @@ import { getCustomerById } from "@/services/customers";
 
 const getStatusStyles = (status: any) => {
   switch (status) {
-    case "pending":
-      return "bg-[#fdefca] text-[#805e0c]";
+    // case "pending":
+    //   return "bg-[#fdefca] text-[#805e0c]";
     case "confirmed":
       return "bg-[#e6eddd] text-[#56663e]";
     case "rejected":
       return "bg-[#f2d5cd] text-[#6f260e]";
     default:
-      return "bg-[#ebebeb] text-[#1a1a1a]";
+      return "bg-[#dbf0f3] text-[#33686c]";
   }
 };
 

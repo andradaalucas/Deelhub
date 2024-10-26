@@ -54,7 +54,9 @@ export const getAllTransactions = async () => {
   try {
     const { data, error } = await supabase
       .from("transactions")
-      .select("*, transaction_product(*), customer_transaction(*, customers(name))");
+      .select(
+        "*, transaction_product(*), customer_transaction(*, customers(name))",
+      );
 
     if (error) {
       throw error;
@@ -228,9 +230,9 @@ export const createTransactions = async (data: any) => {
           subtotal,
           total,
           currency,
-          taxRate,
-          startDate,
-          expirationDate,
+          tax_rate: taxRate,
+          start_date: startDate,
+          expiration_date: expirationDate,
           description,
         })
         .select(); // This will return the inserted row with the new `id`
