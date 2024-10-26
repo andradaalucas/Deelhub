@@ -66,83 +66,59 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const cardData = [
+    {
+      title: "Total Customers",
+      value: "1,234",
+      description: "+5.2% last month",
+    },
+    {
+      title: "Average Spend",
+      value: "$345",
+      description: "Per customer",
+    },
+    {
+      title: "Customer Retention",
+      value: "78%",
+      description: "+2.5% last quarter",
+    },
+    {
+      title: "New Customers",
+      value: "89",
+      description: "This month",
+    },
+  ];
+
   return (
     <div className="mx-auto w-full max-w-5xl grid-cols-2 gap-6 space-y-6 p-2">
       <div className="grid gap-6 lg:grid-cols-2">
-
-        <div className="grid grid-cols-2 gap-6">
-          <Card className="flex flex-col justify-between shadow-md">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">
-                Total Customers
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="px-6 font-mono text-2xl font-semibold">1,234</div>
-              <div className="mt-2 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
-                <p className="flex items-center font-mono text-xs text-muted-foreground">
-                  <ArrowUpIcon className="mr-1 h-4 w-4 text-green-500" />
-                  +5.2% last month
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="flex flex-col justify-between shadow-md">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">
-                Average Spend
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="px-6 font-mono text-2xl font-semibold">$345</div>
-              <div className="mt-2 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
-                <p className="flex items-center font-mono text-xs text-muted-foreground">
-                <ArrowUpIcon className="mr-1 h-4 w-4 text-green-500" />
-                  Per customer
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="flex flex-col justify-between shadow-md">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">
-                Customer Retention
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="px-6 font-mono text-2xl font-semibold">78%</div>
-              <div className="mt-2 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
-                <p className="flex items-center font-mono text-xs text-muted-foreground">
-                  <ArrowUpIcon className="mr-1 h-4 w-4 text-green-500" />
-                  +2.5% last quarter
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="flex flex-col justify-between shadow-md">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">
-                New Customers
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="px-6 font-mono text-2xl font-semibold">89</div>
-              <div className="mt-2 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
-                <p className="flex items-center font-mono text-xs text-muted-foreground">
-                <ArrowUpIcon className="mr-1 h-4 w-4 text-green-500" />
-                  This month
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          {cardData.map((card, index) => (
+            <Card
+              key={index}
+              className="flex flex-col justify-between shadow-md"
+            >
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">
+                  {card.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="px-6 font-mono text-2xl font-semibold">
+                  {card.value}
+                </div>
+                <div className="mt-2 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
+                  <p className="flex items-center whitespace-nowrap font-mono text-xs text-muted-foreground">
+                    <ArrowUpIcon className="mr-1 h-4 w-4 text-green-500" />
+                    {card.description}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
-
-        {/* Sección derecha con el listado de Top Spenders */}
         <div className="lg:col-span-1">
-          <Card className="flex flex-col justify-between shadow-md ">
+          <Card className="flex flex-col justify-between shadow-md">
             <CardHeader>
               <CardTitle className="text-sm font-medium">
                 Top Spenders
@@ -151,7 +127,7 @@ export function DataTable<TData, TValue>({
                 Customers with highest total spend
               </CardDescription>
             </CardHeader>
-            <CardContent >
+            <CardContent>
               <div className="space-y-4">
                 {[
                   "Frank Miller",

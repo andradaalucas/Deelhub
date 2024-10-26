@@ -29,13 +29,35 @@ import {
   ClockIcon,
 } from "lucide-react";
 
-const predictionData = [
-  { month: "Apr", actual: 2780, prediction: 2800 },
-  { month: "May", actual: 1890, prediction: 2200 },
-  { month: "Jun", actual: 2390, prediction: 2600 },
-  { month: "Jul", actual: 3490, prediction: 3400 },
-  { month: "Aug", actual: null, prediction: 3700 },
-  { month: "Sep", actual: null, prediction: 4000 },
+const data = [
+  {
+    average: 400,
+    today: 240,
+  },
+  {
+    average: 300,
+    today: 139,
+  },
+  {
+    average: 200,
+    today: 980,
+  },
+  {
+    average: 278,
+    today: 390,
+  },
+  {
+    average: 189,
+    today: 480,
+  },
+  {
+    average: 239,
+    today: 380,
+  },
+  {
+    average: 349,
+    today: 430,
+  },
 ];
 
 export default function Component() {
@@ -160,30 +182,66 @@ export default function Component() {
             Comparison of actual revenue vs. prediction for the next months
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="h-[400px]">
+        <CardContent className="pb-4">
+          <div className="h-[200px]">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={predictionData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="actual"
-                  name="Actual Revenue"
-                  stroke="hsl(var(--primary))"
-                  strokeWidth={2}
-                  dot={true}
+              <LineChart
+                data={data}
+                margin={{
+                  top: 5,
+                  right: 10,
+                  left: 10,
+                  bottom: 0,
+                }}
+              >
+                <Tooltip
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      return (
+                        <div className="rounded-lg border bg-background p-2 shadow-sm">
+                          <div className="grid grid-cols-2 gap-2">
+                            <div className="flex flex-col">
+                              <span className="text-[0.70rem] uppercase text-muted-foreground">
+                                Average
+                              </span>
+                              <span className="font-mono font-bold text-muted-foreground">
+                                {payload[0].value}
+                              </span>
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="text-[0.70rem] uppercase text-muted-foreground">
+                                Today
+                              </span>
+                              <span className="font-mono font-bold">
+                                {payload[1].value}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
                 />
                 <Line
                   type="monotone"
-                  dataKey="prediction"
-                  name="Predicted Revenue"
-                  stroke="#22c55e"
+                  dataKey="average"
                   strokeWidth={2}
-                  dot={false}
+                  stroke="#52525b" // Ajuste de color para modo oscuro
+                  activeDot={{
+                    r: 6,
+                    style: { fill: "#52525b" },
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="today"
+                  strokeWidth={2}
+                  stroke="#fafafa" // Otro color contrastante
+                  activeDot={{
+                    r: 8,
+                    style: { fill: "#fafafa" },
+                  }}
                 />
               </LineChart>
             </ResponsiveContainer>
