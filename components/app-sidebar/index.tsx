@@ -5,6 +5,7 @@ import {
   LandmarkIcon,
   LifeBuoy,
   SettingsIcon,
+  Tags,
   User2,
   UsersIcon,
 } from "lucide-react";
@@ -43,6 +44,11 @@ const items = [
     title: "Customers",
     url: "/in/customers",
     icon: UsersIcon,
+  },
+  {
+    title: "Products",
+    url: "/in/products",
+    icon: Tags,
   },
   {
     title: "Insights AI",
