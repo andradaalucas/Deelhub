@@ -172,7 +172,7 @@ export function BudgetCreator() {
   const selectedCurrency = form.watch("currency");
 
   return (
-    <div className="flex h-screen flex-col p-4 md:p-8 overflow-y-auto">
+    <div className="flex h-screen flex-col overflow-y-auto p-4 md:p-8">
       <div className="flex-grow">
         <Form {...form}>
           <form
@@ -181,7 +181,7 @@ export function BudgetCreator() {
           >
             <div className="space-y-4">
               {/* Cliente */}
-              <div className="flex  items-end space-y-4 flex-row md:space-x-4 md:space-y-0">
+              <div className="flex flex-row items-end space-y-4 md:space-x-4 md:space-y-0">
                 {customers && (
                   <FormField
                     control={form.control}
@@ -217,7 +217,7 @@ export function BudgetCreator() {
               </div>
 
               {/* Fechas */}
-              <div className="grid gap-4 grid-cols-2">
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="startDate"
@@ -291,7 +291,7 @@ export function BudgetCreator() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4 ">
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="currency"
@@ -572,13 +572,17 @@ export function BudgetCreator() {
                   </div>
                 </div>
               </div>
-              <div className="mt-4 flex items-end justify-end">
+              <div className="mt-4 flex justify-end">
                 <Button
                   type="submit"
                   className="bg-blue hover:bg-hoverBlue px-4 py-2 font-semibold text-white"
                 >
                   Create Budget
                 </Button>
+              </div>
+
+              <div className="mt-4 flex lg:hidden md:hidden items-end justify-end">
+                a
               </div>
             </div>
           </form>
