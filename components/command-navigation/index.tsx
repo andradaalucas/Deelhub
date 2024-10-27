@@ -24,17 +24,6 @@ import { CommandIcon } from "lucide-react";
 
 export function CommandNavigation() {
   const [open, setOpen] = React.useState(false);
-  const [isDesktop, setIsDesktop] = React.useState(false);
-
-  React.useEffect(() => {
-    // Verifica si el dispositivo tiene teclado y si la pantalla es lo suficientemente ancha
-    const updateIsDesktop = () => {
-      setIsDesktop(window.matchMedia("(min-width: 1024px)").matches);
-    };
-    updateIsDesktop();
-    window.addEventListener("resize", updateIsDesktop);
-    return () => window.removeEventListener("resize", updateIsDesktop);
-  }, []);
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -47,8 +36,6 @@ export function CommandNavigation() {
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
   }, []);
-
-  if (!isDesktop) return null;
 
   return (
     <>
@@ -67,32 +54,32 @@ export function CommandNavigation() {
           <CommandGroup heading="Suggestions">
             <CommandItem>
               <CalendarIcon />
-              <span>Calendar</span>
+              <span className="pl-2">Calendar</span>
             </CommandItem>
             <CommandItem>
               <FaceIcon />
-              <span>Search Emoji</span>
+              <span className="pl-2">Search Emoji</span>
             </CommandItem>
             <CommandItem>
               <RocketIcon />
-              <span>Launch</span>
+              <span className="pl-2">Launch</span>
             </CommandItem>
           </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading="Settings">
             <CommandItem>
               <PersonIcon />
-              <span>Profile</span>
+              <span className="pl-2">Profile</span>
               <CommandShortcut>⌘P</CommandShortcut>
             </CommandItem>
             <CommandItem>
               <EnvelopeClosedIcon />
-              <span>Mail</span>
+              <span className="pl-2">Mail</span>
               <CommandShortcut> ⌘B</CommandShortcut>
             </CommandItem>
             <CommandItem>
               <GearIcon />
-              <span>Settings</span>
+              <span className="pl-2">Settings</span>
               <CommandShortcut> ⌘S</CommandShortcut>
             </CommandItem>
           </CommandGroup>

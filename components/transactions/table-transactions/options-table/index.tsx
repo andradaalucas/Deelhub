@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowUpRight, RefreshCcw } from "lucide-react";
+import { FileSpreadsheet } from "lucide-react";
 import { useState } from "react";
 import { AuthorizationOption } from "./authorization-option";
 
@@ -31,22 +31,15 @@ export function OptionsTable() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="rounded-lg font-medium">
-          <DropdownMenuLabel>Options</DropdownMenuLabel>
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
 
           <DropdownMenuItem
-            className="flex cursor-pointer items-center justify-between gap-3"
-            onClick={handleRefreshData}
-          >
-            <div>Refresh data</div>
-            <RefreshCcw className="stroke-1" />
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="flex cursor-pointer items-center justify-between gap-3"
+            className="flex cursor-pointer items-center justify-between gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-900"
             onClick={handleExportCSV}
           >
             <div>Export on CSV</div>
-            <ArrowUpRight className="stroke-1" />
+            <FileSpreadsheet className="h-5 w-5 stroke-2" />
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

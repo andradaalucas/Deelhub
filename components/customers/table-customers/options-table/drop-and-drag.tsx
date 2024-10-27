@@ -136,7 +136,7 @@ export function DropAndDrag({ isOpen, setIsOpen }: any) {
           </div>
 
           {file && (
-            <div className="mt-4 flex items-center justify-between rounded-lg bg-gray-100 p-4">
+            <div className="mt-4 flex items-center justify-between rounded-lg bg-zinc-100/75 p-4 dark:bg-zinc-900/75">
               <div className="flex items-center">
                 <File className="mr-2 h-5 w-5 text-primary" />
                 <span className="text-sm font-medium">{file.name}</span>

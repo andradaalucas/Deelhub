@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -17,8 +18,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import { exportCustomerOnSheet } from "@/services/customers";
 import { toast } from "sonner";
 import { ConfirmAction } from "@/components/atom/confirm-action";
+import { Table } from "@tanstack/react-table";
 
-export function OptionsTable() {
+interface DataTableOptions<TData> {
+  table: Table<TData>;
+}
+
+export function OptionsTable<TData>({ table }: DataTableOptions<TData>) {
   const [openImport, setOpenImport] = useState(false);
   const [openExport, setOpenExport] = useState(false);
   const [actionExcecuteData, setActionExcecuteData] = useState({
@@ -56,31 +62,28 @@ export function OptionsTable() {
             <DotsVerticalIcon className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="rounded-lg font-medium">
-          <DropdownMenuLabel>Options</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-
-          <DropdownMenuItem
-            className="flex cursor-pointer items-center justify-between gap-3"
-            onClick={handleRefreshData}
-          >
-            <div>Refresh data</div>
-            <RefreshCcw className="h-5 w-5 stroke-2" />
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="flex cursor-pointer items-center justify-between gap-3"
-            onClick={handleExportCSV}
-          >
-            <div>Export on CSV</div>
-            <FileSpreadsheet className="h-5 w-5 stroke-2" />
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="flex cursor-pointer items-center justify-between gap-3"
-            onClick={handleImportCSV}
-          >
-            <div>Import on CSV</div>
-            <FileSpreadsheet className="h-5 w-5 stroke-2" />
-          </DropdownMenuItem>
+        <DropdownMenuContent
+          align="end"
+          className="flex gap-2 rounded-lg font-medium"
+        >
+          <div>
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center justify-between gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+              onClick={handleExportCSV}
+            >
+              <div>Export on CSV</div>
+              <FileSpreadsheet className="h-5 w-5 stroke-2" />
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center justify-between gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+              onClick={handleImportCSV}
+            >
+              <div>Import on CSV</div>
+              <FileSpreadsheet className="h-5 w-5 stroke-2" />
+            </DropdownMenuItem>
+          </div>
         </DropdownMenuContent>
       </DropdownMenu>
       <DropAndDrag isOpen={openImport} setIsOpen={setOpenImport} />

@@ -32,9 +32,22 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { DataTableProps } from "../types";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { HeaderTable } from "./data-table-header";
 import { DataTablePagination } from "./data-table-pagination";
-import { ArrowUpIcon } from "lucide-react";
+import { ArrowUpIcon, ChevronDownIcon } from "lucide-react";
+import { OptionsTable } from "./options-table";
+import { CreateForm } from "../form-create-customers/create-form";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 export function DataTable<TData, TValue>({
   columns,
@@ -189,7 +202,11 @@ export function DataTable<TData, TValue>({
               }
               className="max-w-sm"
             />
-            <HeaderTable />
+            <div className="flex items-center justify-between py-4">
+              <OptionsTable table={table} />
+              <CreateForm/>
+              
+            </div>
           </div>
           <div className="rounded-md border shadow-lg">
             <Table>
