@@ -16,13 +16,13 @@ import { DropAndDrag } from "./drop-and-drag";
 import { useQueryClient } from "@tanstack/react-query";
 import { exportCustomerOnSheet } from "@/services/customers";
 import { toast } from "sonner";
-import { ConfirmTest } from "@/components/atom/text";
+import { ConfirmAction } from "@/components/atom/confirm-action";
 
 export function OptionsTable() {
   const [openImport, setOpenImport] = useState(false);
   const [openExport, setOpenExport] = useState(false);
   const [actionExcecuteData, setActionExcecuteData] = useState({
-    title: "export data on csv",
+    title: "export data on csv?",
     description: "It is likely to open a pop-up tab with the file.",
   });
 
@@ -85,15 +85,13 @@ export function OptionsTable() {
       </DropdownMenu>
       <DropAndDrag isOpen={openImport} setIsOpen={setOpenImport} />
 
-      {openExport && (
-        <ConfirmTest
-          isOpen={openExport}
-          setIsOpen={setOpenExport}
-          actionExcecuteData={actionExcecuteData}
-          actionToExcecuteFunction={handleExport}
-        />
-      )}
-      <AuthorizationOption isOpen={openExport} setIsOpen={setOpenExport} />
+      <ConfirmAction
+        isOpen={openExport}
+        setIsOpen={setOpenExport}
+        actionExcecuteData={actionExcecuteData}
+        actionToExcecuteFunction={handleExport}
+      />
+      <DropAndDrag isOpen={openImport} setIsOpen={setOpenImport} />
     </div>
   );
 }

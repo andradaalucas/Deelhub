@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { exportCustomerOnSheet } from "@/services/customers";
-import { ConfirmAction } from "@/components/atom/confirm-action";
 
 export function AuthorizationOption({ isOpen, setIsOpen }: any) {
   const handleExport = async () => {

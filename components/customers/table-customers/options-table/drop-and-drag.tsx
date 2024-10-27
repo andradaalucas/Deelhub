@@ -148,11 +148,12 @@ export function DropAndDrag({ isOpen, setIsOpen }: any) {
           )}
         </div>
 
-        <DialogFooter className="flex justify-end gap-2 rounded-b-lg border bg-[#fafafa] px-8 py-4">
+        <DialogFooter className="flex items-end rounded-b-lg border bg-zinc-100/75 px-8 py-4 dark:bg-zinc-900/75">
           <Button
             ref={initialFocusRef} // Asignar el foco inicial al botón
             disabled={!file}
             onClick={handleUploadCustomers}
+            className="bg-blue px-4 py-2 font-semibold text-white hover:bg-hoverBlue"
           >
             Create new customers
           </Button>
