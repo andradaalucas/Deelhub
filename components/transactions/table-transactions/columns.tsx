@@ -252,12 +252,12 @@ export const columns: ColumnDef<Transactions>[] = [
 
     cell: ({ row }) => (
       <>
-        <div className="max-w-[100px] overflow-hidden whitespace-nowrap text-left">
+        <div className="max-w-[120px] whitespace-nowrap flex text-left">
           <div
-            className={`${getStatusStyles(row.getValue("status"))} flex items-center gap-2 truncate rounded-sm border px-2 text-center text-xs font-semibold uppercase`}
+            className={`${getStatusStyles(row.getValue("status"))} flex items-center gap-1 truncate rounded-sm border px-2 text-center text-xs font-semibold uppercase`}
           >
             <div
-              className={`${getDotStatusStyles(row.getValue("status"))} h-2 w-2 rounded-full`}
+              className={`${getDotStatusStyles(row.getValue("status"))} h-1 w-1 rounded-full`}
             ></div>
             {row.getValue("status")}
           </div>
