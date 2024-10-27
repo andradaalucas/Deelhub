@@ -22,14 +22,22 @@ import { getCustomerById } from "@/services/customers";
 
 const getStatusStyles = (status: any) => {
   switch (status) {
-    // case "pending":
-    //   return "bg-[#fdefca] text-[#805e0c]";
     case "confirmed":
-      return "bg-[#e6eddd] text-[#56663e]";
+      return "bg-green-100 text-[#56663e]";
     case "rejected":
-      return "bg-[#f2d5cd] text-[#6f260e]";
+      return "bg-red-100 text-[#e14133]";
     default:
-      return "bg-[#dbf0f3] text-[#33686c]";
+      return "bg-[#e2ecf3] text-[#0a85d1]";
+  }
+};
+const getDotStatusStyles = (status: any) => {
+  switch (status) {
+    case "confirmed":
+      return "bg-[#56663e]";
+    case "rejected":
+      return "bg-[#e14133]";
+    default:
+      return "bg-[#0a85d1]";
   }
 };
 
@@ -246,8 +254,11 @@ export const columns: ColumnDef<Transactions>[] = [
       <>
         <div className="max-w-[100px] overflow-hidden whitespace-nowrap text-left">
           <div
-            className={`${getStatusStyles(row.getValue("status"))} truncate rounded-sm border px-2 text-center text-xs font-semibold uppercase`}
+            className={`${getStatusStyles(row.getValue("status"))} flex items-center gap-2 truncate rounded-sm border px-2 text-center text-xs font-semibold uppercase`}
           >
+            <div
+              className={`${getDotStatusStyles(row.getValue("status"))} h-2 w-2 rounded-full`}
+            ></div>
             {row.getValue("status")}
           </div>
         </div>
