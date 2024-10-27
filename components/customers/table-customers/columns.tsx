@@ -18,7 +18,28 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCustomers } from "@/services/customers";
 import { EditCustomers } from "../actions/edit";
 import { DetailsCustomers } from "../actions/details";
-import { ConfirmAction } from "@/components/atom/confirm-action";
+import { ConfirmDelete } from "@/components/atom/confirm-delete";
+
+const getStatusStyles = (status: any) => {
+  switch (status) {
+    case "confirmed":
+      return "bg-green-100 text-[#56663e]";
+    case "rejected":
+      return "bg-red-100 text-[#e14133]";
+    default:
+      return "bg-[#e2ecf3] text-[#0a85d1]";
+  }
+};
+const getDotStatusStyles = (status: any) => {
+  switch (status) {
+    case "confirmed":
+      return "bg-[#56663e]";
+    case "rejected":
+      return "bg-[#e14133]";
+    default:
+      return "bg-[#0a85d1]";
+  }
+};
 
 const ActionsCell = ({ row }: any) => {
   const [isOpenDetails, setIsOpenDetails] = useState(false);
@@ -100,7 +121,7 @@ const ActionsCell = ({ row }: any) => {
         </DropdownMenuContent>
       </DropdownMenu>
       {isOpenDelete && (
-        <ConfirmAction
+        <ConfirmDelete
           isOpen={isOpenDelete}
           setIsOpen={setIsOpenDelete}
           actionExcecuteData={actionExcecuteData}
@@ -189,8 +210,15 @@ export const columns: ColumnDef<Customers>[] = [
     },
     cell: ({ row }) => (
       <>
-        <div className="max-w-[100px] overflow-hidden whitespace-nowrap text-left">
-          <div>{row.getValue("status")}</div>
+        <div className="flex whitespace-nowrap text-left">
+          <div
+            className={`${getStatusStyles(row.getValue("status"))} flex items-center gap-1 truncate rounded-sm border px-2 text-center text-xs font-semibold uppercase`}
+          >
+            <div
+              className={`${getDotStatusStyles(row.getValue("status"))} h-1 w-1 rounded-full`}
+            ></div>
+            {row.getValue("status")}
+          </div>
         </div>
       </>
     ),

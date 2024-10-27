@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,25 +9,45 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { FileDown, FileUp, RefreshCcw } from "lucide-react";
+import { FileSpreadsheet, RefreshCcw } from "lucide-react";
 import { useState } from "react";
 import { AuthorizationOption } from "./authorization-option";
 import { DropAndDrag } from "./drop-and-drag";
 import { useQueryClient } from "@tanstack/react-query";
+import { exportCustomerOnSheet } from "@/services/customers";
+import { toast } from "sonner";
+import { ConfirmTest } from "@/components/atom/text";
 
 export function OptionsTable() {
   const [openImport, setOpenImport] = useState(false);
   const [openExport, setOpenExport] = useState(false);
+  const [actionExcecuteData, setActionExcecuteData] = useState({
+    title: "export data on csv",
+    description: "It is likely to open a pop-up tab with the file.",
+  });
+
   const queryClient = useQueryClient();
   const handleImportCSV = async () => {
     setOpenImport(!openImport);
   };
   const handleExportCSV = async () => {
-    setOpenExport(!openImport);
+    setOpenExport(!openExport);
   };
   const handleRefreshData = () => {
     queryClient.invalidateQueries(["customers"]);
   };
+  const handleExport = async () => {
+    const promise = exportCustomerOnSheet();
+    toast.promise(promise, {
+      loading: "Loading...",
+      success: () => {
+        return `Data exported successfully`;
+      },
+      error: "Error",
+    });
+    setOpenExport(!openImport);
+  };
+
   return (
     <div>
       <DropdownMenu>
@@ -41,30 +61,38 @@ export function OptionsTable() {
           <DropdownMenuSeparator />
 
           <DropdownMenuItem
-
             className="flex cursor-pointer items-center justify-between gap-3"
-          onClick={handleRefreshData}
+            onClick={handleRefreshData}
           >
             <div>Refresh data</div>
-            <RefreshCcw className="stroke-1" />
+            <RefreshCcw className="h-5 w-5 stroke-2" />
           </DropdownMenuItem>
           <DropdownMenuItem
             className="flex cursor-pointer items-center justify-between gap-3"
             onClick={handleExportCSV}
           >
             <div>Export on CSV</div>
-            <FileUp className="stroke-1" />
+            <FileSpreadsheet className="h-5 w-5 stroke-2" />
           </DropdownMenuItem>
           <DropdownMenuItem
             className="flex cursor-pointer items-center justify-between gap-3"
             onClick={handleImportCSV}
           >
             <div>Import on CSV</div>
-            <FileDown className="stroke-1" />
+            <FileSpreadsheet className="h-5 w-5 stroke-2" />
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <DropAndDrag isOpen={openImport} setIsOpen={setOpenImport} />
+
+      {openExport && (
+        <ConfirmTest
+          isOpen={openExport}
+          setIsOpen={setOpenExport}
+          actionExcecuteData={actionExcecuteData}
+          actionToExcecuteFunction={handleExport}
+        />
+      )}
       <AuthorizationOption isOpen={openExport} setIsOpen={setOpenExport} />
     </div>
   );

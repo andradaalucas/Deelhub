@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { exportCustomerOnSheet } from "@/services/customers";
+import { ConfirmAction } from "@/components/atom/confirm-action";
 
 export function AuthorizationOption({ isOpen, setIsOpen }: any) {
   const handleExport = async () => {
@@ -35,7 +36,7 @@ export function AuthorizationOption({ isOpen, setIsOpen }: any) {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-end gap-2 rounded-b-lg border bg-[#fafafa] px-8 py-4">
-          <Button onClick={handleExport}>Accept</Button>
+          <Button onClick={handleExport} className="bg-blue hover:bg-hoverBlue px-4 py-2 font-semibold text-white">Accept</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -14,7 +14,7 @@ import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
-import { ConfirmAction } from "../../atom/confirm-action";
+import { ConfirmDelete } from "../../atom/confirm-delete";
 // import { Edit } from "../actions/edit";
 import { Transactions } from "../types";
 import { toast } from "sonner";
@@ -140,7 +140,7 @@ const ActionsCell = ({ row }: any) => {
         </DropdownMenu>
       </div>
       {isOpenDelete && (
-        <ConfirmAction
+        <ConfirmDelete
           isOpen={isOpenDelete}
           setIsOpen={setIsOpenDelete}
           actionExcecuteData={actionExcecuteData}
@@ -252,7 +252,7 @@ export const columns: ColumnDef<Transactions>[] = [
 
     cell: ({ row }) => (
       <>
-        <div className="max-w-[120px] whitespace-nowrap flex text-left">
+        <div className="whitespace-nowrap flex text-left">
           <div
             className={`${getStatusStyles(row.getValue("status"))} flex items-center gap-1 truncate rounded-sm border px-2 text-center text-xs font-semibold uppercase`}
           >

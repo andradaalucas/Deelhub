@@ -128,9 +128,7 @@ export async function AppSidebar() {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel>Preferences</DropdownMenuLabel>
-                <DropdownMenuItem>
-                  <ModeToggle />
-                </DropdownMenuItem>
+                <ModeToggle />
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
