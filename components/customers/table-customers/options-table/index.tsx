@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { ArrowDownLeft, ArrowUpRight, RefreshCcw } from "lucide-react";
+import { FileDown, FileUp, RefreshCcw } from "lucide-react";
 import { useState } from "react";
 import { AuthorizationOption } from "./authorization-option";
 import { DropAndDrag } from "./drop-and-drag";
@@ -53,14 +53,14 @@ export function OptionsTable() {
             onClick={handleExportCSV}
           >
             <div>Export on CSV</div>
-            <ArrowUpRight className="stroke-1" />
+            <FileUp className="stroke-1" />
           </DropdownMenuItem>
           <DropdownMenuItem
             className="flex cursor-pointer items-center justify-between gap-3"
             onClick={handleImportCSV}
           >
             <div>Import on CSV</div>
-            <ArrowDownLeft className="stroke-1" />
+            <FileDown className="stroke-1" />
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
