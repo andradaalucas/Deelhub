@@ -22,9 +22,9 @@ import { ConfirmDelete } from "@/components/atom/confirm-delete";
 
 const getStatusStyles = (status: any) => {
   switch (status) {
-    case "confirmed":
+    case "enabled":
       return "bg-green-100 text-[#56663e]";
-    case "rejected":
+    case "disabled":
       return "bg-red-100 text-[#e14133]";
     default:
       return "bg-[#e2ecf3] text-[#0a85d1]";
@@ -32,9 +32,9 @@ const getStatusStyles = (status: any) => {
 };
 const getDotStatusStyles = (status: any) => {
   switch (status) {
-    case "confirmed":
+    case "enabled":
       return "bg-[#56663e]";
-    case "rejected":
+    case "disabled":
       return "bg-[#e14133]";
     default:
       return "bg-[#0a85d1]";
