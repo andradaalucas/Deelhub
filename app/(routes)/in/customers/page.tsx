@@ -1,8 +1,10 @@
 "use client";
-import { DataTable } from "@/components/customers/table-customers";
-import { columns } from "@/components/customers/table-customers/columns";
+import { DataTable } from "@/components/data-table";
+import { columns } from "@/components/customers/table-components/columns";
 import { getAllCustomers } from "@/services/customers";
 import { useQuery } from "@tanstack/react-query";
+import { OptionsAndCreate } from "@/components/customers/table-components";
+import { Overview } from "@/components/customers/overview";
 
 export default function Customers() {
   const {
@@ -12,11 +14,16 @@ export default function Customers() {
   } = useQuery(["customers"], () => getAllCustomers());
 
   return (
-    <DataTable
-      columns={columns}
-      data={customers || []}
-      isLoading={isLoading}
-      isError={isError}
-    />
+    <>
+      <Overview />
+      <DataTable
+        columns={columns}
+        data={customers || []}
+        filter="name"
+        isLoading={isLoading}
+        isError={isError}
+        Component={OptionsAndCreate}
+      />
+    </>
   );
 }

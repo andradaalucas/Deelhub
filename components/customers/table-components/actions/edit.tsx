@@ -24,9 +24,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { formSchemaEdit } from "../schemas";
+import { formSchemaEdit } from "../../schemas";
 import { updateCustomers } from "@/services/customers";
-import { DetailsProps } from "../types";
+import { DetailsProps } from "../../types";
 import { toast } from "sonner";
 
 export function EditCustomers({ rowData, isOpen, setIsOpen }: DetailsProps) {

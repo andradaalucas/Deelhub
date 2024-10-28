@@ -16,8 +16,8 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCustomers } from "@/services/customers";
-import { EditCustomers } from "../actions/edit";
-import { DetailsCustomers } from "../actions/details";
+import { EditCustomers } from "./actions/edit";
+import { DetailsCustomers } from "./actions/details";
 import { ConfirmDelete } from "@/components/atom/confirm-delete";
 
 const getStatusStyles = (status: any) => {

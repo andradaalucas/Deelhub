@@ -1,5 +1,11 @@
 "use client";
 
+import * as React from "react";
+import {
+  CaretSortIcon,
+  ChevronDownIcon,
+  DotsHorizontalIcon,
+} from "@radix-ui/react-icons";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -13,6 +19,18 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -21,22 +39,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
-import { HeaderTable } from "./data-table-header";
-import { DataTablePagination } from "./data-table-pagination";
-import { DataTableProps } from "../types";
-import { Input } from "@/components/ui/input";
+import { DataTableProps } from "./types";
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  filter,
   isLoading,
   isError,
+  Component,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
     data,
@@ -61,18 +80,18 @@ export function DataTable<TData, TValue>({
     <>
       <div className="mx-auto grid w-full max-w-5xl grid-cols-2 gap-6 p-2">
         <div className="col-span-2">
-          <div className="flex items-center justify-between py-4">
+          <div className="flex items-center justify-between gap-2 py-4">
             <Input
-              placeholder="Filter description..."
+              placeholder={`Filter ${filter}`}
               value={
-                (table.getColumn("description")?.getFilterValue() as string) ?? ""
+                (table.getColumn(filter)?.getFilterValue() as string) ?? ""
               }
               onChange={(event) =>
-                table.getColumn("description")?.setFilterValue(event.target.value)
+                table.getColumn(filter)?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
             />
-            <HeaderTable />
+            <Component />
           </div>
           <div className="rounded-md border shadow-lg">
             <Table>
@@ -166,7 +185,6 @@ export function DataTable<TData, TValue>({
           </div>
         </div>
       </div>
-      <DataTablePagination table={table} />
     </>
   );
 }

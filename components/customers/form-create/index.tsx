@@ -66,13 +66,18 @@ export function CreateForm() {
   };
   return (
     <div>
-      <Button className="ml-4 h-9 bg-blue hover:bg-hoverBlue text-white font-semibold" onClick={handleOpenDialog}>
+      <Button
+        className="h-9 bg-blue font-semibold text-white hover:bg-hoverBlue"
+        onClick={handleOpenDialog}
+      >
         Create customer
       </Button>
       <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
         <DialogContent className="max-w rounded-xl p-0">
           <DialogHeader className="px-8 pt-8">
-            <DialogTitle className="text-2xl font-semibold">Create Customers</DialogTitle>
+            <DialogTitle className="text-2xl font-semibold">
+              Create Customers
+            </DialogTitle>
             <DialogDescription>
               Make changes to your profile here. Click save when youe done.
             </DialogDescription>
@@ -130,8 +135,13 @@ export function CreateForm() {
                   </FormItem>
                 )}
               />
-              <DialogFooter className="flex justify-end gap-2 rounded-b-lg border bg-zinc-100/75 dark:bg-zinc-900/75 px-8 py-6 mt-4">
-                <Button type="submit" className="px-4 py-2 bg-blue hover:bg-hoverBlue text-white font-semibold">Create customer</Button>
+              <DialogFooter className="mt-4 flex justify-end gap-2 rounded-b-lg border bg-zinc-100/75 px-8 py-6 dark:bg-zinc-900/75">
+                <Button
+                  type="submit"
+                  className="bg-blue px-4 py-2 font-semibold text-white hover:bg-hoverBlue"
+                >
+                  Create customer
+                </Button>
               </DialogFooter>
             </form>
           </Form>

@@ -1,47 +1,36 @@
 "use client";
+import { ConfirmAction } from "@/components/atom/confirm-action";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { FileSpreadsheet, RefreshCcw } from "lucide-react";
-import { useState } from "react";
-import { AuthorizationOption } from "./authorization-option";
-import { DropAndDrag } from "./drop-and-drag";
-import { useQueryClient } from "@tanstack/react-query";
 import { exportCustomerOnSheet } from "@/services/customers";
+import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { FileSpreadsheet } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { ConfirmAction } from "@/components/atom/confirm-action";
-import { Table } from "@tanstack/react-table";
+import { DropAndDrag } from "./drop-and-drag";
 
-interface DataTableOptions<TData> {
-  table: Table<TData>;
-}
-
-export function OptionsTable<TData>({ table }: DataTableOptions<TData>) {
+export function OptionsTable() {
   const [openImport, setOpenImport] = useState(false);
   const [openExport, setOpenExport] = useState(false);
   const [actionExcecuteData, setActionExcecuteData] = useState({
-    title: "export data on csv?",
+    title: "export data on CSV?",
     description: "It is likely to open a pop-up tab with the file.",
   });
 
-  const queryClient = useQueryClient();
   const handleImportCSV = async () => {
     setOpenImport(!openImport);
   };
   const handleExportCSV = async () => {
     setOpenExport(!openExport);
   };
-  const handleRefreshData = () => {
-    queryClient.invalidateQueries(["customers"]);
-  };
+
   const handleExport = async () => {
     const promise = exportCustomerOnSheet();
     toast.promise(promise, {

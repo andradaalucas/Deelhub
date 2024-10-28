@@ -1,3 +1,5 @@
+"use client"
+import { ConfirmAction } from "@/components/atom/confirm-action";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -7,21 +9,35 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { exportTransactionsOnSheet } from "@/services/transactions";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { FileSpreadsheet } from "lucide-react";
 import { useState } from "react";
-import { AuthorizationOption } from "./authorization-option";
+import { toast } from "sonner";
 
 export function OptionsTable() {
   const [openExport, setOpenExport] = useState(false);
+  const [actionExcecuteData, setActionExcecuteData] = useState({
+    title: "export data on CSV?",
+    description: "It is likely to open a pop-up tab with the file.",
+  });
   const queryClient = useQueryClient();
   const handleExportCSV = async () => {
     setOpenExport(!openExport);
   };
-  const handleRefreshData = () => {
-    queryClient.invalidateQueries(["transactions"]);
+  const handleExport = async () => {
+    const promise = exportTransactionsOnSheet();
+    toast.promise(promise, {
+      loading: "Loading...",
+      success: () => {
+        return `Data exported successfully`;
+      },
+      error: "Error",
+    });
+    setOpenExport(!openExport);
   };
+
   return (
     <>
       <DropdownMenu>
@@ -43,7 +59,12 @@ export function OptionsTable() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <AuthorizationOption isOpen={openExport} setIsOpen={setOpenExport} />
+      <ConfirmAction
+        isOpen={openExport}
+        setIsOpen={setOpenExport}
+        actionExcecuteData={actionExcecuteData}
+        actionToExcecuteFunction={handleExport}
+      />
     </>
   );
 }
