@@ -36,7 +36,7 @@ import { getAllCustomers } from "@/services/customers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
-import { CalendarIcon, X } from "lucide-react";
+import { CalendarIcon, Info, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -52,6 +52,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Tipos para productos y servicios
 interface Product {
@@ -207,7 +213,7 @@ export function CreateForm() {
                         name="customers"
                         render={({ field }) => (
                           <FormItem className="w-full">
-                            <FormLabel>Customer</FormLabel>
+                            <FormLabel>Customers</FormLabel>
                             <FormControl>
                               <MultiSelect
                                 options={customers.map((customer) => ({
@@ -219,8 +225,8 @@ export function CreateForm() {
                                   handleValueChange(selected);
                                 }}
                                 placeholder="Select customer"
-                                className="mt-10 w-full md:w-96"
-                                contentClass="w-full md:!w-96"
+                                className="mt-10 w-full"
+                                contentClass="w-full "
                               />
                             </FormControl>
                             <FormMessage />
@@ -230,7 +236,9 @@ export function CreateForm() {
                     )}
                     <div className="ml-4">
                       <Link href="/in/customers">
-                        <Button size="sm" className="font-semibold">Add Customer</Button>
+                        <Button size="sm" className="font-semibold">
+                          Add Customer
+                        </Button>
                       </Link>
                     </div>
                   </div>
@@ -242,7 +250,7 @@ export function CreateForm() {
                       name="startDate"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Start Date</FormLabel>
+                          <FormLabel>Issue Date</FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
                               <FormControl>
@@ -279,7 +287,7 @@ export function CreateForm() {
 
                         return (
                           <FormItem>
-                            <FormLabel>Expiration Date</FormLabel>
+                            <FormLabel>Due Date</FormLabel>
                             <Popover>
                               <PopoverTrigger asChild>
                                 <FormControl>
@@ -400,14 +408,27 @@ export function CreateForm() {
                       <TabsContent value="product" className="space-y-4">
                         <div className="flex items-center justify-between">
                           <div className="font-semibold">Products</div>
-                          <Button
-                            onClick={() => addItem("product")}
-                            type="button"
-                            size="sm"
-                            className="font-semibold"
-                          >
-                            Add Product
-                          </Button>
+                          <TooltipProvider delayDuration={200}>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  onClick={() => addItem("product")}
+                                  type="button"
+                                  size="sm"
+                                  className="font-semibold"
+                                >
+                                  <Info />
+                                  <span>Add Product</span>
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent align="end">
+                                <p>
+                                  This product will not be deducted from your
+                                  stock of products.
+                                </p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
                         </div>
                         {activeTable && (
                           <div className="h-22 mt-4 overflow-y-auto rounded-lg border lg:h-48">

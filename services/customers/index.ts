@@ -17,8 +17,8 @@ export const getCustomerById = async (id: any) => {
       .from("customers")
       .select()
       .eq("id", id)
-      .single();
-
+    console.log("data customer id", data);
+    
     if (error) {
       throw new Error(error.message || "Failed to get customer");
     }

@@ -4,6 +4,7 @@ import {
   Command,
   LandmarkIcon,
   LifeBuoy,
+  MessageSquareText,
   SettingsIcon,
   Tags,
   User2,
@@ -39,7 +40,7 @@ const items = [
   {
     title: "Home",
     url: "/in/dashboard",
-    icon: Command,
+    icon: LifeBuoy,
   },
   {
     title: "Customers",
@@ -102,10 +103,10 @@ export async function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <a href="get-started">
-                <LifeBuoy />
+              <Link href="get-started">
+                <MessageSquareText />
                 <span>Help</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>

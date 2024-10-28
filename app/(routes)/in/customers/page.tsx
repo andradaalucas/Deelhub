@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { OptionsAndCreate } from "@/components/customers/table-components";
 import { Overview } from "@/components/customers/overview";
 
-export default function Customers() {
+export default function Page() {
   const {
     data: customers,
     isLoading,

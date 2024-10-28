@@ -36,11 +36,11 @@ export function Overview() {
               <div className="flex-shrink-0 rounded-full bg-gray-100 p-3 dark:bg-[#27272a]">
                 <ShoppingBag className="h-6 w-6 text-primary" />
               </div>
-              <div>
+              <div className="flex-1">
                 {isLoadingOverview ? (
                   <>
-                    <div className="mb-2 h-6 w-24 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
-                    <div className="h-8 w-48 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
+                    <div className="mb-2 h-6 w-3/4 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
+                    <div className="h-8 w-full animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
                   </>
                 ) : (
                   <>

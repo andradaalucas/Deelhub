@@ -1,6 +1,8 @@
-function Page() {
-    return <div>Products</div>;
-  }
-  
-  export default Page;
-  
+import { Products } from "@/components/products";
+export default function Page() {
+  return (
+    <>
+      <Products />
+    </>
+  );
+}

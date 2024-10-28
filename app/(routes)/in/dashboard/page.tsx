@@ -6,7 +6,7 @@ import { getAllTransactions } from "@/services/transactions";
 import { useQuery } from "@tanstack/react-query";
 import { OptionsAndCreate } from "@/components/transactions/table-components";
 
-export default function Dashboard() {
+export default function Page() {
   const {
     data: transactions,
     isLoading,

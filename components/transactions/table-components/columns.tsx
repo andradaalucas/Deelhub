@@ -15,7 +15,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 import { ConfirmDelete } from "../../atom/confirm-delete";
-// import { Edit } from "../actions/edit";
 import { Transactions } from "../types";
 import { toast } from "sonner";
 import { getCustomerById } from "@/services/customers";
@@ -219,15 +218,21 @@ export const columns: ColumnDef<Transactions>[] = [
     },
   },
   {
-    accessorKey: "startDate",
+    accessorKey: "start_date",
     header: ({ column }) => {
       return <div className="w-full text-left">Date</div>; // Ajusta el ancho al completo
     },
-    cell: ({ row }) => (
-      <div className="flex w-full justify-between whitespace-nowrap text-left lowercase">
-        {row.getValue("startDate")} {row.getValue("expirationDate")}
-      </div>
-    ),
+    cell: ({ row }): React.ReactNode => {
+      const expirationDate = row.getValue("expiration_date");
+    
+      return (
+        <div className="flex w-full justify-between whitespace-nowrap text-left lowercase">
+          {row.getValue("start_date")}{expirationDate ? ` - ${expirationDate}` : ""}
+        </div>
+      );
+    },
+    
+    
   },
   {
     accessorKey: "id",

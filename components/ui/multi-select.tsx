@@ -67,7 +67,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
           />
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className={`w-full ${contentClass}`}>
+      <DropdownMenuContent className={`w-full ${contentClass}`} align="start">
         {options.map((option) => (
           <DropdownMenuCheckboxItem
             className="w-full"

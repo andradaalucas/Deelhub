@@ -25,8 +25,14 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useToast } from "@/components/ui/use-toast";
-import { Select, SelectContent, SelectTrigger, SelectValue, SelectItem } from "@/components/ui/select";
+import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+  SelectItem,
+} from "@/components/ui/select";
 import { getAllCountries } from "@/services/countries";
 
 const formSchemaBrand = z.object({
@@ -48,7 +54,6 @@ const formSchemaAddress = z.object({
 
 export function UserPresetsBilling() {
   const queryClient = useQueryClient();
-  const { toast } = useToast();
   const {
     data: dataPresets,
     isLoading: isLoadingPresets,
@@ -116,14 +121,9 @@ export function UserPresetsBilling() {
     // Compara el nuevo valor con el valor actual
     if (values.company_name !== dataPresets?.company_name) {
       updatePresets(values);
-      toast({
-        title: "Billing data successfully updated",
-      });
+      toast.success("Billing data successfully updated");
     } else {
-      toast({
-        title: "No changes detected",
-        variant: "destructive",
-      });
+      toast.warning("No changes detected");
     }
   };
 
@@ -144,23 +144,18 @@ export function UserPresetsBilling() {
 
     if (hasChanges) {
       updatePresets(values);
-      toast({
-        title: "Billing data successfully updated",
-      });
+      toast.success("Billing data successfully updated");
     } else {
-      toast({
-        title: "No changes detected",
-        variant: "destructive",
-      });
+      toast.warning("No changes detected");
     }
   };
 
   const isLoading = isLoadingPresets || isUpdatingPresets;
 
   return (
-    <div className="mx-auto w-full max-w-2xl space-y-8">
+    <div className="mx-auto grid w-full max-w-5xl gap-6 p-2">
       <Card>
-        <CardHeader className="px-8">
+        <CardHeader className="px-20">
           <CardTitle>Company Name</CardTitle>
           <CardDescription>
             By default, your team name appears on the invoice. If you want to
@@ -177,7 +172,7 @@ export function UserPresetsBilling() {
                 control={formBrand.control}
                 name="company_name"
                 render={({ field }) => (
-                  <FormItem className="px-8">
+                  <FormItem className="px-20">
                     <FormControl>
                       {isLoadingPresets ? (
                         <Skeleton className="h-10 w-full" />
@@ -194,11 +189,11 @@ export function UserPresetsBilling() {
                   </FormItem>
                 )}
               />
-              <CardFooter className="flex justify-end border bg-zinc-100/75 dark:bg-zinc-900/75 py-2 rounded-b-lg ">
+              <CardFooter className="flex justify-end rounded-b-lg border bg-zinc-100/75 p-6 py-2 dark:bg-zinc-900/75">
                 <Button
                   type="submit"
                   size="default"
-                  className="mx-2 px-4 py-2 bg-blue hover:bg-hoverBlue text-white font-semibold"
+                  className="mx-14 bg-blue px-4 py-2 font-semibold text-white hover:bg-hoverBlue"
                   disabled={isLoading}
                 >
                   {isUpdatingPresets ? "Saving..." : "Save"}
@@ -209,7 +204,7 @@ export function UserPresetsBilling() {
         </CardContent>
       </Card>
       <Card>
-        <CardHeader className="px-8">
+        <CardHeader className="px-20">
           <CardTitle>Billing Address</CardTitle>
           <CardDescription>
             If youd like to add a mailing address to each invoice, enter it
@@ -226,7 +221,7 @@ export function UserPresetsBilling() {
                 control={formAddress.control}
                 name="street_and_number"
                 render={({ field }) => (
-                  <FormItem className="px-8">
+                  <FormItem className="px-20">
                     <FormLabel>Address Line 1</FormLabel>
                     <FormControl>
                       {isLoadingPresets ? (
@@ -249,7 +244,7 @@ export function UserPresetsBilling() {
                 control={formAddress.control}
                 name="apartment"
                 render={({ field }) => (
-                  <FormItem className="px-8">
+                  <FormItem className="px-20">
                     <FormLabel>Address Line 2</FormLabel>
                     <FormControl>
                       {isLoadingPresets ? (
@@ -272,7 +267,7 @@ export function UserPresetsBilling() {
                 control={formAddress.control}
                 name="city"
                 render={({ field }) => (
-                  <FormItem className="px-8">
+                  <FormItem className="px-20">
                     <FormLabel>City</FormLabel>
                     <FormControl>
                       {isLoadingPresets ? (
@@ -290,7 +285,7 @@ export function UserPresetsBilling() {
                   </FormItem>
                 )}
               />
-              <div className="grid grid-cols-2 gap-4 px-8">
+              <div className="grid grid-cols-2 gap-4 px-20">
                 <FormField
                   control={formAddress.control}
                   name="country"
@@ -328,7 +323,7 @@ export function UserPresetsBilling() {
                 control={formAddress.control}
                 name="postal_code"
                 render={({ field }) => (
-                  <FormItem className="px-8">
+                  <FormItem className="px-20">
                     <FormLabel>Postal Code</FormLabel>
                     <FormControl>
                       {isLoadingPresets ? (
@@ -351,7 +346,7 @@ export function UserPresetsBilling() {
                 control={formAddress.control}
                 name="description"
                 render={({ field }) => (
-                  <FormItem className="px-8">
+                  <FormItem className="px-20">
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       {isLoadingPresets ? (
@@ -370,8 +365,11 @@ export function UserPresetsBilling() {
                 )}
               />
 
-              <CardFooter className="flex justify-end border bg-zinc-100/75 dark:bg-zinc-900/75 py-2 rounded-b-lg">
-                <Button type="submit" className="mx-2 px-4 py-2 bg-blue hover:bg-hoverBlue text-white font-semibold">
+              <CardFooter className="flex justify-end rounded-b-lg border bg-zinc-100/75 py-2 dark:bg-zinc-900/75">
+                <Button
+                  type="submit"
+                  className="mx-2 bg-blue px-4 py-2 font-semibold text-white hover:bg-hoverBlue"
+                >
                   Save
                 </Button>
               </CardFooter>
