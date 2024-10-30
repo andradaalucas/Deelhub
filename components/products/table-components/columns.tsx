@@ -1,7 +1,7 @@
 "use client";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import { Customers } from "../types";
+import { Products } from "../types";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -16,8 +16,6 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCustomers } from "@/services/customers";
-import { EditCustomers } from "./actions/edit";
-import { DetailsCustomers } from "./actions/details";
 import { ConfirmDelete } from "@/components/atom/confirm-delete";
 
 const getStatusStyles = (status: any) => {
@@ -46,7 +44,7 @@ const ActionsCell = ({ row }: any) => {
   const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [actionExcecuteData, setActionExcecuteData] = useState({
-    title: "delete this customer?",
+    title: "delete this payment",
     description: "This action will permanently delete the user's data.",
     rowData: row.original,
   });
@@ -128,25 +126,11 @@ const ActionsCell = ({ row }: any) => {
           actionToExcecuteFunction={actionToExcecuteFunction}
         />
       )}
-      {isOpenEdit && (
-        <EditCustomers
-          isOpen={isOpenEdit}
-          setIsOpen={setIsOpenEdit}
-          rowData={row.original}
-        />
-      )}
-      {isOpenDetails && (
-        <DetailsCustomers
-          isOpen={isOpenDetails}
-          setIsOpen={setIsOpenDetails}
-          rowData={row.original}
-        />
-      )}
     </div>
   );
 };
 
-export const columns: ColumnDef<Customers>[] = [
+export const columns: ColumnDef<Products>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -181,25 +165,19 @@ export const columns: ColumnDef<Customers>[] = [
     enableSorting: false,
   },
   {
-    accessorKey: "email",
+    accessorKey: "price",
     header: ({ column }) => {
-      return <div className="text-left">Email</div>;
+      return <div className="text-left">Price</div>;
     },
-    cell: ({ row }) => <div className="text-left">{row.getValue("email")}</div>,
+    cell: ({ row }) => <div className="text-left">{row.getValue("price")}</div>,
     enableSorting: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: "quantity",
     header: ({ column }) => {
-      return <div className="text-left">Customer ID</div>;
+      return <div className="text-left">Quantity</div>;
     },
-    cell: ({ row }) => (
-      <>
-        <div className="max-w-[100px] overflow-hidden whitespace-nowrap text-left">
-          <div className="truncate">#{row.getValue("id")}</div>
-        </div>
-      </>
-    ),
+    cell: ({ row }) => <div className="text-left">{row.getValue("quantity")}</div>,
     enableSorting: false,
     enableHiding: true,
   },

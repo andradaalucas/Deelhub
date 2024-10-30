@@ -15,7 +15,6 @@ export default function Page() {
 
   return (
     <>
-      <Overview />
       <DataTable
         columns={columns}
         data={transactions || []}

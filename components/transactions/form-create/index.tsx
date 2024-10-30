@@ -200,41 +200,44 @@ export function CreateForm() {
               >
                 <div className="space-y-4">
                   {/* Cliente */}
-                  <div className="flex flex-row items-start space-y-4 md:space-x-4 md:space-y-0">
-                    {customers && (
-                      <FormField
-                        control={form.control}
-                        name="customers"
-                        render={({ field }) => (
-                          <FormItem className="w-full">
-                            <FormLabel>Customers</FormLabel>
-                            <FormControl>
-                              <MultiSelect
-                                options={customers.map((customer) => ({
-                                  value: customer.id,
-                                  label: customer.name,
-                                }))}
-                                selectedOptions={field.value}
-                                onChange={(selected: string[]) => {
-                                  field.onChange(selected); // Usa el método onChange de RHF
-                                }}
-                                placeholder="Select customer"
-                                className="mt-10 w-full"
-                                contentClass="w-full"
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
+                  <div>
+                    <div className="flex flex-row items-start space-y-4 md:space-x-4 md:space-y-0">
+                      {customers && (
+                        <FormField
+                          control={form.control}
+                          name="customers"
+                          render={({ field }) => (
+                            <FormItem className="w-full">
+                              <FormLabel>Customers</FormLabel>
+                              <FormControl>
+                                <MultiSelect
+                                  options={customers.map((customer) => ({
+                                    value: customer.id,
+                                    label: customer.name,
+                                  }))}
+                                  selectedOptions={field.value}
+                                  onChange={(selected: string[]) => {
+                                    field.onChange(selected); // Usa el método onChange de RHF
+                                  }}
+                                  placeholder="Select customer"
+                                  className="mt-10 w-full"
+                                  contentClass="w-full"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      )}
+                    </div>
+                    <Link
+                      className="mt-2 flex cursor-pointer items-center text-sm font-medium hover:underline"
+                      href="/in/customers"
+                    >
+                      <div>To add customers</div>{" "}
+                      <ArrowUpRight className="h-4 w-4" />
+                    </Link>
                   </div>
-                  <Link
-                    className="cursor-pointer text-xs text-zinc-600 hover:underline"
-                    href="/in/customers"
-                  >
-                    To add customers
-                  </Link>
 
                   {/* Fechas */}
                   <div className="grid grid-cols-2 gap-4">
@@ -423,37 +426,37 @@ export function CreateForm() {
                       {/* Contenido de Productos */}
                       <TabsContent value="product">
                         <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-semibold">Products</div>
-                          </div>
-                          <TooltipProvider delayDuration={200}>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Button
-                                  onClick={() => addItem("product")}
-                                  type="button"
-                                  size="sm"
-                                  className="font-semibold"
-                                >
-                                  <Info />
-                                  <span>Add Product</span>
-                                </Button>
-                              </TooltipTrigger>
-                              <TooltipContent align="end">
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <div className="flex cursor-pointer items-center gap-2">
+                                <Info className="h-4 w-4" />
+                                <div className="font-semibold">Products</div>
+                              </div>
+                            </PopoverTrigger>
+                            <PopoverContent align="end">
+                              <div className="text-sm">
                                 <p>
                                   Selecting a quantity of products will be
-                                  deducted from your stock.{" "}
-                                  <Link
-                                    className="flex cursor-pointer items-center hover:underline"
-                                    href="/in/products"
-                                  >
-                                    <div>To add products</div>{" "}
-                                    <ArrowUpRight className="h-4 w-4" />
-                                  </Link>
+                                  deducted from your stock.
                                 </p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
+                                <Link
+                                  className="flex cursor-pointer items-center font-medium hover:underline"
+                                  href="/in/products"
+                                >
+                                  <div>To add products</div>{" "}
+                                  <ArrowUpRight className="h-4 w-4" />
+                                </Link>
+                              </div>
+                            </PopoverContent>
+                          </Popover>
+                          <Button
+                            onClick={() => addItem("product")}
+                            type="button"
+                            size="sm"
+                            className="font-semibold"
+                          >
+                            <span>Add Product</span>
+                          </Button>
                         </div>
 
                         <ScrollArea>
@@ -556,7 +559,7 @@ export function CreateForm() {
                       {/* Contenido de Servicios */}
                       <TabsContent value="service">
                         <div className="flex items-center justify-between">
-                          <h3>Service</h3>
+                          <h3 className="font-semibold">Service</h3>
                           <Button
                             onClick={() => addItem("service")}
                             type="button"

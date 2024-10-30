@@ -83,6 +83,7 @@ export function OptionsTable() {
         actionExcecuteData={actionExcecuteData}
         actionToExcecuteFunction={handleExport}
       />
+      <DropAndDrag isOpen={openImport} setIsOpen={setOpenImport} />
     </div>
   );
 }

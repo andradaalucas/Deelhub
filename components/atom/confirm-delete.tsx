@@ -1,12 +1,13 @@
-import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { ConfirmActionType } from "./types";
 
 export function ConfirmDelete({
@@ -16,24 +17,28 @@ export function ConfirmDelete({
   actionToExcecuteFunction,
 }: ConfirmActionType) {
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-      <DialogContent className="p-0">
-        <DialogHeader className="px-6 py-8">
-          <DialogTitle className="flex items-center justify-between text-lg">
+    <AlertDialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+      <AlertDialogContent className="p-0">
+        <AlertDialogHeader className="px-6 py-8">
+          <AlertDialogTitle className="text-left">
             Are you sure you want to {actionExcecuteData.title}
-          </DialogTitle>
-          <DialogDescription className="flex">
+          </AlertDialogTitle>
+          <AlertDialogDescription className="text-left">
             {actionExcecuteData.description}
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter className="flex justify-end gap-2 rounded-b-lg border bg-zinc-100/75 dark:bg-zinc-900/75 px-8 py-4">
-          <div className="flex justify-end">
-            <Button onClick={actionToExcecuteFunction} variant="destructive">
-              Accept
-            </Button>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter className="flex items-end border bg-zinc-100/75 px-8 py-4 dark:bg-zinc-900/75">
+          <div className="flex items-center gap-2">
+            <AlertDialogCancel className="mt-0">Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={actionToExcecuteFunction}
+              className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90"
+            >
+              Continue
+            </AlertDialogAction>
           </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

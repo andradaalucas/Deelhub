@@ -1,5 +1,6 @@
-"use client"
+"use client";
 import { ConfirmAction } from "@/components/atom/confirm-action";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,7 +12,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { exportTransactionsOnSheet } from "@/services/transactions";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { useQueryClient } from "@tanstack/react-query";
 import { FileSpreadsheet } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -22,7 +22,6 @@ export function OptionsTable() {
     title: "export data on CSV?",
     description: "It is likely to open a pop-up tab with the file.",
   });
-  const queryClient = useQueryClient();
   const handleExportCSV = async () => {
     setOpenExport(!openExport);
   };
@@ -47,16 +46,30 @@ export function OptionsTable() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="rounded-lg font-medium">
+          <DropdownMenuLabel className="flex items-center justify-between gap-2">
+            <div>Change Status</div> <Badge variant="outline">12</Badge>
+          </DropdownMenuLabel>
+          <DropdownMenuItem className="flex cursor-pointer items-center justify-between gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-900">
+            <div>Confirmed</div>
+            <div className="h-2 w-2 rounded-full bg-[#56663e]"></div>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="flex cursor-pointer items-center justify-between gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-900">
+            <div>Pending</div>
+            <div className="h-2 w-2 rounded-full bg-[#0a85d1]"></div>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="flex cursor-pointer items-center justify-between gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-900">
+            <div>Rejected</div>
+            <div className="h-2 w-2 rounded-full bg-[#e14133]"></div>
+          </DropdownMenuItem>
+          {/* <DropdownMenuSeparator />
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-
           <DropdownMenuItem
             className="flex cursor-pointer items-center justify-between gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-900"
             onClick={handleExportCSV}
           >
             <div>Export on CSV</div>
             <FileSpreadsheet className="h-5 w-5 stroke-2" />
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
         </DropdownMenuContent>
       </DropdownMenu>
       <ConfirmAction

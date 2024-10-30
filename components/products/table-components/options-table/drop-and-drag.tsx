@@ -15,16 +15,6 @@ import { File, Upload, X } from "lucide-react";
 import Papa from "papaparse";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 
 export function DropAndDrag({ isOpen, setIsOpen }: any) {
   const [file, setFile] = useState<File | null>(null);
@@ -99,7 +89,6 @@ export function DropAndDrag({ isOpen, setIsOpen }: any) {
     });
 
     promise.then(() => setIsOpen(false));
-    promise.then(() => setFile(null));
   };
 
   const removeFile = () => {
@@ -108,17 +97,25 @@ export function DropAndDrag({ isOpen, setIsOpen }: any) {
     setRowsWithMissingFields([]); // Resetear las filas incompletas
   };
 
+  // Referencia para controlar el foco
+  const initialFocusRef = useRef<HTMLButtonElement | null>(null);
+
+  // Focalizar el botón cuando el modal se abre
+  useEffect(() => {
+    if (isOpen && initialFocusRef.current) {
+      initialFocusRef.current.focus();
+    }
+  }, [isOpen]);
+
   return (
-    <AlertDialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-      <AlertDialogContent className="p-0">
-        <AlertDialogHeader className="p-8">
-          <AlertDialogTitle className="mb-2 mt-4">
-            Import CSV File
-          </AlertDialogTitle>
-          <AlertDialogDescription className="mb-4">
+    <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+      <DialogContent className="p-0">
+        <div className="p-8">
+          <DialogTitle className="mb-2 mt-4">Import CSV File</DialogTitle>
+          <DialogDescription className="mb-4">
             Upload a CSV file containing customer information to import new
             customers.
-          </AlertDialogDescription>
+          </DialogDescription>
 
           <div
             {...getRootProps()}
@@ -149,21 +146,19 @@ export function DropAndDrag({ isOpen, setIsOpen }: any) {
               </Button>
             </div>
           )}
-        </AlertDialogHeader>
+        </div>
 
-        <AlertDialogFooter className="flex items-end rounded-b-lg border bg-zinc-100/75 px-8 py-4 dark:bg-zinc-900/75">
-          <div className="flex items-center gap-2">
-            <AlertDialogCancel className="mt-0">Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              disabled={!file}
-              onClick={handleUploadCustomers}
-              className="bg-blue font-semibold text-white hover:bg-hoverBlue"
-            >
-              Create new customers
-            </AlertDialogAction>
-          </div>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+        <DialogFooter className="flex items-end rounded-b-lg border bg-zinc-100/75 px-8 py-4 dark:bg-zinc-900/75">
+          <Button
+            ref={initialFocusRef} // Asignar el foco inicial al botón
+            disabled={!file}
+            onClick={handleUploadCustomers}
+            className="bg-blue px-4 py-2 font-semibold text-white hover:bg-hoverBlue"
+          >
+            Create new customers
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
