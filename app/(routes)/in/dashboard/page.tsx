@@ -19,7 +19,7 @@ export default function Page() {
       <DataTable
         columns={columns}
         data={transactions || []}
-        filter="name"
+        filter="customer"
         isLoading={isLoading}
         isError={isError}
         Component={OptionsAndCreate}

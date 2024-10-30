@@ -50,22 +50,37 @@ const supabase = createClient();
 //     return [];
 //   }
 // };
+
+type CustomerTransaction = {
+  customers: {
+    name: string;
+  };
+};
+
 export const getAllTransactions = async () => {
   try {
-    const { data, error } = await supabase
-      .from("transactions")
-      .select(
-        "*, transaction_product(*), customer_transaction(*, customers(name))",
-      );
+    const { data, error } = await supabase.from("transactions").select(`
+        id,
+        issue_date,
+        due_date,
+        total,
+        status,
+        customer_transaction (
+          customers!inner(name)
+        )
+      `);
 
     if (error) {
       throw error;
     }
 
-    console.log("data", data);
-    return data;
+    // Retornamos data directamente si su estructura ya es la deseada
+    return data.map((transaction: any) => ({
+      ...transaction,
+      customer: transaction.customer_transaction[0]?.customers?.name || null,
+    }));
   } catch (error) {
-    console.log("Error on create customer", error);
+    console.log("Error on fetch transactions", error);
   }
 };
 
@@ -208,7 +223,7 @@ export const getAllTransactions = async () => {
 // };
 export const createTransactions = async (data: any) => {
   const {
-    customersID,
+    customers,
     products,
     subtotal,
     total,
@@ -221,7 +236,7 @@ export const createTransactions = async (data: any) => {
   const user_id = await getUserSession();
   try {
     // Iterate over each customerID
-    for (const customerID of customersID) {
+    for (const customerID of customers) {
       // Step 1: Insert into the `transactions` table
       const { data: transactionData, error: transactionError } = await supabase
         .from("transactions")

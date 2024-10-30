@@ -1,9 +1,9 @@
-import { UserPresetsBilling } from "@/components/user-presets-billing";
+import { Billing } from "@/components/billing";
 
 export default function Page() {
   return (
     <>
-      <UserPresetsBilling />
+      <Billing />
     </>
   );
 }

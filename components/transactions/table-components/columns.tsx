@@ -17,7 +17,6 @@ import { useState } from "react";
 import { ConfirmDelete } from "../../atom/confirm-delete";
 import { Transactions } from "../types";
 import { toast } from "sonner";
-import { getCustomerById } from "@/services/customers";
 
 const getStatusStyles = (status: any) => {
   switch (status) {
@@ -198,7 +197,7 @@ export const columns: ColumnDef<Transactions>[] = [
     },
     cell: ({ row }) => {
       const id = row.original.id;
-      return <CustomerName row={id} />;
+      return <div className="text-left font-medium">{row.getValue("customer")}</div>;
     },
   },
   {
@@ -218,26 +217,36 @@ export const columns: ColumnDef<Transactions>[] = [
     },
   },
   {
-    accessorKey: "start_date",
+    accessorKey: "issue_date",
     header: ({ column }) => {
-      return <div className="w-full text-left">Date</div>; // Ajusta el ancho al completo
+      return <div className="w-full text-left">Issue Date</div>; // Ajusta el ancho al completo
     },
     cell: ({ row }): React.ReactNode => {
-      const expirationDate = row.getValue("expiration_date");
-    
       return (
         <div className="flex w-full justify-between whitespace-nowrap text-left lowercase">
-          {row.getValue("start_date")}{expirationDate ? ` - ${expirationDate}` : ""}
+          {row.getValue("issue_date")}
         </div>
       );
     },
+  },
+  {
+    accessorKey: "due_date",
+    header: ({ column }) => {
+      return <div className="w-full text-left">Due Date</div>; // Ajusta el ancho al completo
+    },
+    cell: ({ row }): React.ReactNode => {
     
-    
+      return (
+        <div className="flex w-full justify-between whitespace-nowrap text-left">
+          {row.getValue("due_date") ? row.getValue("due_date") : "No Due Date"}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "id",
     header: ({ column }) => {
-      return <div className="text-left">Transaction ID </div>;
+      return <div className="text-left">Transaction ID</div>;
     },
     cell: ({ row }) => (
       <>

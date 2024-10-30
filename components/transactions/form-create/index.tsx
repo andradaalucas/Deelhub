@@ -24,27 +24,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getAllCustomers } from "@/services/customers";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { format } from "date-fns";
-import { CalendarIcon, Info, X } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { formSchemaTransactions, FormSchemaTransactions } from "../schemas";
-import { createTransactions } from "@/services/transactions";
-import { toast } from "sonner";
-import {
   Sheet,
   SheetContent,
   SheetDescription,
@@ -53,31 +32,68 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
-// Tipos para productos y servicios
-interface Product {
-  name: string;
-  price: number;
-  quantity: number;
-}
-
-interface Service {
-  name: string;
-  price: number;
-  hours: number;
-}
+import { getAllCustomers } from "@/services/customers";
+import { createTransactions } from "@/services/transactions";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { format } from "date-fns";
+import {
+  ArrowUpRight,
+  CalendarIcon,
+  Delete,
+  Info,
+  TriangleAlert,
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useFieldArray, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { formSchemaTransactions, FormSchemaTransactions } from "../schemas";
+import { useState } from "react";
+import { Switch } from "@/components/ui/switch";
+import { getAllProducts } from "@/services/products";
 
 export function CreateForm() {
-  const [customersID, setCustomersID] = useState<string[]>([]);
-  const [activeTable, setActiveTable] = useState<boolean>(false);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [services, setServices] = useState<Service[]>([]);
-  const [taxRate, setTaxRate] = useState<number>(0);
+  const [precreateProduct, setPrecreateProduct] = useState(false);
+  const form = useForm<FormSchemaTransactions>({
+    resolver: zodResolver(formSchemaTransactions),
+    defaultValues: {
+      issueDate: new Date(),
+      customers: [],
+      currency: "USD",
+      taxRate: 0,
+      products: [{ name: "", price: 0, quantity: 0 }],
+      services: [],
+    },
+  });
+  const { control, handleSubmit, setValue, getValues, register } = form;
+
+  const { fields: productFields, remove: removeProduct } = useFieldArray({
+    control,
+    name: "products",
+  });
+  const {
+    fields: serviceFields,
+    append: addService,
+    remove: removeService,
+  } = useFieldArray({
+    control,
+    name: "services",
+  });
 
   const queryClient = useQueryClient();
   const createTransaction = useMutation({
@@ -90,19 +106,19 @@ export function CreateForm() {
     },
   });
 
-  const handleValueChange = (value: string[]) => {
-    setCustomersID(value);
-  };
-
   const addItem = (type: "product" | "service") => {
-    setActiveTable(true);
     if (type === "product") {
+      const products = getValues("products") || [];
       if (products.length === 0 || isLastRowValid(products)) {
-        setProducts([...products, { name: "", price: 0, quantity: 0 }]);
+        setValue("products", [
+          ...products,
+          { name: "", price: 0, quantity: 0 },
+        ]);
       }
     } else {
+      const services = getValues("services") || [];
       if (services.length === 0 || isLastRowValid(services)) {
-        setServices([...services, { name: "", price: 0, hours: 0 }]);
+        setValue("services", [...services, { name: "", price: 0, hours: 0 }]);
       }
     }
   };
@@ -112,24 +128,9 @@ export function CreateForm() {
     return lastItem?.name && lastItem?.price && lastItem?.quantity;
   };
 
-  const removeItem = (index: number, type: "product" | "service") => {
-    if (type === "product") {
-      const updatedProducts = products.filter((_, i) => i !== index);
-      setProducts(updatedProducts);
-
-      if (updatedProducts.length === 0) {
-        setActiveTable(false);
-      }
-    } else {
-      const updatedServices = services.filter((_, i) => i !== index);
-      setServices(updatedServices);
-      if (updatedServices.length === 0) {
-        setActiveTable(false);
-      }
-    }
-  };
-
-  const calculateSubtotal = (): number => {
+  const calculateSubtotal = () => {
+    const products = form.watch("products") || [];
+    const services = form.watch("services") || [];
     const productTotal = products.reduce(
       (sum, product) => sum + product.price * product.quantity,
       0,
@@ -143,36 +144,28 @@ export function CreateForm() {
 
   const calculateTotal = (): number => {
     const subtotal = calculateSubtotal();
+    const taxRate = form.watch("taxRate");
     const taxAmount = subtotal * (taxRate / 100);
     return subtotal + taxAmount;
   };
 
-  const form = useForm<FormSchemaTransactions>({
-    resolver: zodResolver(formSchemaTransactions),
-    defaultValues: {
-      customers: "",
-      description: "",
-      startDate: new Date(),
-      currency: "USD",
-      taxRate: 0,
-    },
-  });
+  const { data: customers } = useQuery(["customers"], () => getAllCustomers());
+  const { data: products } = useQuery(["products"], () => getAllProducts());
 
-  const {
-    data: customers,
-    isLoading,
-    isError,
-  } = useQuery(["customers"], () => getAllCustomers());
-
+  const handlePreCreateProduct = () => {
+    setPrecreateProduct(!precreateProduct);
+  };
   const onSubmit = (data: FormSchemaTransactions) => {
     const enrichedData = {
       ...data,
-      customersID,
       subtotal: calculateSubtotal(),
       total: calculateTotal(),
-      products,
-      services,
     };
+    const refinementError = (form.formState.errors as any)[""];
+    if (refinementError && refinementError.type === "custom") {
+      toast.warning(refinementError.message);
+      return;
+    }
     const promise = createTransaction.mutateAsync(enrichedData);
     toast.promise(promise, {
       loading: "Uploading transaction...",
@@ -182,9 +175,10 @@ export function CreateForm() {
       error: "Failed to upload transaction. Please try again.",
     });
     promise.then(() => form.reset());
+    console.log("data on submit", data);
   };
-  const selectedCurrency = form.watch("currency");
-
+  const currency = form.watch("currency");
+  const taxRate = form.watch("taxRate");
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -206,7 +200,7 @@ export function CreateForm() {
               >
                 <div className="space-y-4">
                   {/* Cliente */}
-                  <div className="flex flex-row items-end space-y-4 md:space-x-4 md:space-y-0">
+                  <div className="flex flex-row items-start space-y-4 md:space-x-4 md:space-y-0">
                     {customers && (
                       <FormField
                         control={form.control}
@@ -220,13 +214,13 @@ export function CreateForm() {
                                   value: customer.id,
                                   label: customer.name,
                                 }))}
-                                selectedOptions={customersID}
+                                selectedOptions={field.value}
                                 onChange={(selected: string[]) => {
-                                  handleValueChange(selected);
+                                  field.onChange(selected); // Usa el método onChange de RHF
                                 }}
                                 placeholder="Select customer"
                                 className="mt-10 w-full"
-                                contentClass="w-full "
+                                contentClass="w-full"
                               />
                             </FormControl>
                             <FormMessage />
@@ -234,20 +228,19 @@ export function CreateForm() {
                         )}
                       />
                     )}
-                    <div className="ml-4">
-                      <Link href="/in/customers">
-                        <Button size="sm" className="font-semibold">
-                          Add Customer
-                        </Button>
-                      </Link>
-                    </div>
                   </div>
+                  <Link
+                    className="cursor-pointer text-xs text-zinc-600 hover:underline"
+                    href="/in/customers"
+                  >
+                    To add customers
+                  </Link>
 
                   {/* Fechas */}
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
-                      name="startDate"
+                      name="issueDate"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Issue Date</FormLabel>
@@ -281,9 +274,9 @@ export function CreateForm() {
 
                     <FormField
                       control={form.control}
-                      name="expirationDate"
+                      name="dueDate"
                       render={({ field }) => {
-                        const startDate = form.watch("startDate");
+                        const issueDate = form.watch("issueDate");
 
                         return (
                           <FormItem>
@@ -307,7 +300,7 @@ export function CreateForm() {
                                   mode="single"
                                   selected={field.value}
                                   onSelect={field.onChange}
-                                  disabled={(date) => date < startDate}
+                                  disabled={(date) => date < issueDate}
                                 />
                               </PopoverContent>
                             </Popover>
@@ -384,10 +377,9 @@ export function CreateForm() {
                             <Input
                               type="number"
                               className="font-mono"
-                              value={taxRate}
-                              onChange={(e) =>
-                                setTaxRate(Number(e.target.value))
-                              }
+                              max={100}
+                              min={0}
+                              {...field}
                             />
                           </FormControl>
                           <FormMessage />
@@ -395,19 +387,45 @@ export function CreateForm() {
                       )}
                     />
                   </div>
-
-                  {/* Tabs para productos y servicios */}
+                  {/* <div>
+                    <div className="flex items-center gap-4">
+                      <Switch
+                        checked={precreateProduct}
+                        onCheckedChange={handlePreCreateProduct}
+                      />
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className="flex items-center gap-2">
+                              <Info className="h-4 w-4" />
+                              <div className="font-semibold">
+                                Use pre-created product
+                              </div>
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>
+                              Using the pre-created products will be discounted
+                              from stock
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </div> */}
                   <div className="mt-4 flex-grow">
                     <Tabs defaultValue="product">
                       <TabsList className="grid w-full grid-cols-2">
-                        <TabsTrigger value="product">Producto</TabsTrigger>
-                        <TabsTrigger value="service">Servicio</TabsTrigger>
+                        <TabsTrigger value="product">Products</TabsTrigger>
+                        <TabsTrigger value="service">Services</TabsTrigger>
                       </TabsList>
 
                       {/* Contenido de Productos */}
-                      <TabsContent value="product" className="space-y-4">
+                      <TabsContent value="product">
                         <div className="flex items-center justify-between">
-                          <div className="font-semibold">Products</div>
+                          <div>
+                            <div className="font-semibold">Products</div>
+                          </div>
                           <TooltipProvider delayDuration={200}>
                             <Tooltip>
                               <TooltipTrigger asChild>
@@ -423,172 +441,108 @@ export function CreateForm() {
                               </TooltipTrigger>
                               <TooltipContent align="end">
                                 <p>
-                                  This product will not be deducted from your
-                                  stock of products.
+                                  Selecting a quantity of products will be
+                                  deducted from your stock.{" "}
+                                  <Link
+                                    className="flex cursor-pointer items-center hover:underline"
+                                    href="/in/products"
+                                  >
+                                    <div>To add products</div>{" "}
+                                    <ArrowUpRight className="h-4 w-4" />
+                                  </Link>
                                 </p>
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
                         </div>
-                        {activeTable && (
-                          <div className="h-22 mt-4 overflow-y-auto rounded-lg border lg:h-48">
-                            <ScrollArea className="w-full overflow-x-auto">
-                              <div className="w-full whitespace-nowrap">
-                                {/* Tabla de Productos */}
-                                <Table className="min-w-full">
-                                  <TableHeader>
-                                    <TableRow>
-                                      <TableHead>Name</TableHead>
-                                      <TableHead>Price</TableHead>
-                                      <TableHead>Quantity</TableHead>
-                                      <TableHead></TableHead>
-                                    </TableRow>
-                                  </TableHeader>
-                                  <TableBody>
-                                    {products.map((product, index) => (
-                                      <TableRow key={index}>
-                                        <TableCell>
-                                          <Input
-                                            type="text"
-                                            placeholder="name"
-                                            value={product.name}
-                                            onChange={(e) => {
-                                              const updatedProducts = [
-                                                ...products,
-                                              ];
-                                              updatedProducts[index].name =
-                                                e.target.value;
-                                              setProducts(updatedProducts);
-                                            }}
-                                          />
-                                        </TableCell>
-                                        <TableCell>
-                                          <Input
-                                            type="number"
-                                            placeholder="price"
-                                            value={product.price}
-                                            className="font-mono"
-                                            onChange={(e) => {
-                                              const updatedProducts = [
-                                                ...products,
-                                              ];
-                                              updatedProducts[index].price =
-                                                parseFloat(e.target.value);
-                                              setProducts(updatedProducts);
-                                            }}
-                                          />
-                                        </TableCell>
-                                        <TableCell>
-                                          <Input
-                                            type="number"
-                                            placeholder="quantity"
-                                            value={product.quantity}
-                                            className="font-mono"
-                                            onChange={(e) => {
-                                              const updatedProducts = [
-                                                ...products,
-                                              ];
-                                              updatedProducts[index].quantity =
-                                                parseInt(e.target.value);
-                                              setProducts(updatedProducts);
-                                            }}
-                                          />
-                                        </TableCell>
-                                        <TableCell>
-                                          <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={() =>
-                                              removeItem(index, "product")
-                                            }
-                                          >
-                                            <X className="h-4 w-4" />
-                                          </Button>
-                                        </TableCell>
-                                      </TableRow>
-                                    ))}
-                                  </TableBody>
-                                </Table>
-                              </div>
-                            </ScrollArea>
-                          </div>
-                        )}
-                      </TabsContent>
 
-                      {/* Contenido de Servicios */}
-                      <TabsContent value="service" className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <div className="font-semibold">Service</div>
-                          <Button
-                            onClick={() => addItem("service")}
-                            size="sm"
-                            type="button"
-                            className="font-semibold"
-                          >
-                            Add Service
-                          </Button>
-                        </div>
-                        {activeTable && (
-                          <div className="h-22 overflow-y-auto rounded-lg border lg:h-48">
+                        <ScrollArea>
+                          <div className="h-22 mt-4 overflow-y-auto rounded-lg border lg:h-48">
                             <Table>
                               <TableHeader>
                                 <TableRow>
                                   <TableHead>Name</TableHead>
-                                  <TableHead>Price per Hour</TableHead>
-                                  <TableHead>Hours</TableHead>
+                                  <TableHead>Price</TableHead>
+                                  <TableHead>Quantity</TableHead>
                                   <TableHead></TableHead>
                                 </TableRow>
                               </TableHeader>
                               <TableBody>
-                                {services.map((service, index) => (
-                                  <TableRow key={index}>
+                                {productFields.map((field, index) => (
+                                  <TableRow key={field.id}>
                                     <TableCell>
-                                      <Input
-                                        type="text"
-                                        value={service.name}
-                                        onChange={(e) => {
-                                          const updatedServices = [...services];
-                                          updatedServices[index].name =
-                                            e.target.value;
-                                          setServices(updatedServices);
-                                        }}
+                                      <FormField
+                                        control={control}
+                                        name={`products.${index}.name`}
+                                        render={({ field }) => (
+                                          <Select
+                                            onValueChange={(selectedId) => {
+                                              field.onChange(selectedId);
+                                              // Cuando se selecciona un producto, actualizamos su precio
+                                              const selectedProduct =
+                                                products?.find(
+                                                  (product) =>
+                                                    product.id === selectedId,
+                                                );
+                                              if (selectedProduct) {
+                                                setValue(
+                                                  `products.${index}.price`,
+                                                  selectedProduct.price,
+                                                );
+                                              }
+                                            }}
+                                            value={field.value}
+                                          >
+                                            <FormControl>
+                                              <SelectTrigger className="w-full">
+                                                <SelectValue placeholder="Select a product" />
+                                              </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                              {products?.map((product) => (
+                                                <SelectItem
+                                                  key={product.id}
+                                                  value={product.id}
+                                                >
+                                                  {product.name}
+                                                </SelectItem>
+                                              ))}
+                                            </SelectContent>
+                                          </Select>
+                                        )}
                                       />
                                     </TableCell>
                                     <TableCell>
                                       <Input
                                         type="number"
-                                        value={service.price}
-                                        className="font-mono"
-                                        onChange={(e) => {
-                                          const updatedServices = [...services];
-                                          updatedServices[index].price =
-                                            parseFloat(e.target.value);
-                                          setServices(updatedServices);
-                                        }}
+                                        placeholder="Price"
+                                        readOnly
+                                        {...register(
+                                          `products.${index}.price`,
+                                          {
+                                            valueAsNumber: true,
+                                          },
+                                        )}
                                       />
                                     </TableCell>
                                     <TableCell>
                                       <Input
                                         type="number"
-                                        value={service.hours}
-                                        className="font-mono"
-                                        onChange={(e) => {
-                                          const updatedServices = [...services];
-                                          updatedServices[index].hours =
-                                            parseInt(e.target.value);
-                                          setServices(updatedServices);
-                                        }}
+                                        placeholder="Quantity"
+                                        {...register(
+                                          `products.${index}.quantity`,
+                                          {
+                                            valueAsNumber: true,
+                                          },
+                                        )}
                                       />
                                     </TableCell>
                                     <TableCell>
                                       <Button
                                         variant="ghost"
-                                        size="icon"
-                                        onClick={() =>
-                                          removeItem(index, "service")
-                                        }
+                                        onClick={() => removeProduct(index)}
                                       >
-                                        <X className="h-4 w-4" />
+                                        <Delete />
                                       </Button>
                                     </TableCell>
                                   </TableRow>
@@ -596,10 +550,93 @@ export function CreateForm() {
                               </TableBody>
                             </Table>
                           </div>
-                        )}
+                        </ScrollArea>
+                      </TabsContent>
+
+                      {/* Contenido de Servicios */}
+                      <TabsContent value="service">
+                        <div className="flex items-center justify-between">
+                          <h3>Service</h3>
+                          <Button
+                            onClick={() => addItem("service")}
+                            type="button"
+                            size="sm"
+                            className="font-semibold"
+                          >
+                            Add Service
+                          </Button>
+                        </div>
+
+                        <ScrollArea>
+                          <div className="h-22 mt-4 overflow-y-auto rounded-lg border lg:h-48">
+                            <Table>
+                              <TableHeader>
+                                <TableRow>
+                                  <TableHead>Name</TableHead>
+                                  <TableHead>Price per hour</TableHead>
+                                  <TableHead>Hour</TableHead>
+                                  <TableHead></TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {serviceFields.map((field, index) => (
+                                  <TableRow key={field.id}>
+                                    <TableCell>
+                                      <Input
+                                        placeholder="Nombre"
+                                        {...control.register(
+                                          `services.${index}.name`,
+                                        )}
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input
+                                        type="number"
+                                        placeholder="Precio por Hora"
+                                        {...control.register(
+                                          `services.${index}.price`,
+                                          {
+                                            valueAsNumber: true,
+                                          },
+                                        )}
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input
+                                        type="number"
+                                        placeholder="Horas"
+                                        {...control.register(
+                                          `services.${index}.hours`,
+                                          {
+                                            valueAsNumber: true,
+                                          },
+                                        )}
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Button
+                                        variant="ghost"
+                                        onClick={() => removeService(index)}
+                                      >
+                                        <Delete />
+                                      </Button>
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </div>
+                        </ScrollArea>
                       </TabsContent>
                     </Tabs>
+                    {(form.formState.errors as any)[""] && (
+                      <div className="mt-4 flex items-center gap-2 rounded-lg border p-4 text-xs text-zinc-600">
+                        <TriangleAlert className="h-4 w-4" />
+                        <div>{(form.formState.errors as any)[""].message}.</div>
+                      </div>
+                    )}
                   </div>
+                  {/* Tabs para productos y servicios */}
                 </div>
 
                 <div className="mt-4">
@@ -609,7 +646,7 @@ export function CreateForm() {
                       <div className="flex justify-between">
                         <div>Subtotal</div>
                         <div className="font-mono">
-                          {selectedCurrency} {calculateSubtotal().toFixed(2)}
+                          {currency} {calculateSubtotal().toFixed(2)}
                         </div>
                       </div>
                       <div className="flex justify-between">
