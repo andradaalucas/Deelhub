@@ -12,7 +12,7 @@ export const formSchemaTransactions = z
         .number()
         .max(100, { message: "Tax rate must be between 0 and 100" })
         .min(0, { message: "Tax rate must be between 0 and 100" }),
-    ).default(0),
+    ),
     products: z
       .array(
         z.object({

@@ -159,7 +159,7 @@ export function DropAndDrag({ isOpen, setIsOpen }: any) {
               onClick={handleUploadCustomers}
               className="bg-blue font-semibold text-white hover:bg-hoverBlue"
             >
-              Create new customers
+              Continue
             </AlertDialogAction>
           </div>
         </AlertDialogFooter>

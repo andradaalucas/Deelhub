@@ -72,6 +72,7 @@ export function CreateForm() {
       issueDate: new Date(),
       customers: [],
       currency: "USD",
+      taxRate: 0,
       products: [{ name: "", price: 0, quantity: 0 }],
     },
   });
@@ -138,6 +139,7 @@ export function CreateForm() {
       error: "Failed to upload transaction. Please try again.",
     });
     promise.then(() => form.reset());
+    promise.then(() => form.reset());
   };
 
   const currency = form.watch("currency");
@@ -151,13 +153,15 @@ export function CreateForm() {
         </Button>
       </DialogTrigger>
       <DialogContent className="w-full p-0 lg:min-w-[600px]">
-        <DialogHeader className="sr-only">
-          <DialogTitle>Create Budget</DialogTitle>
-          <DialogDescription>
+        <DialogHeader className="mb-0 px-4 pt-8 md:px-8">
+          <DialogTitle className="text-left text-2xl font-semibold">
+            Create Budget
+          </DialogTitle>
+          <DialogDescription className="sr-only">
             Make changes to your budget here.
           </DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col overflow-y-auto p-4 md:p-8">
+        <div className="flex flex-col overflow-y-auto px-4 pb-4 md:px-8 md:pb-8">
           <div className="flex-grow">
             <Form {...form}>
               <form
@@ -464,7 +468,7 @@ export function CreateForm() {
                       type="submit"
                       className="bg-blue px-4 py-4 font-semibold text-white hover:bg-hoverBlue"
                     >
-                      Create Budget
+                      Continue
                     </Button>
                   </div>
                 </div>
