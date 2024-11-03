@@ -17,7 +17,7 @@ import { useState } from "react";
 import { RowData } from "../../types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateTransactions } from "@/services/transactions";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormField, FormItem } from "@/components/ui/form";
@@ -26,10 +26,15 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 
 const formSchema = z.object({
   id: z.string(),
-  status: z.enum(["pending", "confirmed", "rejected"], {
+  status: z.enum(["pending", "confirmed", "rejected"] as const, {
     required_error: "Please select a status",
   }),
 });
+
+type FormValues = {
+  id: string;
+  status: "pending" | "confirmed" | "rejected" | string;
+};
 
 export function Edit({
   isOpen,
@@ -48,6 +53,7 @@ export function Edit({
       email: rowData.customer_transaction[0]?.customers?.email || "No Email",
       phone: rowData.customer_transaction[0]?.customers?.phone || "No Phone",
     },
+    status: rowData.status,
     companyInfo: {
       name: "Deelfy",
       logo: "D",
@@ -72,10 +78,10 @@ export function Edit({
     },
   });
 
-  const form = useForm({
+  const form = useForm<FormValues>({
     defaultValues: {
       id: rowData.id,
-      status: rowData.status || "pending",
+      status: invoiceData?.status,
     },
     resolver: zodResolver(formSchema),
   });
@@ -85,13 +91,16 @@ export function Edit({
     mutationFn: updateTransactions,
     onSuccess: () => {
       queryClient.invalidateQueries(["transactions"]);
+      setIsOpen(false);
+      toast.success("Transaction updated successfully");
     },
     onError: () => {
       queryClient.invalidateQueries(["transactions"]);
+      toast.error("Failed to update transaction. Please try again.");
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     const promise = updateTransaction.mutateAsync(data);
     toast.promise(promise, {
       loading: "Uploading transaction...",
@@ -102,7 +111,10 @@ export function Edit({
     });
     promise.then(() => setIsOpen(false));
   };
-
+  const handleStatusChange = (value: FormValues["status"]) => {
+    form.setValue("status", value);
+    form.handleSubmit(onSubmit)();
+  };
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogContent className="rounded-none lg:min-w-[700px]">
@@ -145,10 +157,7 @@ export function Edit({
                 render={({ field }) => (
                   <FormItem>
                     <Select
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        form.handleSubmit(onSubmit)();
-                      }}
+                      onValueChange={handleStatusChange}
                       defaultValue={field.value}
                     >
                       <SelectTrigger className="max-w-32 font-semibold md:max-w-36">
@@ -158,7 +167,10 @@ export function Edit({
                         />
                       </SelectTrigger>
                       <SelectContent className="max-w-32 md:max-w-36">
-                        <SelectItem value="pending" className="font-semibold  text-sm">
+                        <SelectItem
+                          value="pending"
+                          className="text-sm font-semibold"
+                        >
                           <span className="flex items-center text-sm">
                             <span className="mr-2 h-2 w-2 rounded-full bg-[#0a85d1]" />
                             PENDING
