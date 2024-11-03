@@ -78,10 +78,18 @@ export function Insights() {
             <CardTitle className="text-sm font-medium">
               Predicted Revenue (Next Month)
             </CardTitle>
-            <DollarSignIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent className="p-0">
-            <div className="px-6 font-mono text-2xl font-semibold">$3,700</div>
+            <div className="flex justify-between px-6 font-mono text-2xl font-semibold">
+              <div className="flex flex-col">
+                <span>$3,700</span>
+                <span className="text-xs">Current</span>
+              </div>
+              <div className="dark:[#52525b] flex flex-col text-[#333]">
+                <span>$3,700</span>
+                <span className="text-xs">Forecast</span>
+              </div>
+            </div>
             <div className="mt-2 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
               <p className="flex items-center font-mono text-xs text-muted-foreground">
                 <ArrowUpIcon className="mr-1 h-4 w-4 text-green-500" />
@@ -95,7 +103,6 @@ export function Insights() {
             <CardTitle className="text-sm font-medium">
               Annual Growth Rate
             </CardTitle>
-            <TrendingUpIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent className="p-0">
             <div className="px-6 font-mono text-2xl font-semibold">12.5%</div>
@@ -112,7 +119,6 @@ export function Insights() {
             <CardTitle className="text-sm font-medium">
               Collection Cycle
             </CardTitle>
-            <ClockIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent className="p-0">
             <div className="px-6 font-mono text-2xl font-semibold">45 days</div>
@@ -130,7 +136,6 @@ export function Insights() {
             <CardTitle className="text-sm font-medium">
               Projected Growth
             </CardTitle>
-            <TrendingUpIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent className="p-0">
             <div className="px-6 font-mono text-2xl font-semibold">15.3%</div>
@@ -148,7 +153,6 @@ export function Insights() {
             <CardTitle className="text-sm font-medium">
               Conversion Rate
             </CardTitle>
-            <RefreshCcwIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent className="p-0">
             <div className="px-6 font-mono text-2xl font-semibold">8.7%</div>
@@ -166,7 +170,6 @@ export function Insights() {
             <CardTitle className="text-sm font-medium">
               Projected Gross Margins
             </CardTitle>
-            <PieChartIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent className="p-0">
             <div className="px-6 font-mono text-2xl font-semibold">62%</div>

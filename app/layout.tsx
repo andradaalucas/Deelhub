@@ -30,9 +30,6 @@ export default function HomeLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Head>
-            <title>Deelfy Inc</title>
-          </Head>
           <QueryClientProvider client={queryClient}>
             <NextUIProvider>
               {children}

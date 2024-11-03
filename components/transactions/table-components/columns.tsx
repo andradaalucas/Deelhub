@@ -17,6 +17,9 @@ import { useState } from "react";
 import { ConfirmDelete } from "../../atom/confirm-delete";
 import { Transactions } from "../types";
 import { toast } from "sonner";
+import { ConfirmAction } from "@/components/atom/confirm-action";
+import { Details } from "./actions/details";
+import { Edit } from "./actions/edit";
 
 const getStatusStyles = (status: any) => {
   switch (status) {
@@ -41,13 +44,10 @@ const getDotStatusStyles = (status: any) => {
 
 const ActionsCell = ({ row }: any) => {
   const [isOpenDetails, setIsOpenDetails] = useState(false);
+  const [isOpenAction, setIsOpenAction] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [isOpenDelete, setIsOpenDelete] = useState(false);
-  const [actionExcecuteData, setActionExcecuteData] = useState({
-    title: "delete this payment",
-    description: "This action will permanently delete the transactions's data.",
-    rowData: row.original,
-  });
+  const [actionExcecuteData, setActionExcecuteData] = useState({});
 
   const queryClient = useQueryClient();
 
@@ -80,6 +80,12 @@ const ActionsCell = ({ row }: any) => {
     setIsOpenEdit(!isOpenEdit);
   };
   const handleDelete = () => {
+    setActionExcecuteData({
+      title: "delete this payment",
+      description:
+        "This action will permanently delete the transaction's data.",
+      rowData: row.original,
+    });
     setIsOpenDelete(!isOpenDelete);
   };
 
@@ -87,10 +93,18 @@ const ActionsCell = ({ row }: any) => {
     navigator.clipboard.writeText(rowData?.id);
     toast.success("Copied to clipboard");
   };
-  const handleGeneratePDF = () => {};
+  const handleGeneratePDF = () => {
+    setIsOpenAction(!isOpenAction);
+    setActionExcecuteData({
+      title: "download the PDF of this transaction",
+      description:
+        "This action will generate a PDF file of the transaction's data.",
+      rowData: row.original,
+    });
+  };
 
   return (
-    <>
+    <div>
       <div className="flex items-center justify-center">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -129,7 +143,7 @@ const ActionsCell = ({ row }: any) => {
               Download PDF
             </DropdownMenuItem>
             <DropdownMenuItem
-              className="cursor-pointer text-red-500"
+              className="cursor-pointer text-red-500 hover:bg-[red-500] hover:text-white"
               onClick={handleDelete}
             >
               Delete
@@ -137,15 +151,31 @@ const ActionsCell = ({ row }: any) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      {isOpenDelete && (
-        <ConfirmDelete
-          isOpen={isOpenDelete}
-          setIsOpen={setIsOpenDelete}
-          actionExcecuteData={actionExcecuteData}
-          actionToExcecuteFunction={actionToExcecuteFunction}
-        />
-      )}
-    </>
+      <ConfirmDelete
+        isOpen={isOpenDelete}
+        setIsOpen={setIsOpenDelete}
+        actionExcecuteData={actionExcecuteData}
+        actionToExcecuteFunction={actionToExcecuteFunction}
+      />
+      <ConfirmAction
+        isOpen={isOpenAction}
+        setIsOpen={setIsOpenAction}
+        actionExcecuteData={actionExcecuteData}
+        actionToExcecuteFunction={() => {
+          console.log("Action Excecuted");
+        }}
+      />
+      <Details
+        isOpen={isOpenDetails}
+        setIsOpen={setIsOpenDetails}
+        rowData={row.original}
+      />
+      <Edit
+        isOpen={isOpenEdit}
+        setIsOpen={setIsOpenEdit}
+        rowData={row.original}
+      />
+    </div>
   );
 };
 
@@ -197,7 +227,9 @@ export const columns: ColumnDef<Transactions>[] = [
     },
     cell: ({ row }) => {
       const id = row.original.id;
-      return <div className="text-left font-medium">{row.getValue("customer")}</div>;
+      return (
+        <div className="text-left font-medium">{row.getValue("customer")}</div>
+      );
     },
   },
   {
@@ -235,7 +267,6 @@ export const columns: ColumnDef<Transactions>[] = [
       return <div className="w-full text-left">Due Date</div>; // Ajusta el ancho al completo
     },
     cell: ({ row }): React.ReactNode => {
-    
       return (
         <div className="flex w-full justify-between whitespace-nowrap text-left">
           {row.getValue("due_date") ? row.getValue("due_date") : "No Due Date"}
@@ -266,7 +297,7 @@ export const columns: ColumnDef<Transactions>[] = [
 
     cell: ({ row }) => (
       <>
-        <div className="whitespace-nowrap flex text-left">
+        <div className="flex whitespace-nowrap text-left">
           <div
             className={`${getStatusStyles(row.getValue("status"))} flex items-center gap-1 truncate rounded-sm border px-2 text-center text-xs font-semibold uppercase`}
           >

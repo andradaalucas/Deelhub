@@ -4,77 +4,37 @@ import { getUserSession } from "../user_management";
 
 const supabase = createClient();
 
-// export const getAllTransactions = async (filters?: any) => {
-//   try {
-
-//     let query = supabase.from("transactions").select();
-
-//     // If filters are provided, apply them to the query
-//     if (filters && filters.length > 0) {
-//       filters.forEach((filter: any) => {
-//         const { column, operator, value } = filter;
-
-//         switch (operator) {
-//           case "equals":
-//             query = query.eq(column, value);
-//             break;
-//           case "neq":
-//             query = query.neq(column, value);
-//             break;
-//           case "gte":
-//             query = query.gte(column, value);
-//             break;
-//           case "lte":
-//             query = query.lte(column, value);
-//             break;
-//           default:
-//             query = query.ilike(column, `%${value}%`);
-//         }
-//       });
-//     }
-
-//     // Execute the query
-//     const { data: transactions, error } = await query;
-
-//     // Handle any errors from Supabase
-//     if (error) {
-//       console.error("Error fetching transactions:", error);
-//       return [];
-//     }
-
-//     // Return the filtered or unfiltered transactions
-//     console.log("result desde index.ts", transactions);
-//     return transactions;
-//   } catch (error) {
-//     console.error("Error in getAllTransactions:", error);
-//     return [];
-//   }
-// };
-
-type CustomerTransaction = {
-  customers: {
-    name: string;
-  };
-};
-
 export const getAllTransactions = async () => {
   try {
     const { data, error } = await supabase.from("transactions").select(`
+      id,
+      issue_date,
+      due_date,
+      total,
+      tax_rate,
+      currency,
+      status,
+      products (
         id,
-        issue_date,
-        due_date,
-        total,
-        status,
-        customer_transaction (
-          customers!inner(name)
+        name,
+        price,
+        quantity
+      ),
+      customer_transaction (
+        customers (
+          name,
+          email,
+          address,
+          phone
         )
-      `);
+      )
+    `).order('created_at', { ascending: false });
 
     if (error) {
       throw error;
     }
 
-    // Retornamos data directamente si su estructura ya es la deseada
+    // Formateamos los datos para que incluyan los detalles de los productos y el nombre del cliente
     return data.map((transaction: any) => ({
       ...transaction,
       customer: transaction.customer_transaction[0]?.customers?.name || null,
@@ -84,143 +44,6 @@ export const getAllTransactions = async () => {
   }
 };
 
-// export const createTransactions = async (data: any) => {
-//   console.log("data desde create transaction", data);
-
-//   // try {
-//   //   // Insertar el cliente en la tabla customers
-//   //   const user_id = await getUserSession()
-//   //   const { data: dataCustomer, error: errorCustomer } = await supabase
-//   //     .from("customers")
-//   //     .insert({
-//   //       user_id: user_id,
-//   //       name: data.transactions.customers, // Usar el campo customers como name
-//   //     })
-//   //     .select();
-
-//   //   // Manejar errores de inserción de cliente
-//   //   if (errorCustomer) {
-//   //     console.error("Error inserting customer:", errorCustomer);
-//   //     return {
-//   //       success: false,
-//   //       message: "Error inserting customer",
-//   //       error: errorCustomer,
-//   //     };
-//   //   }
-
-//   //   if (!dataCustomer?.length) {
-//   //     return {
-//   //       success: false,
-//   //       message: "No customer was inserted.",
-//   //     };
-//   //   }
-
-//   //   const customer_id = dataCustomer[0].id; // Obtener el ID del cliente insertado
-
-//   //   // Insertar la transacción y obtener el ID
-//   //   const { data: dataTransactions, error: errorTransactions } = await supabase
-//   //     .from("transactions")
-//   //     .insert({
-//   //       description: data.transactions.description,
-//   //       date: data.transactions.date,
-//   //       status: data.transactions.status,
-//   //       amount: data.transactions.amount,
-//   //       user_id: user_id, // Relacionar la transacción con el usuario
-//   //     })
-//   //     .select();
-
-//   //   // Manejar errores de inserción de la transacción
-//   //   if (errorTransactions) {
-//   //     console.error("Error inserting transaction:", errorTransactions);
-//   //     return {
-//   //       success: false,
-//   //       message: "Error inserting transaction",
-//   //       error: errorTransactions,
-//   //     };
-//   //   }
-
-//   //   if (dataTransactions?.length > 0) {
-//   //     const transaction_id = dataTransactions[0].id; // Obtener el ID de la transacción insertada
-
-//   //     // Relacionar cliente con la transacción en la tabla intermedia customer_transaction
-//   //     const { error: errorCustomerTransaction } = await supabase
-//   //       .from("customer_transaction")
-//   //       .insert({
-//   //         customer_id: customer_id, // ID del cliente insertado
-//   //         transaction_id: transaction_id, // ID de la transacción insertada
-//   //       });
-
-//   //     if (errorCustomerTransaction) {
-//   //       console.error("Error inserting into customer_transaction:", errorCustomerTransaction);
-//   //       return {
-//   //         success: false,
-//   //         message: "Error inserting customer-transaction relation",
-//   //         error: errorCustomerTransaction,
-//   //       };
-//   //     }
-
-//   //     // Insertar productos relacionados con la transacción en la tabla products
-//   //     const productInsertPromises = data.products.map(async (product: any) => {
-//   //       const { data: dataProduct, error: errorProduct } = await supabase
-//   //         .from("products")
-//   //         .insert({
-//   //           name: product.name,
-//   //           price: product.price,
-//   //           quantity: product.quantity,
-//   //           user_id: user_id, // Enviar el user_id aquí
-//   //         })
-//   //         .select();
-
-//   //       // Manejar errores de inserción de productos
-//   //       if (errorProduct) {
-//   //         console.error("Error inserting product:", errorProduct);
-//   //         return {
-//   //           success: false,
-//   //           message: "Error inserting product",
-//   //           error: errorProduct,
-//   //         };
-//   //       }
-
-//   //       // Relacionar producto con la transacción en la tabla intermedia transaction_product
-//   //       if (dataProduct?.length > 0) {
-//   //         const product_id = dataProduct[0].id; // Obtener el ID del producto insertado
-
-//   //         const { error: errorTransactionProduct } = await supabase
-//   //           .from("transaction_product")
-//   //           .insert({
-//   //             product_id: product_id, // ID del producto insertado
-//   //             transaction_id: transaction_id, // ID de la transacción insertada
-//   //           });
-
-//   //         if (errorTransactionProduct) {
-//   //           console.error("Error inserting into transaction_product:", errorTransactionProduct);
-//   //           return {
-//   //             success: false,
-//   //             message: "Error inserting transaction-product relation",
-//   //             error: errorTransactionProduct,
-//   //           };
-//   //         }
-//   //       }
-//   //     });
-
-//   //     // Esperar a que se completen todas las inserciones de productos
-//   //     const productResults = await Promise.all(productInsertPromises);
-
-//   //     // Verificar si hubo errores en las inserciones de productos
-//   //     const hasError = productResults.some((result) => result && !result.success);
-//   //     if (hasError) {
-//   //       return { success: false, message: "Some products were not inserted." };
-//   //     }
-
-//   //     return { success: true, transaction: dataTransactions };
-//   //   }
-
-//   //   return { success: false, message: "No transaction was inserted." };
-//   // } catch (error) {
-//   //   console.error("Unexpected error:", error);
-//   //   return { success: false, message: "Unexpected error occurred.", error };
-//   // }
-// };
 export const createTransactions = async (data: any) => {
   const {
     customers,
@@ -229,15 +52,16 @@ export const createTransactions = async (data: any) => {
     total,
     currency,
     taxRate,
-    startDate,
-    expirationDate,
+    issueDate,
+    dueDate,
     description,
   } = data;
   const user_id = await getUserSession();
+
   try {
-    // Iterate over each customerID
+    // Iterar sobre cada customerID
     for (const customerID of customers) {
-      // Step 1: Insert into the `transactions` table
+      // Paso 1: Insertar en la tabla `transactions`
       const { data: transactionData, error: transactionError } = await supabase
         .from("transactions")
         .insert({
@@ -246,43 +70,48 @@ export const createTransactions = async (data: any) => {
           total,
           currency,
           tax_rate: taxRate,
-          start_date: startDate,
-          expiration_date: expirationDate,
+          issue_date: issueDate,
+          due_date: dueDate,
           description,
         })
-        .select(); // This will return the inserted row with the new `id`
+        .select(); // Retorna la fila insertada con el nuevo `id`
 
-      if (transactionError)
+      if (transactionError) {
         throw new Error(
           "Error inserting transaction: " + transactionError.message,
         );
+      }
 
       const transactionID = transactionData?.[0]?.id;
 
-      // Step 2: Insert into the `customer_transaction` intermediate table
+      // Paso 2: Insertar en la tabla intermedia `customer_transaction`
       const { error: customerTransactionError } = await supabase
         .from("customer_transaction")
         .insert({
           customer_id: customerID,
-          transaction_id: transactionID, // Link to the newly created transaction
+          transaction_id: transactionID, // Vincula al ID de la transacción recién creada
         });
 
-      if (customerTransactionError)
+      if (customerTransactionError) {
         throw new Error(
           "Error inserting into customer_transaction: " +
             customerTransactionError.message,
         );
+      }
 
-      // Step 3: Insert each product into `transaction_product`
+      // Paso 3: Insertar cada producto en `transaction_product` con sus detalles
       for (const product of products) {
-        const { error: productError } = await supabase
-          .from("transaction_product")
-          .insert({
-            transaction_id: transactionID, // Link the product to the transaction
-          });
-
-        if (productError)
+        const { name, quantity, price } = product;
+        const { error: productError } = await supabase.from("products").insert({
+          user_id,
+          transaction_id: transactionID,
+          name: name, // ID del producto específico
+          quantity: quantity, // Cantidad del producto en la transacción
+          price: price, // Precio del producto en la transacción
+        });
+        if (productError) {
           throw new Error("Error inserting product: " + productError.message);
+        }
       }
     }
     return { success: true };
@@ -302,6 +131,7 @@ export const updateTransactions = async (data: any) => {
     console.log("error", error);
   }
 };
+
 export const deleteTransactions = async (id: any): Promise<string> => {
   try {
     const { error } = await supabase.from("transactions").delete().eq("id", id);

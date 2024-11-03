@@ -49,15 +49,15 @@ export function OptionsTable() {
           <DropdownMenuLabel className="flex items-center justify-between gap-2">
             <div>Change Status</div> <Badge variant="outline">12</Badge>
           </DropdownMenuLabel>
-          <DropdownMenuItem className="flex cursor-pointer items-center justify-between gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-900">
+          <DropdownMenuItem className="flex cursor-pointer items-center justify-between gap-3">
             <div>Confirmed</div>
             <div className="h-2 w-2 rounded-full bg-[#56663e]"></div>
           </DropdownMenuItem>
-          <DropdownMenuItem className="flex cursor-pointer items-center justify-between gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-900">
+          <DropdownMenuItem className="flex cursor-pointer items-center justify-between gap-3 ">
             <div>Pending</div>
             <div className="h-2 w-2 rounded-full bg-[#0a85d1]"></div>
           </DropdownMenuItem>
-          <DropdownMenuItem className="flex cursor-pointer items-center justify-between gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-900">
+          <DropdownMenuItem className="flex cursor-pointer items-center justify-between gap-3">
             <div>Rejected</div>
             <div className="h-2 w-2 rounded-full bg-[#e14133]"></div>
           </DropdownMenuItem>

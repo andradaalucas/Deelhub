@@ -12,8 +12,7 @@ export const formSchemaTransactions = z
         .number()
         .max(100, { message: "Tax rate must be between 0 and 100" })
         .min(0, { message: "Tax rate must be between 0 and 100" }),
-    ),
-
+    ).default(0),
     products: z
       .array(
         z.object({
@@ -37,8 +36,7 @@ export const formSchemaTransactions = z
   .refine(
     (data) => {
       const hasProducts = data.products && data.products.length > 0;
-      const hasServices = data.services && data.services.length > 0;
-      return hasProducts || hasServices;
+      return hasProducts;
     },
     {
       message: "At least one product or service is required",

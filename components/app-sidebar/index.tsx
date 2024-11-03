@@ -1,4 +1,5 @@
 import {
+  ArchiveIcon,
   BarChart2Icon,
   ChevronUp,
   Command,
@@ -48,11 +49,6 @@ const items = [
     icon: UsersIcon,
   },
   {
-    title: "Products",
-    url: "/in/products",
-    icon: Tags,
-  },
-  {
     title: "Insights AI",
     url: "/in/insights",
     icon: BarChart2Icon,
@@ -66,6 +62,11 @@ const items = [
     title: "Billing",
     url: "/in/billing",
     icon: LandmarkIcon,
+  },
+  {
+    title: "Vault",
+    url: "/in/vault",
+    icon: ArchiveIcon,
   },
 ];
 

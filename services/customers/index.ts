@@ -5,7 +5,7 @@ const supabase = createClient();
 
 export const getAllCustomers = async (filters?: any) => {
   try {
-    const { data, error } = await supabase.from("customers").select();
+    const { data, error } = await supabase.from("customers").select().order('created_at', { ascending: false });
     return data;
   } catch (error) {
     console.log("Error on create customer", error);

@@ -5,6 +5,7 @@ import { getAllCustomers } from "@/services/customers";
 import { useQuery } from "@tanstack/react-query";
 import { OptionsAndCreate } from "@/components/customers/table-components";
 import { Overview } from "@/components/customers/overview";
+import Head from "next/head";
 
 export default function Page() {
   const {
@@ -15,6 +16,9 @@ export default function Page() {
 
   return (
     <>
+      <Head>
+        <title>My page title</title>
+      </Head>
       <Overview />
       <DataTable
         columns={columns}

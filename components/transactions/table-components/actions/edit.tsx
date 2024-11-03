@@ -1,341 +1,246 @@
-// "use client";
+import { CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
+import { RowData } from "../../types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateTransactions } from "@/services/transactions";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormField, FormItem } from "@/components/ui/form";
+import { toast } from "sonner";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
-// import {
-//   CardContent,
-//   CardDescription,
-//   CardFooter,
-//   CardHeader,
-//   CardTitle,
-// } from "@/components/ui/card";
-// import {
-//   Form,
-//   FormControl,
-//   FormField,
-//   FormItem,
-//   FormLabel,
-//   FormMessage,
-// } from "@/components/ui/form";
-// import {
-//   Popover,
-//   PopoverContent,
-//   PopoverTrigger,
-// } from "@/components/ui/popover";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectGroup,
-//   SelectItem,
-//   SelectLabel,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-// import { cn } from "@/lib/utils";
-// import { updateTransactions } from "@/services/transactions";
-// import { createClient } from "@/utils/supabase/client";
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { useMutation, useQueryClient } from "@tanstack/react-query";
-// import { format } from "date-fns";
-// import { CalendarIcon, DollarSign } from "lucide-react";
-// import Image from "next/image";
-// import { useEffect, useState } from "react";
-// import { useForm } from "react-hook-form";
-// import { z } from "zod";
-// // import { FormSchema } from "../schemas";
-// import { Button } from "@/components/ui/button";
-// import { Calendar } from "@/components/ui/calendar";
-// import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-// import { Input } from "@/components/ui/input";
-// import { Textarea } from "@/components/ui/textarea";
-// import { useToast } from "@/components/ui/use-toast";
-// import { parse } from "date-fns";
+const formSchema = z.object({
+  id: z.string(),
+  status: z.enum(["pending", "confirmed", "rejected"], {
+    required_error: "Please select a status",
+  }),
+});
 
-// // TODO: Crear validacion para que los numeros del monto sean mayores a 0
+export function Edit({
+  isOpen,
+  setIsOpen,
+  rowData,
+}: {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  rowData: RowData;
+}) {
+  const [invoiceData, setInvoiceData] = useState({
+    clientInfo: {
+      name: rowData.customer_transaction[0]?.customers?.name || "No Name",
+      address:
+        rowData.customer_transaction[0]?.customers?.address || "No Address",
+      email: rowData.customer_transaction[0]?.customers?.email || "No Email",
+      phone: rowData.customer_transaction[0]?.customers?.phone || "No Phone",
+    },
+    companyInfo: {
+      name: "Deelfy",
+      logo: "D",
+      invoiceNumber: "INV-0001",
+      city: "Córdoba, Argentina",
+      email: "hi@deelfy.com",
+    },
+    items: rowData.products.map((product) => ({
+      description: product.name,
+      quantity: product.quantity,
+      price: product.price,
+      total: product.price * product.quantity,
+    })),
+    totals: {
+      tax_rate: rowData.tax_rate ?? 0,
+      currency: rowData.currency || null,
+      total: rowData.total.toFixed(2),
+    },
+    date: {
+      issue_date: rowData.issue_date || "No issue date",
+      due_date: rowData.due_date || "No due date",
+    },
+  });
 
-// type DetailsProps = {
-//   rowData: any;
-//   isOpen: boolean;
-//   setIsOpen: (isOpen: boolean) => void;
-// };
+  const form = useForm({
+    defaultValues: {
+      id: rowData.id,
+      status: rowData.status || "pending",
+    },
+    resolver: zodResolver(formSchema),
+  });
 
-// export function Edit({ rowData, isOpen, setIsOpen }: DetailsProps) {
-//   const [dateNow, setDateNow] = useState<Date>(new Date());
-//   const [openDialog, setOpenDialog] = useState(false);
+  const queryClient = useQueryClient();
+  const updateTransaction = useMutation({
+    mutationFn: updateTransactions,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["transactions"]);
+    },
+    onError: () => {
+      queryClient.invalidateQueries(["transactions"]);
+    },
+  });
 
-//   const { toast } = useToast();
-//   const supabase = createClient();
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    const promise = updateTransaction.mutateAsync(data);
+    toast.promise(promise, {
+      loading: "Uploading transaction...",
+      success: () => {
+        return "transaction updated successfully";
+      },
+      error: "Failed to updated transaction. Please try again.",
+    });
+    promise.then(() => setIsOpen(false));
+  };
 
-//   const defaultValues = {
-//     amount: rowData?.amount,
-//     date: parse(rowData?.date, "yyyy-MM-dd", new Date()),
-//     description: rowData?.description,
-//     // type: rowData?.type,
-//     // status: rowData?.status,
-//     // currency: rowData?.currency,
-//   };
-//   const form = useForm<z.infer<typeof FormSchema>>({
-//     defaultValues,
-//     resolver: zodResolver(FormSchema),
-//   });
-//   const queryClient = useQueryClient();
-//   const updateTransaction = useMutation({
-//     mutationFn: updateTransactions,
-//     onSuccess: () => {
-//       queryClient.invalidateQueries(["transactions"]);
-//       toast({
-//         title: "Successfully updated",
-//         description: dateNow.toString(),
-//       });
-//     },
-//     onError() {
-//       toast({
-//         title: "Error An error occurred while creating the transaction",
-//         description: dateNow.toString(),
-//       });
-//     },
-//   });
-
-//   const handleOpenDialog = () => {
-//     openDialog ? setOpenDialog(false) : setOpenDialog(true);
-//   };
-
-//   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-//     const {
-//       data: { user },
-//     } = await supabase.auth.getUser();
-//     if (user !== null) {
-//       const enrichedData = {
-//         ...values,
-//         user_id: user.id,
-//         id: rowData?.id,
-//       };
-//       updateTransaction.mutate(enrichedData);
-//       form.reset();
-//       () => setIsOpen(false);
-//     } else {
-//       toast({
-//         title: "Unauthenticated user",
-//         description: "Log in and try again",
-//       });
-//       () => setIsOpen(false);
-//     }
-//     handleOpenDialog();
-//   };
-
-//   useEffect(() => {
-//     isOpen && setOpenDialog(isOpen);
-//   }, [isOpen]);
-//   return (
-//     <Dialog open={openDialog} onOpenChange={handleOpenDialog}>
-//       <DialogContent className="p-0">
-//         <Form {...form}>
-//           <form onSubmit={form.handleSubmit(onSubmit)}>
-//             <CardHeader>
-//               <div className="px-4 pt-4">
-//                 <CardTitle className="text-lg">Edit transaction</CardTitle>
-//                 <CardDescription>
-//                   Please enter the details of your transaction.
-//                 </CardDescription>
-//               </div>
-//             </CardHeader>
-//             <CardContent className="space-y-4">
-//               <div className="grid grid-cols-2 gap-4 px-4">
-//                 <FormField
-//                   control={form.control}
-//                   name="amount"
-//                   render={({ field }) => (
-//                     <FormItem>
-//                       <FormLabel>Amount</FormLabel>
-//                       <FormControl>
-//                         <div>
-//                           <div className="relative">
-//                             <DollarSign className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-
-//                             <Input
-//                               placeholder="Enter a amount"
-//                               type="number"
-//                               className="box-border block w-full rounded-md border px-4 py-2 pl-8 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]"
-//                               {...field}
-//                             />
-//                           </div>
-//                         </div>
-//                       </FormControl>
-//                       <FormMessage />
-//                     </FormItem>
-//                   )}
-//                 />
-//                 <FormField
-//                   control={form.control}
-//                   name="date"
-//                   render={({ field }) => (
-//                     <FormItem className="">
-//                       <FormLabel>Date</FormLabel>
-//                       <Popover>
-//                         <PopoverTrigger asChild>
-//                           <FormControl>
-//                             <Button
-//                               variant={"outline"}
-//                               className={cn(
-//                                 "box-border w-full rounded-md border px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]",
-//                                 !field.value && "text-muted-foreground",
-//                               )}
-//                             >
-//                               {field.value ? (
-//                                 format(field.value, "PPP")
-//                               ) : (
-//                                 <span>Pick a date</span>
-//                               )}
-//                               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-//                             </Button>
-//                           </FormControl>
-//                         </PopoverTrigger>
-//                         <PopoverContent className="w-auto p-0" align="start">
-//                           <Calendar
-//                             mode="single"
-//                             selected={field.value}
-//                             onSelect={field.onChange}
-//                             initialFocus
-//                           />
-//                         </PopoverContent>
-//                       </Popover>
-//                       <FormMessage />
-//                     </FormItem>
-//                   )}
-//                 />
-//               </div>
-//               <div className="px-4">
-//                 <FormField
-//                   control={form.control}
-//                   name="description"
-//                   render={({ field }) => (
-//                     <FormItem>
-//                       <FormLabel>Description</FormLabel>
-//                       <FormControl>
-//                         <Textarea
-//                           placeholder="Enter a description"
-//                           className="box-border w-full resize-none rounded-md border px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]"
-//                           {...field}
-//                         />
-//                       </FormControl>
-//                       <FormMessage />
-//                     </FormItem>
-//                   )}
-//                 />
-//               </div>
-//               <div className="grid grid-cols-2 gap-4 px-4">
-//                 <FormField
-//                   control={form.control}
-//                   name="type"
-//                   render={({ field }) => (
-//                     <FormItem>
-//                       <FormLabel>Type</FormLabel>
-//                       <Select
-//                         onValueChange={field.onChange}
-//                         defaultValue={field.value}
-//                       >
-//                         <FormControl>
-//                           <SelectTrigger className="box-border w-full rounded-md border px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]">
-//                             <SelectValue placeholder="Select type" />
-//                           </SelectTrigger>
-//                         </FormControl>
-//                         <SelectContent>
-//                           <SelectItem value="income">Income</SelectItem>
-//                           <SelectItem value="expense">Expense</SelectItem>
-//                         </SelectContent>
-//                       </Select>
-//                       <FormMessage />
-//                     </FormItem>
-//                   )}
-//                 />
-//                 <FormField
-//                   control={form.control}
-//                   name="status"
-//                   render={({ field }) => (
-//                     <FormItem>
-//                       <FormLabel>Status</FormLabel>
-//                       <Select
-//                         onValueChange={field.onChange}
-//                         defaultValue={field.value}
-//                       >
-//                         <FormControl>
-//                           <SelectTrigger className="box-border w-full rounded-md border px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]">
-//                             <SelectValue placeholder="Select status" />
-//                           </SelectTrigger>
-//                         </FormControl>
-//                         <SelectContent>
-//                           <SelectItem value="confirmed">Confirmed</SelectItem>
-//                           <SelectItem value="pending">Pending</SelectItem>
-//                           <SelectItem value="cancelled">Cancelled</SelectItem>
-//                           <SelectItem value="rejected">Rejected</SelectItem>
-//                         </SelectContent>
-//                       </Select>
-//                       <FormMessage />
-//                     </FormItem>
-//                   )}
-//                 />
-//               </div>
-//               <div className="px-4">
-//                 <FormField
-//                   control={form.control}
-//                   name="currency"
-//                   render={({ field }) => (
-//                     <FormItem>
-//                       <FormLabel>Currency</FormLabel>
-//                       <Select
-//                         onValueChange={field.onChange}
-//                         defaultValue={field.value}
-//                       >
-//                         <FormControl>
-//                           <SelectTrigger className="box-border w-full rounded-md border px-4 py-2 text-sm text-foreground shadow-sm outline-none transition-all focus:ring-1 focus:ring-current focus-visible:shadow-md focus-visible:ring-[#a9a9a9]">
-//                             <SelectValue placeholder="Choose a currency" />
-//                           </SelectTrigger>
-//                         </FormControl>
-//                         <SelectContent>
-//                           <SelectGroup>
-//                             <SelectLabel>Currency</SelectLabel>
-//                             <SelectItem value="argentine-peso">
-//                               <div className="flex items-center gap-2">
-//                                 <Image
-//                                   src="/assets/flags/argentina.png"
-//                                   alt="argentine-flag"
-//                                   height={17}
-//                                   width={17}
-//                                 />
-//                                 Argentine pesos
-//                               </div>
-//                             </SelectItem>
-//                             <SelectItem value="american-dollar">
-//                               <div className="flex items-center gap-2">
-//                                 <Image
-//                                   src="/assets/flags/united-states.png"
-//                                   alt="argentine-flag"
-//                                   height={17}
-//                                   width={17}
-//                                 />
-//                                 American Dollar
-//                               </div>
-//                             </SelectItem>
-//                           </SelectGroup>
-//                         </SelectContent>
-//                       </Select>
-//                       <FormMessage />
-//                     </FormItem>
-//                   )}
-//                 />
-//               </div>
-//             </CardContent>
-//             <CardFooter className="flex justify-end gap-2 rounded-b-lg border bg-[#fafafa] py-6">
-//               <Button
-//                 variant="outline"
-//                 onClick={() => setIsOpen(false)}
-//                 type="button"
-//               >
-//                 Cancel
-//               </Button>
-//               <Button type="submit">Edit</Button>
-//             </CardFooter>
-//           </form>
-//         </Form>
-//       </DialogContent>
-//     </Dialog>
-//   );
-// }
+  return (
+    <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+      <DialogContent className="rounded-none lg:min-w-[700px]">
+        <DialogHeader className="sr-only">
+          <DialogTitle></DialogTitle>
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
+        <div className="mx-auto w-full max-w-3xl">
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-7">
+              <div className="flex items-center space-x-4">
+                <div className="flex h-12 min-h-[48px] w-12 min-w-[48px] items-center justify-center rounded-lg bg-primary">
+                  <span className="text-2xl font-bold text-primary-foreground">
+                    {invoiceData.companyInfo.logo}
+                  </span>
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold">
+                    {invoiceData.companyInfo.name}
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    Invoice N°
+                    <div>{invoiceData.companyInfo.invoiceNumber}</div>
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col space-y-1 text-sm">
+                <div className="font-semibold">Issue Date</div>
+                <div className="text-muted-foreground">
+                  {invoiceData.date.issue_date}
+                </div>
+                <div className="font-semibold">Due Date</div>
+                <div className="text-muted-foreground">
+                  {invoiceData.date.due_date}
+                </div>
+              </div>
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <Select
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        form.handleSubmit(onSubmit)();
+                      }}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="max-w-32 font-semibold md:max-w-36">
+                        <SelectValue
+                          placeholder="Select status"
+                          className="text-sm font-semibold"
+                        />
+                      </SelectTrigger>
+                      <SelectContent className="max-w-32 md:max-w-36">
+                        <SelectItem value="pending" className="font-semibold  text-sm">
+                          <span className="flex items-center text-sm">
+                            <span className="mr-2 h-2 w-2 rounded-full bg-[#0a85d1]" />
+                            PENDING
+                          </span>
+                        </SelectItem>
+                        <SelectItem value="confirmed" className="font-semibold">
+                          <span className="flex items-center text-sm">
+                            <span className="mr-2 h-2 w-2 rounded-full bg-[#56663e] font-semibold" />
+                            CONFIRMED
+                          </span>
+                        </SelectItem>
+                        <SelectItem value="rejected" className="font-semibold">
+                          <span className="flex items-center text-sm">
+                            <span className="mr-2 h-2 w-2 rounded-full bg-[#e14133] font-semibold" />
+                            REJECTED
+                          </span>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+            </CardHeader>
+            <CardContent className="grid gap-6">
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-1.5">
+                  <h3 className="text-sm font-semibold sm:text-base">From</h3>
+                  <div className="text-xs text-muted-foreground sm:text-sm">
+                    <div>{invoiceData.companyInfo.name}</div>
+                    <div>{invoiceData.companyInfo.city}</div>
+                    <div>{invoiceData.companyInfo.email}</div>
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <h3 className="text-sm font-semibold sm:text-base">To</h3>
+                  <div className="text-xs text-muted-foreground sm:text-sm">
+                    <div>{invoiceData.clientInfo.name}</div>
+                    <div>{invoiceData.clientInfo.address}</div>
+                    <div>{invoiceData.clientInfo.email}</div>
+                    <div>{invoiceData.clientInfo.phone}</div>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <div className="grid grid-cols-4 text-xs font-semibold sm:text-sm">
+                  <div>Description</div>
+                  <div className="text-right">Quantity</div>
+                  <div className="text-right">Price</div>
+                  <div className="text-right">Total</div>
+                </div>
+                <Separator />
+                {invoiceData.items.map((item, index) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-4 text-xs sm:text-sm"
+                  >
+                    <div>{item.description}</div>
+                    <div className="text-right">{item.quantity}</div>
+                    <div className="text-right">${item.price.toFixed(2)}</div>
+                    <div className="text-right">${item.total.toFixed(2)}</div>
+                  </div>
+                ))}
+                <Separator />
+                <div className="grid grid-cols-4 text-xs sm:text-sm">
+                  <div className="col-span-3 text-right font-semibold">TAX</div>
+                  <div className="text-right">
+                    {invoiceData.totals.tax_rate}%
+                  </div>
+                </div>
+                <div className="grid grid-cols-4 items-center text-xs sm:text-sm">
+                  <div className="col-span-3 text-right font-semibold">
+                    Total
+                  </div>
+                  <div className="text-right text-base font-semibold sm:text-lg">
+                    {invoiceData.totals.currency} ${invoiceData.totals.total}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </form>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}

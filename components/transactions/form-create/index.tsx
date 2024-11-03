@@ -32,6 +32,15 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Table,
   TableBody,
   TableCell,
@@ -39,13 +48,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { getAllCustomers } from "@/services/customers";
 import { createTransactions } from "@/services/transactions";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -55,7 +57,6 @@ import {
   ArrowUpRight,
   CalendarIcon,
   Delete,
-  Info,
   TriangleAlert,
 } from "lucide-react";
 import Image from "next/image";
@@ -63,36 +64,23 @@ import Link from "next/link";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { formSchemaTransactions, FormSchemaTransactions } from "../schemas";
-import { useState } from "react";
-import { Switch } from "@/components/ui/switch";
-import { getAllProducts } from "@/services/products";
 
 export function CreateForm() {
-  const [precreateProduct, setPrecreateProduct] = useState(false);
   const form = useForm<FormSchemaTransactions>({
     resolver: zodResolver(formSchemaTransactions),
     defaultValues: {
       issueDate: new Date(),
       customers: [],
       currency: "USD",
-      taxRate: 0,
       products: [{ name: "", price: 0, quantity: 0 }],
-      services: [],
     },
   });
-  const { control, handleSubmit, setValue, getValues, register } = form;
+
+  const { control, handleSubmit, setValue, getValues } = form;
 
   const { fields: productFields, remove: removeProduct } = useFieldArray({
     control,
     name: "products",
-  });
-  const {
-    fields: serviceFields,
-    append: addService,
-    remove: removeService,
-  } = useFieldArray({
-    control,
-    name: "services",
   });
 
   const queryClient = useQueryClient();
@@ -106,20 +94,10 @@ export function CreateForm() {
     },
   });
 
-  const addItem = (type: "product" | "service") => {
-    if (type === "product") {
-      const products = getValues("products") || [];
-      if (products.length === 0 || isLastRowValid(products)) {
-        setValue("products", [
-          ...products,
-          { name: "", price: 0, quantity: 0 },
-        ]);
-      }
-    } else {
-      const services = getValues("services") || [];
-      if (services.length === 0 || isLastRowValid(services)) {
-        setValue("services", [...services, { name: "", price: 0, hours: 0 }]);
-      }
+  const addProduct = () => {
+    const products = getValues("products") || [];
+    if (products.length === 0 || isLastRowValid(products)) {
+      setValue("products", [...products, { name: "", price: 0, quantity: 0 }]);
     }
   };
 
@@ -130,16 +108,10 @@ export function CreateForm() {
 
   const calculateSubtotal = () => {
     const products = form.watch("products") || [];
-    const services = form.watch("services") || [];
-    const productTotal = products.reduce(
+    return products.reduce(
       (sum, product) => sum + product.price * product.quantity,
       0,
     );
-    const serviceTotal = services.reduce(
-      (sum, service) => sum + service.price * service.hours,
-      0,
-    );
-    return productTotal + serviceTotal;
   };
 
   const calculateTotal = (): number => {
@@ -150,48 +122,42 @@ export function CreateForm() {
   };
 
   const { data: customers } = useQuery(["customers"], () => getAllCustomers());
-  const { data: products } = useQuery(["products"], () => getAllProducts());
 
-  const handlePreCreateProduct = () => {
-    setPrecreateProduct(!precreateProduct);
-  };
   const onSubmit = (data: FormSchemaTransactions) => {
     const enrichedData = {
       ...data,
       subtotal: calculateSubtotal(),
       total: calculateTotal(),
     };
-    const refinementError = (form.formState.errors as any)[""];
-    if (refinementError && refinementError.type === "custom") {
-      toast.warning(refinementError.message);
-      return;
-    }
     const promise = createTransaction.mutateAsync(enrichedData);
     toast.promise(promise, {
       loading: "Uploading transaction...",
       success: () => {
-        return "All transaction created successfully!";
+        return "Transaction created successfully!";
       },
       error: "Failed to upload transaction. Please try again.",
     });
     promise.then(() => form.reset());
-    console.log("data on submit", data);
   };
+
   const currency = form.watch("currency");
   const taxRate = form.watch("taxRate");
+
   return (
-    <Sheet>
-      <SheetTrigger asChild>
+    <Dialog>
+      <DialogTrigger asChild>
         <Button className="h-9 rounded-md bg-blue font-semibold text-white hover:bg-hoverBlue">
           Create Budget
         </Button>
-      </SheetTrigger>
-      <SheetContent className="w-full p-0 lg:min-w-[600px]">
-        <SheetHeader className="sr-only">
-          <SheetTitle>Create Budget</SheetTitle>
-          <SheetDescription>Make changes to your budget here.</SheetDescription>
-        </SheetHeader>
-        <div className="flex h-screen flex-col overflow-y-auto p-4 md:p-8">
+      </DialogTrigger>
+      <DialogContent className="w-full p-0 lg:min-w-[600px]">
+        <DialogHeader className="sr-only">
+          <DialogTitle>Create Budget</DialogTitle>
+          <DialogDescription>
+            Make changes to your budget here.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex flex-col overflow-y-auto p-4 md:p-8">
           <div className="flex-grow">
             <Form {...form}>
               <form
@@ -199,7 +165,7 @@ export function CreateForm() {
                 className="flex h-full flex-col justify-between"
               >
                 <div className="space-y-4">
-                  {/* Cliente */}
+                  {/* Customers */}
                   <div>
                     <div className="flex flex-row items-start space-y-4 md:space-x-4 md:space-y-0">
                       {customers && (
@@ -217,7 +183,7 @@ export function CreateForm() {
                                   }))}
                                   selectedOptions={field.value}
                                   onChange={(selected: string[]) => {
-                                    field.onChange(selected); // Usa el método onChange de RHF
+                                    field.onChange(selected);
                                   }}
                                   placeholder="Select customer"
                                   className="mt-10 w-full"
@@ -230,16 +196,18 @@ export function CreateForm() {
                         />
                       )}
                     </div>
-                    <Link
-                      className="mt-2 flex cursor-pointer items-center text-sm font-medium hover:underline"
-                      href="/in/customers"
-                    >
-                      <div>To add customers</div>{" "}
-                      <ArrowUpRight className="h-4 w-4" />
-                    </Link>
+                    <div className="mt-2">
+                      <Link
+                        className="flex cursor-pointer items-center text-sm font-medium hover:underline"
+                        href="/in/customers"
+                      >
+                        <span>To add customers</span>
+                        <ArrowUpRight className="ml-1 h-4 w-4" />
+                      </Link>
+                    </div>
                   </div>
 
-                  {/* Fechas */}
+                  {/* Dates */}
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
@@ -390,248 +358,78 @@ export function CreateForm() {
                       )}
                     />
                   </div>
-                  {/* <div>
-                    <div className="flex items-center gap-4">
-                      <Switch
-                        checked={precreateProduct}
-                        onCheckedChange={handlePreCreateProduct}
-                      />
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <div className="flex items-center gap-2">
-                              <Info className="h-4 w-4" />
-                              <div className="font-semibold">
-                                Use pre-created product
-                              </div>
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>
-                              Using the pre-created products will be discounted
-                              from stock
-                            </p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                  </div> */}
+
                   <div className="mt-4 flex-grow">
-                    <Tabs defaultValue="product">
-                      <TabsList className="grid w-full grid-cols-2">
-                        <TabsTrigger value="product">Products</TabsTrigger>
-                        <TabsTrigger value="service">Services</TabsTrigger>
-                      </TabsList>
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-semibold">Items</h3>
+                      <Button
+                        onClick={addProduct}
+                        type="button"
+                        size="sm"
+                        className="font-semibold"
+                      >
+                        Add item
+                      </Button>
+                    </div>
 
-                      {/* Contenido de Productos */}
-                      <TabsContent value="product">
-                        <div className="flex items-center justify-between">
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <div className="flex cursor-pointer items-center gap-2">
-                                <Info className="h-4 w-4" />
-                                <div className="font-semibold">Products</div>
-                              </div>
-                            </PopoverTrigger>
-                            <PopoverContent align="end">
-                              <div className="text-sm">
-                                <p>
-                                  Selecting a quantity of products will be
-                                  deducted from your stock.
-                                </p>
-                                <Link
-                                  className="flex cursor-pointer items-center font-medium hover:underline"
-                                  href="/in/products"
-                                >
-                                  <div>To add products</div>{" "}
-                                  <ArrowUpRight className="h-4 w-4" />
-                                </Link>
-                              </div>
-                            </PopoverContent>
-                          </Popover>
-                          <Button
-                            onClick={() => addItem("product")}
-                            type="button"
-                            size="sm"
-                            className="font-semibold"
-                          >
-                            <span>Add Product</span>
-                          </Button>
-                        </div>
-
-                        <ScrollArea>
-                          <div className="h-22 mt-4 overflow-y-auto rounded-lg border lg:h-48">
-                            <Table>
-                              <TableHeader>
-                                <TableRow>
-                                  <TableHead>Name</TableHead>
-                                  <TableHead>Price</TableHead>
-                                  <TableHead>Quantity</TableHead>
-                                  <TableHead></TableHead>
-                                </TableRow>
-                              </TableHeader>
-                              <TableBody>
-                                {productFields.map((field, index) => (
-                                  <TableRow key={field.id}>
-                                    <TableCell>
-                                      <FormField
-                                        control={control}
-                                        name={`products.${index}.name`}
-                                        render={({ field }) => (
-                                          <Select
-                                            onValueChange={(selectedId) => {
-                                              field.onChange(selectedId);
-                                              // Cuando se selecciona un producto, actualizamos su precio
-                                              const selectedProduct =
-                                                products?.find(
-                                                  (product) =>
-                                                    product.id === selectedId,
-                                                );
-                                              if (selectedProduct) {
-                                                setValue(
-                                                  `products.${index}.price`,
-                                                  selectedProduct.price,
-                                                );
-                                              }
-                                            }}
-                                            value={field.value}
-                                          >
-                                            <FormControl>
-                                              <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Select a product" />
-                                              </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                              {products?.map((product) => (
-                                                <SelectItem
-                                                  key={product.id}
-                                                  value={product.id}
-                                                >
-                                                  {product.name}
-                                                </SelectItem>
-                                              ))}
-                                            </SelectContent>
-                                          </Select>
-                                        )}
-                                      />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input
-                                        type="number"
-                                        placeholder="Price"
-                                        readOnly
-                                        {...register(
-                                          `products.${index}.price`,
-                                          {
-                                            valueAsNumber: true,
-                                          },
-                                        )}
-                                      />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input
-                                        type="number"
-                                        placeholder="Quantity"
-                                        {...register(
-                                          `products.${index}.quantity`,
-                                          {
-                                            valueAsNumber: true,
-                                          },
-                                        )}
-                                      />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Button
-                                        variant="ghost"
-                                        onClick={() => removeProduct(index)}
-                                      >
-                                        <Delete />
-                                      </Button>
-                                    </TableCell>
-                                  </TableRow>
-                                ))}
-                              </TableBody>
-                            </Table>
-                          </div>
-                        </ScrollArea>
-                      </TabsContent>
-
-                      {/* Contenido de Servicios */}
-                      <TabsContent value="service">
-                        <div className="flex items-center justify-between">
-                          <h3 className="font-semibold">Service</h3>
-                          <Button
-                            onClick={() => addItem("service")}
-                            type="button"
-                            size="sm"
-                            className="font-semibold"
-                          >
-                            Add Service
-                          </Button>
-                        </div>
-
-                        <ScrollArea>
-                          <div className="h-22 mt-4 overflow-y-auto rounded-lg border lg:h-48">
-                            <Table>
-                              <TableHeader>
-                                <TableRow>
-                                  <TableHead>Name</TableHead>
-                                  <TableHead>Price per hour</TableHead>
-                                  <TableHead>Hour</TableHead>
-                                  <TableHead></TableHead>
-                                </TableRow>
-                              </TableHeader>
-                              <TableBody>
-                                {serviceFields.map((field, index) => (
-                                  <TableRow key={field.id}>
-                                    <TableCell>
-                                      <Input
-                                        placeholder="Nombre"
-                                        {...control.register(
-                                          `services.${index}.name`,
-                                        )}
-                                      />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input
-                                        type="number"
-                                        placeholder="Precio por Hora"
-                                        {...control.register(
-                                          `services.${index}.price`,
-                                          {
-                                            valueAsNumber: true,
-                                          },
-                                        )}
-                                      />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input
-                                        type="number"
-                                        placeholder="Horas"
-                                        {...control.register(
-                                          `services.${index}.hours`,
-                                          {
-                                            valueAsNumber: true,
-                                          },
-                                        )}
-                                      />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Button
-                                        variant="ghost"
-                                        onClick={() => removeService(index)}
-                                      >
-                                        <Delete />
-                                      </Button>
-                                    </TableCell>
-                                  </TableRow>
-                                ))}
-                              </TableBody>
-                            </Table>
-                          </div>
-                        </ScrollArea>
-                      </TabsContent>
-                    </Tabs>
+                    <ScrollArea>
+                      <div className="h-22 mt-4 overflow-y-auto rounded-lg border lg:h-48">
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead className="h-8">Name</TableHead>
+                              <TableHead className="h-8">Quantity</TableHead>
+                              <TableHead className="h-8">Price</TableHead>
+                              <TableHead className="h-8"></TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {productFields.map((field, index) => (
+                              <TableRow key={field.id}>
+                                <TableCell>
+                                  <Input
+                                    placeholder="Name"
+                                    {...form.register(`products.${index}.name`)}
+                                  />
+                                </TableCell>
+                                <TableCell>
+                                  <Input
+                                    type="number"
+                                    placeholder="Quantity"
+                                    {...form.register(
+                                      `products.${index}.quantity`,
+                                      {
+                                        valueAsNumber: true,
+                                      },
+                                    )}
+                                  />
+                                </TableCell>
+                                <TableCell>
+                                  <Input
+                                    type="number"
+                                    placeholder="Unit Price"
+                                    {...form.register(
+                                      `products.${index}.price`,
+                                      {
+                                        valueAsNumber: true,
+                                      },
+                                    )}
+                                  />
+                                </TableCell>
+                                <TableCell>
+                                  <Button
+                                    variant="ghost"
+                                    onClick={() => removeProduct(index)}
+                                  >
+                                    <Delete />
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    </ScrollArea>
                     {(form.formState.errors as any)[""] && (
                       <div className="mt-4 flex items-center gap-2 rounded-lg border p-4 text-xs text-zinc-600">
                         <TriangleAlert className="h-4 w-4" />
@@ -639,10 +437,9 @@ export function CreateForm() {
                       </div>
                     )}
                   </div>
-                  {/* Tabs para productos y servicios */}
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-12">
                   <div className="rounded-lg bg-secondary px-4 py-2">
                     <h3 className="mb-2 text-lg font-semibold">Resumen</h3>
                     <div className="grid gap-2 text-sm">
@@ -662,7 +459,7 @@ export function CreateForm() {
                       </div>
                     </div>
                   </div>
-                  <div className="mb-14 mt-6 flex justify-end">
+                  <div className="mt-6 flex justify-end">
                     <Button
                       type="submit"
                       className="bg-blue px-4 py-4 font-semibold text-white hover:bg-hoverBlue"
@@ -675,7 +472,7 @@ export function CreateForm() {
             </Form>
           </div>
         </div>
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   );
 }

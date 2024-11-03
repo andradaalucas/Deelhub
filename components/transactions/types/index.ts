@@ -16,3 +16,36 @@ export interface DataTableProps<TData, TValue> {
   isError: boolean;
   Component?: React.ReactNode;
 }
+
+export interface DetailType {
+  isOpen: boolean;
+  setIsOpen: (value: boolean) => void;
+  rowData: any;
+}
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+interface CustomerTransaction {
+  customers: {
+    name: string;
+    address?: string;
+    email?: string;
+    phone?: string;
+  };
+}
+
+export interface RowData {
+  id: string;
+  issue_date: string;
+  due_date?: string;
+  total: number;
+  currency?: string;
+  tax_rate?: number;
+  status: string;
+  products: Product[];
+  customer_transaction: CustomerTransaction[];
+}
