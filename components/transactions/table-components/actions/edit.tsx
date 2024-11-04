@@ -239,7 +239,7 @@ export function Edit({
               </div>
               <div className="grid grid-cols-4 items-center text-xs sm:text-sm">
                 <div className="col-span-3 text-right font-semibold">Total</div>
-                <div className="text-right text-sm font-semibold md:text-base lg:text-lg">
+                <div className="text-right text-xs font-semibold md:text-sm whitespace-nowrap lg:text-lg">
                   {invoiceData.totals.currency} ${invoiceData.totals.total}
                 </div>
               </div>

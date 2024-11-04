@@ -43,8 +43,8 @@ export function Details({
   };
 
   const date = {
-    issue_date: rowData.issue_date || null,
-    due_date: rowData.due_date || "-",
+    issue_date: rowData.issue_date || "No issue date",
+    due_date: rowData.due_date || "No due date",
   };
   const status = rowData?.status || undefined;
 
@@ -77,9 +77,9 @@ export function Details({
               <div className="font-semibold">Due Date</div>
               <div className="text-muted-foreground">{date.due_date}</div>
             </div>
-            <div>
+            <div className="flex items-center">
               <div className="relative w-auto max-w-32 md:max-w-32">
-                <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
+                <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center ">
                   <span
                     className={`h-2 w-2 rounded-full ${
                       status === "pending"
@@ -95,7 +95,7 @@ export function Details({
                 <div className="relative max-w-full">
                   <Input
                     value={status}
-                    className="max-w-full select-none pl-6 text-xs font-semibold uppercase md:text-sm lg:text-sm"
+                    className="max-w-full select-none pl-6 text-xs p-0 px-6 font-semibold uppercase md:text-sm lg:text-sm"
                     readOnly
                     tabIndex={-1}
                   />
@@ -149,7 +149,7 @@ export function Details({
               </div>
               <div className="grid grid-cols-4 items-center text-xs md:text-sm">
                 <div className="col-span-3 text-right font-semibold">Total</div>
-                <div className="text-right text-xs font-semibold md:text-sm whitespace-nowrap lg:text-lg">
+                <div className="whitespace-nowrap text-right text-xs font-semibold md:text-sm lg:text-lg">
                   {totals.currency} ${totals.total}
                 </div>
               </div>
