@@ -224,7 +224,7 @@ export const columns: ColumnDef<Transactions>[] = [
   {
     accessorKey: "customer",
     header: ({ column }) => {
-      return <div className="">Customer</div>;
+      return <div className="whitespace-nowrap">Customer</div>;
     },
     cell: ({ row }) => {
       const id = row.original.id;
@@ -238,7 +238,7 @@ export const columns: ColumnDef<Transactions>[] = [
   {
     accessorKey: "total",
     header: ({ column }) => {
-      return <div className="">Amount</div>;
+      return <div className="whitespace-nowrap">Amount</div>;
     },
     cell: ({ row }) => {
       const Monto = parseFloat(row.getValue("total"));
@@ -258,7 +258,9 @@ export const columns: ColumnDef<Transactions>[] = [
   {
     accessorKey: "issue_date",
     header: ({ column }) => {
-      return <div className="w-full text-left">Issue Date</div>;
+      return (
+        <div className="w-full whitespace-nowrap text-left">Issue Date</div>
+      );
     },
     cell: ({ row }): React.ReactNode => {
       const issueDate = row.getValue("issue_date") as string | Date | null;
@@ -272,7 +274,7 @@ export const columns: ColumnDef<Transactions>[] = [
   {
     accessorKey: "due_date",
     header: ({ column }) => {
-      return <div className="w-full text-left">Due Date</div>;
+      return <div className="w-full whitespace-nowrap text-left">Due Date</div>;
     },
     cell: ({ row }): React.ReactNode => {
       const dueDate = row.getValue("due_date") as string | Date | null;
@@ -287,7 +289,7 @@ export const columns: ColumnDef<Transactions>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => {
-      return <div className="text-left">Transaction ID</div>;
+      return <div className="whitespace-nowrap text-left">Transaction ID</div>;
     },
     cell: ({ row }) => (
       <>
@@ -302,7 +304,7 @@ export const columns: ColumnDef<Transactions>[] = [
   {
     accessorKey: "status",
     header: ({ column }) => {
-      return <div className="text-left">Status</div>;
+      return <div className="whitespace-nowrap text-left">Status</div>;
     },
 
     cell: ({ row }) => (
