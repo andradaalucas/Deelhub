@@ -6,13 +6,7 @@ export const formSchemaTransactions = z
     issueDate: z.date(),
     dueDate: z.date().optional(),
     currency: z.string(),
-    taxRate: z.preprocess(
-      (a) => parseInt(z.string().parse(a), 10),
-      z
-        .number()
-        .max(100, { message: "Tax rate must be between 0 and 100" })
-        .min(0, { message: "Tax rate must be between 0 and 100" }),
-    ),
+    taxRate: z.coerce.number(),
     products: z
       .array(
         z.object({

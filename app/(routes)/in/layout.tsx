@@ -18,9 +18,9 @@ export default async function InLayout({
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) {
-    redirect("/sign-in");
-  }
+  // if (!user) {
+  //   redirect("/sign-in");
+  // }
   return (
     <SidebarProvider>
       <AppSidebar />

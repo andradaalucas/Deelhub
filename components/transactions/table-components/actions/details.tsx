@@ -53,55 +53,61 @@ export function Details({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogContent className="rounded-none lg:min-w-[700px]">
-        <div className="mx-auto w-full max-w-4xl">
-          <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-7">
-            <div className="flex items-center space-x-4">
+        <div>
+          <CardHeader className="flex flex-row items-start justify-between space-y-0 p-0 pb-7 pt-6">
+            <div className="flex items-center space-x-4 p-2">
               <div className="flex h-12 min-h-[48px] w-12 min-w-[48px] items-center justify-center rounded-lg bg-primary">
-                <span className="text-2xl font-bold text-primary-foreground">
+                <span className="text-base font-bold text-primary-foreground lg:text-2xl">
                   {companyInfo.logo}
                 </span>
               </div>
               <div>
-                <h2 className="text-lg font-semibold">{companyInfo.name}</h2>
-                <p className="text-sm text-muted-foreground">
+                <h2 className="text-base font-semibold lg:text-lg">
+                  {companyInfo.name}
+                </h2>
+                <p className="text-xs text-muted-foreground md:text-sm lg:text-sm">
                   Invoice N°
                   <div>{companyInfo.invoiceNumber}</div>
                 </p>
               </div>
             </div>
-            <div className="flex flex-col space-y-1 text-sm">
+            <div className="flex flex-col space-y-1 p-2 text-xs md:text-sm lg:text-sm">
               <div className="font-semibold">Issue Date</div>
               <div className="text-muted-foreground">{date.issue_date}</div>
               <div className="font-semibold">Due Date</div>
               <div className="text-muted-foreground">{date.due_date}</div>
             </div>
-            <div className="relative w-auto max-w-32 md:max-w-36">
-              <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
-                <span
-                  className={`h-2 w-2 rounded-full ${
-                    status === "pending"
-                      ? "bg-[#0a85d1]"
-                      : status === "confirmed"
-                        ? "bg-[#56663e]"
-                        : status === "rejected"
-                          ? "bg-[#e14133]"
-                          : ""
-                  }`}
-                />
+            <div className="p-2">
+              <div className="relative w-auto max-w-32 md:max-w-36">
+                <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
+                  <span
+                    className={`h-2 w-2 rounded-full ${
+                      status === "pending"
+                        ? "bg-[#0a85d1]"
+                        : status === "confirmed"
+                          ? "bg-[#56663e]"
+                          : status === "rejected"
+                            ? "bg-[#e14133]"
+                            : ""
+                    }`}
+                  />
+                </div>
+                <div className="relative max-w-full">
+                  <Input
+                    value={status}
+                    className="max-w-full select-none pl-8 text-xs font-semibold uppercase md:text-sm lg:text-sm"
+                    readOnly
+                    tabIndex={-1}
+                  />
+                </div>
               </div>
-              <Input
-                value={status}
-                className="select-none pl-8 font-semibold uppercase"
-                readOnly
-                tabIndex={-1}
-              />
             </div>
           </CardHeader>
-          <CardContent className="grid gap-28">
-            <div className="grid gap-4 md:grid-cols-2">
+          <CardContent className="grid gap-24 p-0">
+            <div className="grid gap-4 p-2 md:grid-cols-2">
               <div className="space-y-1.5">
                 <h3 className="text-sm font-semibold">From</h3>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-xs text-muted-foreground md:text-sm lg:text-sm">
                   <p>{companyInfo.name}</p>
                   <p>{companyInfo.city}</p>
                   <p>{companyInfo.email}</p>
@@ -109,7 +115,7 @@ export function Details({
               </div>
               <div className="space-y-1.5">
                 <h3 className="text-sm font-semibold">To</h3>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-xs text-muted-foreground md:text-sm lg:text-sm">
                   <p>{clientInfo.name}</p>
                   <p>{clientInfo.address}</p>
                   <p>{clientInfo.email}</p>
@@ -117,8 +123,8 @@ export function Details({
                 </div>
               </div>
             </div>
-            <div className="space-y-1.5">
-              <div className="grid grid-cols-4 text-sm font-semibold">
+            <div className="space-y-1.5 p-2">
+              <div className="grid grid-cols-4 text-xs font-semibold md:text-sm">
                 <div>Description</div>
                 <div className="text-right">Quantity</div>
                 <div className="text-right">Price</div>
@@ -126,7 +132,10 @@ export function Details({
               </div>
               <Separator />
               {items.map((item, index) => (
-                <div key={index} className="grid grid-cols-4 text-sm">
+                <div
+                  key={index}
+                  className="grid grid-cols-4 text-xs md:text-sm"
+                >
                   <div>{item.description}</div>
                   <div className="text-right">{item.quantity}</div>
                   <div className="text-right">${item.price.toFixed(2)}</div>
@@ -134,28 +143,20 @@ export function Details({
                 </div>
               ))}
               <Separator />
-              <div className="grid grid-cols-4 text-sm">
+              <div className="grid grid-cols-4 text-xs md:text-sm">
                 <div className="col-span-3 text-right font-semibold">TAX</div>
                 <div className="text-right">{totals.tax_rate}%</div>
               </div>
-              <div className="grid grid-cols-4 items-center text-sm">
+              <div className="grid grid-cols-4 items-center text-xs md:text-sm">
                 <div className="col-span-3 text-right font-semibold">Total</div>
-                <div className="text-right text-lg font-semibold">
+                <div className="text-right text-sm font-semibold md:text-base lg:text-lg">
                   {totals.currency} ${totals.total}
                 </div>
               </div>
             </div>
-            {/*<div className="space-y-1.5">
-              <h3 className="text-sm font-semibold">Payment Details</h3>
-              <div className="text-sm text-muted-foreground">
-                 <p>{paymentDetails.bank}</p>
-                <p>IBAN: {paymentDetails.iban}</p>
-                <p className="mt-1.5">{paymentDetails.note}</p> 
-              </div>
-            </div>*/}
           </CardContent>
-          <CardFooter>
-            <p className="text-sm text-muted-foreground font-semibold">
+          <CardFooter className="p-0">
+            <p className="p-2 text-xs font-semibold text-muted-foreground md:text-sm">
               Powered by Deelfy
             </p>
           </CardFooter>

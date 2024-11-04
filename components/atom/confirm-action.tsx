@@ -28,7 +28,7 @@ export function ConfirmAction({
             {actionExcecuteData.description}
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="flex items-end border bg-zinc-100/75 px-8 py-4 dark:bg-zinc-900/75">
+        <AlertDialogFooter className="flex items-end rounded-b-md border bg-zinc-100/75 px-8 py-4 dark:bg-zinc-900/75">
           <div className="flex items-center gap-2">
             <AlertDialogCancel className="mt-0">Cancel</AlertDialogCancel>
             <AlertDialogAction
