@@ -229,7 +229,7 @@ export function CreateForm() {
                                 className="w-full px-2 py-1 text-sm"
                               >
                                 {field.value
-                                  ? format(field.value, "PPP")
+                                  ? format(new Date(field.value), "MM/dd/yyyy")
                                   : "Pick a date"}
                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                               </Button>
@@ -266,7 +266,10 @@ export function CreateForm() {
                                   className="w-full px-2 py-1 text-sm"
                                 >
                                   {field.value
-                                    ? format(field.value, "PPP")
+                                    ? format(
+                                        new Date(field.value),
+                                        "MM/dd/yyyy",
+                                      )
                                     : "Pick a date"}
                                   <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                 </Button>
@@ -281,6 +284,7 @@ export function CreateForm() {
                               />
                             </PopoverContent>
                           </Popover>
+
                           <FormMessage />
                         </FormItem>
                       );
@@ -379,7 +383,7 @@ export function CreateForm() {
                   </div>
 
                   <ScrollArea>
-                    <div className="h-28 md:h-28 mt-4 overflow-y-auto rounded-lg border lg:h-48">
+                    <div className="mt-4 h-28 overflow-y-auto rounded-lg border md:h-28 lg:h-48">
                       <Table>
                         <TableHeader>
                           <TableRow>

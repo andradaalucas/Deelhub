@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { ConfirmAction } from "@/components/atom/confirm-action";
 import { Details } from "./actions/details";
 import { Edit } from "./actions/edit";
+import { format } from "date-fns";
 
 const getStatusStyles = (status: any) => {
   switch (status) {
@@ -228,7 +229,9 @@ export const columns: ColumnDef<Transactions>[] = [
     cell: ({ row }) => {
       const id = row.original.id;
       return (
-        <div className="text-left font-medium">{row.getValue("customer")}</div>
+        <div className="whitespace-nowrap text-left font-medium">
+          {row.getValue("customer")}
+        </div>
       );
     },
   },
@@ -245,18 +248,23 @@ export const columns: ColumnDef<Transactions>[] = [
         currency: "USD",
       }).format(Monto);
 
-      return <div className="text-left font-medium">{formatted}</div>;
+      return (
+        <div className="whitespace-nowrap text-left font-medium">
+          {formatted}
+        </div>
+      );
     },
   },
   {
     accessorKey: "issue_date",
     header: ({ column }) => {
-      return <div className="w-full text-left">Issue Date</div>; // Ajusta el ancho al completo
+      return <div className="w-full text-left">Issue Date</div>;
     },
     cell: ({ row }): React.ReactNode => {
+      const issueDate = row.getValue("issue_date") as string | Date | null;
       return (
         <div className="flex w-full justify-between whitespace-nowrap text-left lowercase">
-          {row.getValue("issue_date")}
+          {issueDate ? format(new Date(issueDate), "MM/dd/yyyy") : ""}
         </div>
       );
     },
@@ -264,12 +272,14 @@ export const columns: ColumnDef<Transactions>[] = [
   {
     accessorKey: "due_date",
     header: ({ column }) => {
-      return <div className="w-full text-left">Due Date</div>; // Ajusta el ancho al completo
+      return <div className="w-full text-left">Due Date</div>;
     },
     cell: ({ row }): React.ReactNode => {
+      const dueDate = row.getValue("due_date") as string | Date | null;
+
       return (
-        <div className="flex w-full justify-between whitespace-nowrap text-left">
-          {row.getValue("due_date") ? row.getValue("due_date") : "No Due Date"}
+        <div className="flex w-full justify-between whitespace-nowrap text-left lowercase">
+          {dueDate ? format(new Date(dueDate), "MM/dd/yyyy") : ""}
         </div>
       );
     },
