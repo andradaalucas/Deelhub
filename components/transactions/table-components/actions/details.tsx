@@ -77,8 +77,8 @@ export function Details({
               <div className="font-semibold">Due Date</div>
               <div className="text-muted-foreground">{date.due_date}</div>
             </div>
-            <div className="p-2">
-              <div className="relative w-auto max-w-32 md:max-w-36">
+            <div>
+              <div className="relative w-auto max-w-28 md:max-w-28">
                 <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
                   <span
                     className={`h-2 w-2 rounded-full ${
@@ -107,7 +107,7 @@ export function Details({
             <div className="grid gap-4 p-2 md:grid-cols-2">
               <div className="space-y-1.5">
                 <h3 className="text-sm font-semibold">From</h3>
-                <div className="text-xs text-muted-foreground md:text-sm lg:text-sm">
+                <div className="text-sm text-muted-foreground md:text-sm lg:text-sm">
                   <p>{companyInfo.name}</p>
                   <p>{companyInfo.city}</p>
                   <p>{companyInfo.email}</p>
@@ -115,7 +115,7 @@ export function Details({
               </div>
               <div className="space-y-1.5">
                 <h3 className="text-sm font-semibold">To</h3>
-                <div className="text-xs text-muted-foreground md:text-sm lg:text-sm">
+                <div className="text-sm text-muted-foreground md:text-sm lg:text-sm">
                   <p>{clientInfo.name}</p>
                   <p>{clientInfo.address}</p>
                   <p>{clientInfo.email}</p>
@@ -123,7 +123,7 @@ export function Details({
                 </div>
               </div>
             </div>
-            <div className="space-y-1.5 p-2">
+            <div className="space-y-1.5 p-2 pb-6">
               <div className="grid grid-cols-4 text-xs font-semibold md:text-sm">
                 <div>Description</div>
                 <div className="text-right">Quantity</div>
@@ -155,11 +155,6 @@ export function Details({
               </div>
             </div>
           </CardContent>
-          <CardFooter className="p-0">
-            <p className="p-2 text-xs font-semibold text-muted-foreground md:text-sm">
-              Powered by Deelfy
-            </p>
-          </CardFooter>
         </div>
       </DialogContent>
     </Dialog>

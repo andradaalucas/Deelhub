@@ -122,136 +122,130 @@ export function Edit({
           <DialogTitle></DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <div className="mx-auto w-full max-w-3xl">
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-7">
-              <div className="flex items-center space-x-4">
-                <div className="flex h-12 min-h-[48px] w-12 min-w-[48px] items-center justify-center rounded-lg bg-primary">
-                  <span className="text-2xl font-bold text-primary-foreground">
-                    {invoiceData.companyInfo.logo}
-                  </span>
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold">
-                    {invoiceData.companyInfo.name}
-                  </h2>
-                  <p className="text-sm text-muted-foreground">
-                    Invoice N°
-                    <div>{invoiceData.companyInfo.invoiceNumber}</div>
-                  </p>
-                </div>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <CardHeader className="fflex flex-row items-start justify-between space-y-0 p-0 pb-7 pt-6">
+            <div className="flex items-center space-x-4 p-2">
+              <div className="flex h-12 min-h-[48px] w-12 min-w-[48px] items-center justify-center rounded-lg bg-primary">
+                <span className="text-base font-bold text-primary-foreground lg:text-2xl">
+                  {invoiceData.companyInfo.logo}
+                </span>
               </div>
-              <div className="flex flex-col space-y-1 text-sm">
-                <div className="font-semibold">Issue Date</div>
-                <div className="text-muted-foreground">
-                  {invoiceData.date.issue_date}
-                </div>
-                <div className="font-semibold">Due Date</div>
-                <div className="text-muted-foreground">
-                  {invoiceData.date.due_date}
-                </div>
+              <div>
+                <h2 className="text-base font-semibold lg:text-lg">
+                  {invoiceData.companyInfo.name}
+                </h2>
+                <p className="text-xs text-muted-foreground md:text-sm lg:text-sm">
+                  Invoice N°
+                  <div>{invoiceData.companyInfo.invoiceNumber}</div>
+                </p>
               </div>
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem>
-                    <Select
-                      onValueChange={handleStatusChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="max-w-32 font-semibold md:max-w-36">
-                        <SelectValue
-                          placeholder="Select status"
-                          className="text-sm font-semibold"
-                        />
-                      </SelectTrigger>
-                      <SelectContent className="max-w-32 md:max-w-36">
-                        <SelectItem
-                          value="pending"
-                          className="text-sm font-semibold"
-                        >
-                          <span className="flex items-center text-sm">
-                            <span className="mr-2 h-2 w-2 rounded-full bg-[#0a85d1]" />
-                            PENDING
-                          </span>
-                        </SelectItem>
-                        <SelectItem value="confirmed" className="font-semibold">
-                          <span className="flex items-center text-sm">
-                            <span className="mr-2 h-2 w-2 rounded-full bg-[#56663e] font-semibold" />
-                            CONFIRMED
-                          </span>
-                        </SelectItem>
-                        <SelectItem value="rejected" className="font-semibold">
-                          <span className="flex items-center text-sm">
-                            <span className="mr-2 h-2 w-2 rounded-full bg-[#e14133] font-semibold" />
-                            REJECTED
-                          </span>
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-            </CardHeader>
-            <CardContent className="grid gap-6">
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-1.5">
-                  <h3 className="text-sm font-semibold sm:text-base">From</h3>
-                  <div className="text-xs text-muted-foreground sm:text-sm">
-                    <div>{invoiceData.companyInfo.name}</div>
-                    <div>{invoiceData.companyInfo.city}</div>
-                    <div>{invoiceData.companyInfo.email}</div>
-                  </div>
-                </div>
-                <div className="space-y-1.5">
-                  <h3 className="text-sm font-semibold sm:text-base">To</h3>
-                  <div className="text-xs text-muted-foreground sm:text-sm">
-                    <div>{invoiceData.clientInfo.name}</div>
-                    <div>{invoiceData.clientInfo.address}</div>
-                    <div>{invoiceData.clientInfo.email}</div>
-                    <div>{invoiceData.clientInfo.phone}</div>
-                  </div>
+            </div>
+            <div className="flex flex-col space-y-1 p-2 text-xs md:text-sm lg:text-sm">
+              <div className="font-semibold">Issue Date</div>
+              <div className="text-muted-foreground">
+                {invoiceData.date.issue_date}
+              </div>
+              <div className="font-semibold">Due Date</div>
+              <div className="text-muted-foreground">
+                {invoiceData.date.due_date}
+              </div>
+            </div>
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <Select
+                    onValueChange={handleStatusChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="w-auto max-w-32 font-semibold md:max-w-32">
+                      <SelectValue
+                        placeholder="Select status"
+                        className="text-xs font-semibold"
+                      />
+                    </SelectTrigger>
+                    <SelectContent className="max-w-32 md:max-w-32">
+                      <SelectItem
+                        value="pending"
+                        className="text-xs font-semibold"
+                      >
+                        <span className="flex items-center text-xs">
+                          <span className="mr-2 h-2 w-2 rounded-full bg-[#0a85d1]" />
+                          PENDING
+                        </span>
+                      </SelectItem>
+                      <SelectItem value="confirmed" className="font-semibold">
+                        <span className="flex items-center text-xs">
+                          <span className="mr-2 h-2 w-2 rounded-full bg-[#56663e] font-semibold" />
+                          CONFIRMED
+                        </span>
+                      </SelectItem>
+                      <SelectItem value="rejected" className="font-semibold">
+                        <span className="flex items-center text-xs">
+                          <span className="mr-2 h-2 w-2 rounded-full bg-[#e14133] font-semibold" />
+                          REJECTED
+                        </span>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+          </CardHeader>
+          <CardContent className="grid gap-24 p-0">
+            <div className="grid gap-4 p-2 md:grid-cols-2">
+              <div className="space-y-1.5">
+                <h3 className="text-sm font-semibold">From</h3>
+                <div className="text-sm text-muted-foreground md:text-sm lg:text-sm">
+                  <p>{invoiceData.companyInfo.name}</p>
+                  <p>{invoiceData.companyInfo.city}</p>
+                  <p>{invoiceData.companyInfo.email}</p>
                 </div>
               </div>
               <div className="space-y-1.5">
-                <div className="grid grid-cols-4 text-xs font-semibold sm:text-sm">
-                  <div>Description</div>
-                  <div className="text-right">Quantity</div>
-                  <div className="text-right">Price</div>
-                  <div className="text-right">Total</div>
-                </div>
-                <Separator />
-                {invoiceData.items.map((item, index) => (
-                  <div
-                    key={index}
-                    className="grid grid-cols-4 text-xs sm:text-sm"
-                  >
-                    <div>{item.description}</div>
-                    <div className="text-right">{item.quantity}</div>
-                    <div className="text-right">${item.price.toFixed(2)}</div>
-                    <div className="text-right">${item.total.toFixed(2)}</div>
-                  </div>
-                ))}
-                <Separator />
-                <div className="grid grid-cols-4 text-xs sm:text-sm">
-                  <div className="col-span-3 text-right font-semibold">TAX</div>
-                  <div className="text-right">
-                    {invoiceData.totals.tax_rate}%
-                  </div>
-                </div>
-                <div className="grid grid-cols-4 items-center text-xs sm:text-sm">
-                  <div className="col-span-3 text-right font-semibold">
-                    Total
-                  </div>
-                  <div className="text-right text-base font-semibold sm:text-lg">
-                    {invoiceData.totals.currency} ${invoiceData.totals.total}
-                  </div>
+                <h3 className="text-sm font-semibold">To</h3>
+                <div className="text-sm text-muted-foreground md:text-sm lg:text-sm">
+                  <p>{invoiceData.clientInfo.name}</p>
+                  <p>{invoiceData.clientInfo.address}</p>
+                  <p>{invoiceData.clientInfo.email}</p>
+                  <p>{invoiceData.clientInfo.phone}</p>
                 </div>
               </div>
-            </CardContent>
-          </form>
-        </div>
+            </div>
+            <div className="space-y-1.5 p-2 pb-6">
+              <div className="grid grid-cols-4 text-xs font-semibold sm:text-sm">
+                <div>Description</div>
+                <div className="text-right">Quantity</div>
+                <div className="text-right">Price</div>
+                <div className="text-right">Total</div>
+              </div>
+              <Separator />
+              {invoiceData.items.map((item, index) => (
+                <div
+                  key={index}
+                  className="grid grid-cols-4 text-xs sm:text-sm"
+                >
+                  <div>{item.description}</div>
+                  <div className="text-right">{item.quantity}</div>
+                  <div className="text-right">${item.price.toFixed(2)}</div>
+                  <div className="text-right">${item.total.toFixed(2)}</div>
+                </div>
+              ))}
+              <Separator />
+              <div className="grid grid-cols-4 text-xs sm:text-sm">
+                <div className="col-span-3 text-right font-semibold">TAX</div>
+                <div className="text-right">{invoiceData.totals.tax_rate}%</div>
+              </div>
+              <div className="grid grid-cols-4 items-center text-xs sm:text-sm">
+                <div className="col-span-3 text-right font-semibold">Total</div>
+                <div className="text-right text-sm font-semibold md:text-base lg:text-lg">
+                  {invoiceData.totals.currency} ${invoiceData.totals.total}
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </form>
       </DialogContent>
     </Dialog>
   );
