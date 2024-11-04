@@ -91,12 +91,9 @@ export function Edit({
     mutationFn: updateTransactions,
     onSuccess: () => {
       queryClient.invalidateQueries(["transactions"]);
-      setIsOpen(false);
-      toast.success("Transaction updated successfully");
     },
     onError: () => {
       queryClient.invalidateQueries(["transactions"]);
-      toast.error("Failed to update transaction. Please try again.");
     },
   });
 
