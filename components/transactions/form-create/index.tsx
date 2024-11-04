@@ -66,8 +66,10 @@ import Link from "next/link";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { formSchemaTransactions, FormSchemaTransactions } from "../schemas";
+import { useState } from "react";
 
 export function CreateForm() {
+  const [ isOpen, setIsOpen ] = useState(false);
   const form = useForm<FormSchemaTransactions>({
     resolver: zodResolver(formSchemaTransactions),
     defaultValues: {
@@ -141,14 +143,14 @@ export function CreateForm() {
       error: "Failed to upload transaction. Please try again.",
     });
     promise.then(() => form.reset());
-    promise.then(() => form.reset());
+    promise.then(() => setIsOpen(false))
   };
 
   const currency = form.watch("currency");
   const taxRate = form.watch("taxRate");
 
   return (
-    <AlertDialog>
+    <AlertDialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <AlertDialogTrigger asChild>
         <Button
           size="sm"

@@ -41,7 +41,7 @@ interface CustomerTransaction {
 export interface RowData {
   id: string;
   issue_date: string;
-  due_date?: string;
+  due_date: string;
   total: number;
   currency?: string;
   tax_rate?: number;

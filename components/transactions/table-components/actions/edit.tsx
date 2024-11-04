@@ -23,6 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormField, FormItem } from "@/components/ui/form";
 import { toast } from "sonner";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { format } from "date-fns";
 
 const formSchema = z.object({
   id: z.string(),
@@ -73,8 +74,10 @@ export function Edit({
       total: rowData.total.toFixed(2),
     },
     date: {
-      issue_date: rowData.issue_date || "No issue date",
-      due_date: rowData.due_date || "No due date",
+      issue_date:
+        format(new Date(rowData.issue_date), "MM/dd/yyyy") || "No issue date",
+      due_date:
+        format(new Date(rowData.due_date), "MM/dd/yyyy") || "No due date",
     },
   });
 
@@ -231,12 +234,14 @@ export function Edit({
               ))}
               <Separator />
               <div className="grid grid-cols-4 text-xs sm:text-sm">
-                <div className="col-span-3 text-right font-semibold">TAX</div>
-                <div className="text-right">{invoiceData.totals.tax_rate}%</div>
+                <div className="text-left col-span-1 font-semibold">TAX</div>
+                <div className="col-span-3 text-right">
+                  {invoiceData.totals.tax_rate}%
+                </div>
               </div>
-              <div className="grid grid-cols-4 items-center text-xs sm:text-sm">
-                <div className="col-span-3 text-right font-semibold">Total</div>
-                <div className="text-right text-xs font-semibold md:text-sm whitespace-nowrap lg:text-lg">
+              <div className="grid grid-cols-4 items-center text-xs sm:text-sm ">
+                <div className="col-span-1 text-left font-semibold">Total</div>
+                <div className="col-span-3 whitespace-nowrap text-right text-xs font-semibold md:text-sm lg:text-lg">
                   {invoiceData.totals.currency} ${invoiceData.totals.total}
                 </div>
               </div>

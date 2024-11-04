@@ -7,6 +7,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -62,19 +63,17 @@ export function CreateForm() {
     promise.then(() => formCustomers.reset());
     promise.then(() => setIsOpen(false));
   };
-  const handleOpenDialog = () => {
-    setIsOpen(!isOpen);
-  };
   return (
     <div>
-      <Button
-        size="sm"
-        className="bg-blue text-sm font-semibold text-white hover:bg-hoverBlue"
-        onClick={handleOpenDialog}
-      >
-        Create Customer
-      </Button>
       <AlertDialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+        <AlertDialogTrigger asChild>
+          <Button
+            size="sm"
+            className="bg-blue text-sm font-semibold text-white hover:bg-hoverBlue"
+          >
+            Create Customer
+          </Button>
+        </AlertDialogTrigger>
         <AlertDialogContent className="p-0">
           <AlertDialogHeader className="px-8 pt-8">
             <AlertDialogTitle className="text-left text-2xl font-semibold">

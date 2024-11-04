@@ -3,6 +3,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { RowData } from "../../types";
+import { format } from "date-fns";
 
 export function Details({
   isOpen,
@@ -43,8 +44,10 @@ export function Details({
   };
 
   const date = {
-    issue_date: rowData.issue_date || "No issue date",
-    due_date: rowData.due_date || "No due date",
+    issue_date:
+      format(new Date(rowData.issue_date), "MM/dd/yyyy") || "No issue date",
+
+    due_date: format(new Date(rowData.due_date), "MM/dd/yyyy") || "No due date",
   };
   const status = rowData?.status || undefined;
 
@@ -79,7 +82,7 @@ export function Details({
             </div>
             <div className="flex items-center">
               <div className="relative w-auto max-w-32 md:max-w-32">
-                <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center ">
+                <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
                   <span
                     className={`h-2 w-2 rounded-full ${
                       status === "pending"
@@ -95,7 +98,7 @@ export function Details({
                 <div className="relative max-w-full">
                   <Input
                     value={status}
-                    className="max-w-full select-none pl-6 text-xs p-0 px-6 font-semibold uppercase md:text-sm lg:text-sm"
+                    className="max-w-full select-none p-0 px-6 pl-6 text-xs font-semibold uppercase"
                     readOnly
                     tabIndex={-1}
                   />
@@ -144,12 +147,12 @@ export function Details({
               ))}
               <Separator />
               <div className="grid grid-cols-4 text-xs md:text-sm">
-                <div className="col-span-3 text-right font-semibold">TAX</div>
-                <div className="text-right">{totals.tax_rate}%</div>
+                <div className="col-span-1 text-left font-semibold">TAX</div>
+                <div className="col-span-3 text-right">{totals.tax_rate}%</div>
               </div>
               <div className="grid grid-cols-4 items-center text-xs md:text-sm">
-                <div className="col-span-3 text-right font-semibold">Total</div>
-                <div className="whitespace-nowrap text-right text-xs font-semibold md:text-sm lg:text-lg">
+                <div className="col-span-1 text-left font-semibold">Total</div>
+                <div className="col-span-3 whitespace-nowrap text-right text-xs font-semibold md:text-sm lg:text-lg">
                   {totals.currency} ${totals.total}
                 </div>
               </div>
