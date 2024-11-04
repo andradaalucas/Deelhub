@@ -379,7 +379,7 @@ export function CreateForm() {
                   </div>
 
                   <ScrollArea>
-                    <div className="h-24 md:h-24 mt-4 overflow-y-auto rounded-lg border lg:h-48">
+                    <div className="h-28 md:h-28 mt-4 overflow-y-auto rounded-lg border lg:h-48">
                       <Table>
                         <TableHeader>
                           <TableRow>
