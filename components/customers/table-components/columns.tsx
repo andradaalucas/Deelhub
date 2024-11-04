@@ -175,9 +175,11 @@ export const columns: ColumnDef<Customers>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
-      return <div className="text-left">Name</div>;
+      return <div className="whitespace-nowrap text-left">Name</div>;
     },
-    cell: ({ row }) => <div className="text-left">{row.getValue("name")}</div>,
+    cell: ({ row }) => (
+      <div className="whitespace-nowrap text-left">{row.getValue("name")}</div>
+    ),
     enableSorting: false,
   },
   {
@@ -185,7 +187,9 @@ export const columns: ColumnDef<Customers>[] = [
     header: ({ column }) => {
       return <div className="text-left">Email</div>;
     },
-    cell: ({ row }) => <div className="text-left">{row.getValue("email")}</div>,
+    cell: ({ row }) => (
+      <div className="whitespace-nowrap text-left">{row.getValue("email")}</div>
+    ),
     enableSorting: false,
   },
   {
@@ -196,7 +200,9 @@ export const columns: ColumnDef<Customers>[] = [
     cell: ({ row }) => (
       <>
         <div className="max-w-[100px] overflow-hidden whitespace-nowrap text-left">
-          <div className="truncate">#{row.getValue("id")}</div>
+          <div className="truncate whitespace-nowrap">
+            #{row.getValue("id")}
+          </div>
         </div>
       </>
     ),
