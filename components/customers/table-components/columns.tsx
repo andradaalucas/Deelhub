@@ -48,7 +48,7 @@ const ActionsCell = ({ row }: any) => {
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [enabledOrDisabled, setEnabledOrDisabled] = useState(false);
   const [isOpenEnabledOrDisabled, setIsOpenEnabledOrDisabled] = useState(false);
-  const [actionExcecuteData, setActionExcecuteData] = useState({});
+  const [actionExecuteData, setActionExecuteData] = useState({});
   const [enabledOrDisabledData, setEnabledOrDisabledData] = useState({});
   const queryClient = useQueryClient();
 
@@ -107,7 +107,7 @@ const ActionsCell = ({ row }: any) => {
     setIsOpenDetails(!isOpenDetails);
   };
   const handleDelete = () => {
-    setActionExcecuteData({
+    setActionExecuteData({
       title: "delete this customer?",
       description: "Transactions associated with this customer will also be permanently deleted.",
       rowData: row.original,
@@ -167,7 +167,7 @@ const ActionsCell = ({ row }: any) => {
       <ConfirmDelete
         isOpen={isOpenDelete}
         setIsOpen={setIsOpenDelete}
-        actionExecuteData={actionExcecuteData}
+        actionExecuteData={actionExecuteData}
         actionToExecuteFunction={actionToExecuteFunction}
       />
       <ConfirmAction

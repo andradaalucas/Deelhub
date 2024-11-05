@@ -18,7 +18,7 @@ import { toast } from "sonner";
 
 export function OptionsTable() {
   const [openExport, setOpenExport] = useState(false);
-  const [actionExcecuteData, setActionExcecuteData] = useState({
+  const [actionExecuteData, setActionExecuteData] = useState({
     title: "export data on CSV?",
     description: "It is likely to open a pop-up tab with the file.",
   });
@@ -53,7 +53,7 @@ export function OptionsTable() {
             <div>Confirmed</div>
             <div className="h-2 w-2 rounded-full bg-[#56663e]"></div>
           </DropdownMenuItem>
-          <DropdownMenuItem className="flex cursor-pointer items-center justify-between gap-3 ">
+          <DropdownMenuItem className="flex cursor-pointer items-center justify-between gap-3">
             <div>Pending</div>
             <div className="h-2 w-2 rounded-full bg-[#0a85d1]"></div>
           </DropdownMenuItem>
@@ -75,8 +75,8 @@ export function OptionsTable() {
       <ConfirmAction
         isOpen={openExport}
         setIsOpen={setOpenExport}
-        actionExcecuteData={actionExcecuteData}
-        actionToExcecuteFunction={handleExport}
+        actionExecuteData={actionExecuteData}
+        actionToExecuteFunction={handleExport}
       />
     </>
   );
