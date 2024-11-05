@@ -13,12 +13,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteCustomers } from "@/services/customers";
+import { deleteCustomers, updateCustomers } from "@/services/customers";
 import { EditCustomers } from "./actions/edit";
 import { DetailsCustomers } from "./actions/details";
 import { ConfirmDelete } from "@/components/atom/confirm-delete";
+import { ConfirmAction } from "@/components/atom/confirm-action";
 
 const getStatusStyles = (status: any) => {
   switch (status) {
@@ -45,12 +46,10 @@ const ActionsCell = ({ row }: any) => {
   const [isOpenDetails, setIsOpenDetails] = useState(false);
   const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
-  const [actionExcecuteData, setActionExcecuteData] = useState({
-    title: "delete this customer?",
-    description: "This action will permanently delete the user's data.",
-    rowData: row.original,
-  });
-
+  const [enabledOrDisabled, setEnabledOrDisabled] = useState(false);
+  const [isOpenEnabledOrDisabled, setIsOpenEnabledOrDisabled] = useState(false);
+  const [actionExcecuteData, setActionExcecuteData] = useState({});
+  const [enabledOrDisabledData, setEnabledOrDisabledData] = useState({});
   const queryClient = useQueryClient();
 
   const deleteCustomer = useMutation({
@@ -62,8 +61,37 @@ const ActionsCell = ({ row }: any) => {
       queryClient.invalidateQueries(["customers"]); // Para asegurarse de actualizar el estado en caso de error también
     },
   });
+  const updateCustomer = useMutation({
+    mutationFn: (data: any) => updateCustomers(data), // Se asegura de pasar el `id`
+    onSuccess: () => {
+      queryClient.invalidateQueries(["customers"]);
+    },
+    onError: () => {
+      queryClient.invalidateQueries(["customers"]); // Para asegurarse de actualizar el estado en caso de error también
+    },
+  });
 
-  const actionToExcecuteFunction = () => {
+  const handleEnabledOrDisabled = () => {
+    setEnabledOrDisabledData({
+      title: `${enabledOrDisabled ? "disable" : "enable"} this customer?`,
+      description: `Transactions associated with this customer will remain active.`,
+    });
+    setIsOpenEnabledOrDisabled(!isOpenEnabledOrDisabled);
+  };
+  const actionToExecuteEnabledDisabled = () => {
+    const id = row.original.id;
+    const status = row.original.status === "enabled" ? "disabled" : "enabled";
+    const promise = updateCustomer.mutateAsync({ id, status });
+    toast.promise(promise, {
+      loading: "Update Status...",
+      success: () => {
+        return "Customer update successfully!";
+      },
+      error: "Failed to update status customer. Please try again.",
+    });
+    promise.then(() => setEnabledOrDisabled(false));
+  };
+  const actionToExecuteFunction = () => {
     const promise = deleteCustomer.mutateAsync(row.original.id);
     toast.promise(promise, {
       loading: "Deleting customer...",
@@ -79,6 +107,11 @@ const ActionsCell = ({ row }: any) => {
     setIsOpenDetails(!isOpenDetails);
   };
   const handleDelete = () => {
+    setActionExcecuteData({
+      title: "delete this customer?",
+      description: "Transactions associated with this customer will also be permanently deleted.",
+      rowData: row.original,
+    });
     setIsOpenDelete(!isOpenDelete);
   };
   const handleEdit = () => {
@@ -89,6 +122,11 @@ const ActionsCell = ({ row }: any) => {
     navigator.clipboard.writeText(row?.id);
     toast.success("Copied to clipboard");
   };
+  useEffect(() => {
+    if (row.original.status === "enabled") {
+      setEnabledOrDisabled(true);
+    }
+  }, [row.original.status, enabledOrDisabledData]);
   return (
     <div className="flex justify-center">
       <DropdownMenu>
@@ -113,6 +151,12 @@ const ActionsCell = ({ row }: any) => {
             Copy ID
           </DropdownMenuItem>
           <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={handleEnabledOrDisabled}
+          >
+            {enabledOrDisabled ? "Disable" : "Enable"}
+          </DropdownMenuItem>
+          <DropdownMenuItem
             className="cursor-pointer text-red-500"
             onClick={handleDelete}
           >
@@ -120,28 +164,28 @@ const ActionsCell = ({ row }: any) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      {isOpenDelete && (
-        <ConfirmDelete
-          isOpen={isOpenDelete}
-          setIsOpen={setIsOpenDelete}
-          actionExcecuteData={actionExcecuteData}
-          actionToExcecuteFunction={actionToExcecuteFunction}
-        />
-      )}
-      {isOpenEdit && (
-        <EditCustomers
-          isOpen={isOpenEdit}
-          setIsOpen={setIsOpenEdit}
-          rowData={row.original}
-        />
-      )}
-      {isOpenDetails && (
-        <DetailsCustomers
-          isOpen={isOpenDetails}
-          setIsOpen={setIsOpenDetails}
-          rowData={row.original}
-        />
-      )}
+      <ConfirmDelete
+        isOpen={isOpenDelete}
+        setIsOpen={setIsOpenDelete}
+        actionExecuteData={actionExcecuteData}
+        actionToExecuteFunction={actionToExecuteFunction}
+      />
+      <ConfirmAction
+        isOpen={isOpenEnabledOrDisabled}
+        setIsOpen={setIsOpenEnabledOrDisabled}
+        actionExecuteData={enabledOrDisabledData}
+        actionToExecuteFunction={actionToExecuteEnabledDisabled}
+      />
+      <EditCustomers
+        isOpen={isOpenEdit}
+        setIsOpen={setIsOpenEdit}
+        rowData={row.original}
+      />
+      <DetailsCustomers
+        isOpen={isOpenDetails}
+        setIsOpen={setIsOpenDetails}
+        rowData={row.original}
+      />
     </div>
   );
 };

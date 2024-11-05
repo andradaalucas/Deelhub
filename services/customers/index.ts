@@ -11,6 +11,14 @@ export const getAllCustomers = async (filters?: any) => {
     console.log("Error on create customer", error);
   }
 };
+export const getWithoutTrashedCustomers = async (filters?: any) => {
+  try {
+    const { data, error } = await supabase.from("customers").select().neq('status', 'disabled').order('created_at', { ascending: false });
+    return data;
+  } catch (error) {
+    console.log("Error on create customer", error);
+  }
+};
 export const getCustomerById = async (id: any) => {
   try {
     const { data, error } = await supabase

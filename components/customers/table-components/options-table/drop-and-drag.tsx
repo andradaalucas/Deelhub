@@ -1,20 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { toast } from "sonner";
-import { createCustomersFromCsv } from "@/services/customers";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { File, Upload, X } from "lucide-react";
-import Papa from "papaparse";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useDropzone } from "react-dropzone";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,6 +10,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { createCustomersFromCsv } from "@/services/customers";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { File, Upload, X } from "lucide-react";
+import Papa from "papaparse";
+import { useCallback, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { toast } from "sonner";
 
 export function DropAndDrag({ isOpen, setIsOpen }: any) {
   const [file, setFile] = useState<File | null>(null);
@@ -151,7 +144,7 @@ export function DropAndDrag({ isOpen, setIsOpen }: any) {
           )}
         </AlertDialogHeader>
 
-        <AlertDialogFooter className="flex items-end rounded-b-lg border bg-zinc-100/75 px-8 py-4 dark:bg-zinc-900/75">
+        {/* <AlertDialogFooter className="flex items-end rounded-b-lg border bg-zinc-100/75 px-8 py-4 dark:bg-zinc-900/75">
           <div className="flex items-center gap-2">
             <AlertDialogCancel className="mt-0">Cancel</AlertDialogCancel>
             <AlertDialogAction
@@ -161,6 +154,21 @@ export function DropAndDrag({ isOpen, setIsOpen }: any) {
             >
               Continue
             </AlertDialogAction>
+          </div>
+        </AlertDialogFooter> */}
+        <AlertDialogFooter className="flex items-end gap-2 rounded-b-lg border bg-zinc-100/75 px-8 py-6 dark:bg-zinc-900/75">
+          <div className="flex items-center gap-2">
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <div>
+              <Button
+                onClick={handleUploadCustomers}
+                size="sm"
+                disabled={!file}
+                className="bg-blue text-sm text-white hover:bg-hoverBlue"
+              >
+                Continue
+              </Button>
+            </div>
           </div>
         </AlertDialogFooter>
       </AlertDialogContent>

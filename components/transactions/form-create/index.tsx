@@ -1,3 +1,13 @@
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -24,25 +34,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   Table,
   TableBody,
   TableCell,
@@ -50,7 +41,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getAllCustomers } from "@/services/customers";
+import { getWithoutTrashedCustomers } from "@/services/customers";
 import { createTransactions } from "@/services/transactions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -63,13 +54,13 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { formSchemaTransactions, FormSchemaTransactions } from "../schemas";
-import { useState } from "react";
 
 export function CreateForm() {
-  const [ isOpen, setIsOpen ] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const form = useForm<FormSchemaTransactions>({
     resolver: zodResolver(formSchemaTransactions),
     defaultValues: {
@@ -126,7 +117,9 @@ export function CreateForm() {
     return subtotal + taxAmount;
   };
 
-  const { data: customers } = useQuery(["customers"], () => getAllCustomers());
+  const { data: customers } = useQuery(["customers"], () =>
+    getWithoutTrashedCustomers(),
+  );
 
   const onSubmit = (data: FormSchemaTransactions) => {
     const enrichedData = {
@@ -143,7 +136,7 @@ export function CreateForm() {
       error: "Failed to upload transaction. Please try again.",
     });
     promise.then(() => form.reset());
-    promise.then(() => setIsOpen(false))
+    promise.then(() => setIsOpen(false));
   };
 
   const currency = form.watch("currency");
@@ -206,7 +199,7 @@ export function CreateForm() {
                   </div>
                   <div className="mt-2">
                     <Link
-                      className="flex cursor-pointer items-center text-sm font-medium hover:underline"
+                      className="flex cursor-pointer items-center text-xs font-medium hover:underline md:text-sm lg:text-sm"
                       href="/in/customers"
                     >
                       <span>To add customers</span>

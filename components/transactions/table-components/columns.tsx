@@ -48,7 +48,7 @@ const ActionsCell = ({ row }: any) => {
   const [isOpenAction, setIsOpenAction] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [isOpenDelete, setIsOpenDelete] = useState(false);
-  const [actionExcecuteData, setActionExcecuteData] = useState({});
+  const [actionExecuteData, setActionExecuteData] = useState({});
 
   const queryClient = useQueryClient();
 
@@ -62,7 +62,7 @@ const ActionsCell = ({ row }: any) => {
     },
   });
 
-  const actionToExcecuteFunction = () => {
+  const actionToExecuteFunction = () => {
     const promise = deleteTransaction.mutateAsync(row.original.id);
     toast.promise(promise, {
       loading: "Deleting transaction...",
@@ -81,7 +81,7 @@ const ActionsCell = ({ row }: any) => {
     setIsOpenEdit(!isOpenEdit);
   };
   const handleDelete = () => {
-    setActionExcecuteData({
+    setActionExecuteData({
       title: "delete this payment",
       description:
         "This action will permanently delete the transaction's data.",
@@ -96,7 +96,7 @@ const ActionsCell = ({ row }: any) => {
   };
   const handleGeneratePDF = () => {
     setIsOpenAction(!isOpenAction);
-    setActionExcecuteData({
+    setActionExecuteData({
       title: "download the PDF of this transaction",
       description:
         "This action will generate a PDF file of the transaction's data.",
@@ -155,14 +155,14 @@ const ActionsCell = ({ row }: any) => {
       <ConfirmDelete
         isOpen={isOpenDelete}
         setIsOpen={setIsOpenDelete}
-        actionExcecuteData={actionExcecuteData}
-        actionToExcecuteFunction={actionToExcecuteFunction}
+        actionExecuteData={actionExecuteData}
+        actionToExecuteFunction={actionToExecuteFunction}
       />
       <ConfirmAction
         isOpen={isOpenAction}
         setIsOpen={setIsOpenAction}
-        actionExcecuteData={actionExcecuteData}
-        actionToExcecuteFunction={() => {
+        actionExecuteData={actionExecuteData}
+        actionToExecuteFunction={() => {
           console.log("Action Excecuted");
         }}
       />
@@ -178,22 +178,6 @@ const ActionsCell = ({ row }: any) => {
       />
     </div>
   );
-};
-
-const CustomerName = (id: any) => {
-  // const queryClient = useQueryClient();
-  // const getCustomerByID = useMutation({
-  //   mutationFn: (id: any) => getCustomerById(id), // Se asegura de pasar el `id`
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries(["transactions"]);
-  //   },
-  //   onError: () => {
-  //     queryClient.invalidateQueries(["transactions"]); // Para asegurarse de actualizar el estado en caso de error también
-  //   },
-  // });
-  // const promise = getCustomerByID.mutateAsync(id);
-  // console.log("getCustomerByID", promise);
-  return <div>No Name</div>;
 };
 
 export const columns: ColumnDef<Transactions>[] = [
