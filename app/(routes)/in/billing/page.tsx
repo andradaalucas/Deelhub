@@ -1,12 +1,9 @@
-import { UserPresetsBilling } from "@/components/user-presets-billing";
-import React from "react";
+import { Billing } from "@/components/billing";
 
-function Page() {
+export default function Page() {
   return (
-    <div>
-      <UserPresetsBilling />
-    </div>
+    <>
+      <Billing />
+    </>
   );
 }
-
-export default Page;

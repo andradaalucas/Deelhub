@@ -4,6 +4,9 @@ export type Customers = {
   id: string;
   name: string;
   description: string;
+  email: string;
+  phone: string;
+  status: string;
   user_id: string;
 };
 

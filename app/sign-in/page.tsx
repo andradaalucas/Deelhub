@@ -7,7 +7,7 @@ import Link from "next/link";
 export default async function LoginPage() {
   return (
     <>
-      <div className="flex h-screen flex-col items-center justify-center bg-white">
+      <div className="flex h-screen flex-col items-center justify-center ">
         <div>
           <h1 className="mb-12 text-center text-2xl font-bold">Sign in</h1>
         </div>
