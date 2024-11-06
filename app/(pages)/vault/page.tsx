@@ -1,4 +1,4 @@
 
 export default function Page() {
-  return <div>Vault</div>;
+  return <div>Coming soon</div>;
 }

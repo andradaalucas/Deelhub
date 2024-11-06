@@ -1,14 +1,13 @@
 "use client";
+import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 import { cn } from "@/lib/utils";
 import { NextUIProvider } from "@nextui-org/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
-import Head from "next/head";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
-import { ThemeProvider } from "@/components/ui/theme-provider";
 
 export default function HomeLayout({
   children,
@@ -19,6 +18,9 @@ export default function HomeLayout({
 
   return (
     <html lang="en">
+      {/* <head>
+        <title>Deelhub</title>
+      </head> */}
       <body
         className={`${cn(
           "min-h-screen bg-background font-sans antialiased",
@@ -33,7 +35,7 @@ export default function HomeLayout({
           <QueryClientProvider client={queryClient}>
             <NextUIProvider>
               {children}
-              <Toaster richColors closeButton />
+              <Toaster closeButton />
               <ReactQueryDevtools />
             </NextUIProvider>
           </QueryClientProvider>

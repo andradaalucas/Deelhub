@@ -35,11 +35,6 @@ export function Overview() {
       description: "This month",
     },
   ];
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoadingOverview(false);
-    }, 2000);
-  }, []);
 
   return (
     <div className="mx-auto w-full max-w-5xl grid-cols-2 gap-6">
@@ -95,7 +90,7 @@ export function Overview() {
                   <div key={name} className="flex items-center">
                     <Avatar className="h-9 w-9">
                       <AvatarImage
-                        src={`/placeholder.svg?height=36&width=36`}
+                        src={''}
                         alt={name}
                       />
                       <AvatarFallback>

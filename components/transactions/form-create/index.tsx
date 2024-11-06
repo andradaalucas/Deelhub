@@ -200,7 +200,7 @@ export function CreateForm() {
                   <div className="mt-2">
                     <Link
                       className="flex cursor-pointer items-center text-xs font-medium hover:underline md:text-sm lg:text-sm"
-                      href="/in/customers"
+                      href="/customers"
                     >
                       <span>To add customers</span>
                       <ArrowUpRight className="ml-1 h-4 w-4" />

@@ -1,8 +1,9 @@
-import { Toaster } from "@/components/ui/toaster";
+import LoginButton from "@/components/login-logout-button";
 
 export default async function Home() {
   return (
     <div>
+      <LoginButton/>
     </div>
   );
 }

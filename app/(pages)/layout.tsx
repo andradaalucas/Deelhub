@@ -1,9 +1,7 @@
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { Metadata } from "next";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { CommandNavigation } from "@/components/command-navigation";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Deelfy Inc",
@@ -14,13 +12,6 @@ export default async function InLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
-    redirect("/sign-in");
-  }
   return (
     <SidebarProvider>
       <AppSidebar />

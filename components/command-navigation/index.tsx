@@ -19,8 +19,8 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/components/ui/command";
-import { Button } from "../ui/button";
-import { CommandIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Calendar, CommandIcon, Search, Settings } from "lucide-react";
 
 export function CommandNavigation() {
   const [open, setOpen] = React.useState(false);
@@ -51,36 +51,29 @@ export function CommandNavigation() {
         <CommandInput placeholder="Type a command or search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Suggestions">
+          <CommandGroup heading="Actions">
             <CommandItem>
-              <CalendarIcon />
-              <span className="pl-2">Calendar</span>
+              <Calendar className="mr-2 h-4 w-4" />
+              <span>Upload Budget</span>
             </CommandItem>
             <CommandItem>
-              <FaceIcon />
-              <span className="pl-2">Search Emoji</span>
+              <Search className="mr-2 h-4 w-4" />
+              <span>Search Users</span>
             </CommandItem>
             <CommandItem>
-              <RocketIcon />
-              <span className="pl-2">Launch</span>
+              <Settings className="mr-2 h-4 w-4" />
+              <span>AI Insights</span>
             </CommandItem>
           </CommandGroup>
-          <CommandSeparator />
           <CommandGroup heading="Settings">
             <CommandItem>
-              <PersonIcon />
-              <span className="pl-2">Profile</span>
-              <CommandShortcut>⌘P</CommandShortcut>
+              <span>Automate Budget Sending</span>
             </CommandItem>
             <CommandItem>
-              <EnvelopeClosedIcon />
-              <span className="pl-2">Mail</span>
-              <CommandShortcut> ⌘B</CommandShortcut>
+              <span>Export Data</span>
             </CommandItem>
             <CommandItem>
-              <GearIcon />
-              <span className="pl-2">Settings</span>
-              <CommandShortcut> ⌘S</CommandShortcut>
+              <span>Import Data</span>
             </CommandItem>
           </CommandGroup>
         </CommandList>

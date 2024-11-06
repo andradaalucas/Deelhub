@@ -35,37 +35,39 @@ import {
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { ModeToggle } from "../ui/toggle";
+import { SignOutButton } from "../auth";
+import Image from "next/image";
 
 // Menu items.
 const items = [
   {
     title: "Home",
-    url: "/in/dashboard",
+    url: "/dashboard",
     icon: LifeBuoy,
   },
   {
     title: "Customers",
-    url: "/in/customers",
+    url: "/customers",
     icon: UsersIcon,
   },
   {
     title: "Insights AI",
-    url: "/in/insights",
+    url: "/insights",
     icon: BarChart2Icon,
   },
   {
     title: "Automation",
-    url: "/in/automation",
+    url: "/automation",
     icon: SettingsIcon,
   },
   {
     title: "Billing",
-    url: "/in/billing",
+    url: "/billing",
     icon: LandmarkIcon,
   },
   {
     title: "Vault",
-    url: "/in/vault",
+    url: "/vault",
     icon: ArchiveIcon,
   },
 ];
@@ -82,6 +84,9 @@ export async function AppSidebar() {
     <Sidebar>
       <SidebarHeader></SidebarHeader>
       <SidebarContent>
+        <SidebarGroup className="flex px-4 pb-0">
+          <div className="font-semibold">Deelhub</div>
+        </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -125,9 +130,7 @@ export async function AppSidebar() {
                 <DropdownMenuItem>
                   <span className="cursor-pointer">Billing</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span className="cursor-pointer text-red-600">Sign out</span>
-                </DropdownMenuItem>
+                <SignOutButton />
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel>Preferences</DropdownMenuLabel>
                 <ModeToggle />
