@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { signout } from "@/lib/auth-actions";
 import Link from "next/link";
+import Image from "next/image";
 
 const LoginButton = () => {
   const [user, setUser] = useState<any>(null);
@@ -21,28 +22,31 @@ const LoginButton = () => {
   }, [supabase.auth]);
   if (user) {
     return (
-      <div className="flex items-center justify-between max-w-5xl mx-auto">
-        <Link href="/dashboard">Go to dashboard</Link>
-        <Button
-          onClick={() => {
-            signout();
-            setUser(null);
-          }}
-        >
-          Log out
-        </Button>
+      <div className="mx-auto mt-6 flex max-w-5xl items-center justify-between">
+        <Image
+          src="/assets/images/logo.png"
+          width={48}
+          height={48}
+          alt="logo"
+        />
+        <Link href="/dashboard">
+          <Button variant="outline">Dashboard</Button>
+        </Link>
       </div>
     );
   }
   return (
-    <Button
-      variant="outline"
-      onClick={() => {
-        router.push("/login");
-      }}
-    >
-      Login
-    </Button>
+    <div className="mx-auto mt-6 flex max-w-5xl items-center justify-between">
+      <Image src="/assets/images/logo.png" width={48} height={48} alt="logo" />
+      <Button
+        variant="outline"
+        onClick={() => {
+          router.push("/login");
+        }}
+      >
+        Login
+      </Button>
+    </div>
   );
 };
 

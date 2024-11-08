@@ -128,9 +128,6 @@ export async function AppSidebar() {
                 side="top"
                 className="w-[--radix-popper-anchor-width]"
               >
-                <DropdownMenuItem>
-                  <span className="cursor-pointer">Billing</span>
-                </DropdownMenuItem>
                 <SignOutButton />
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel>Preferences</DropdownMenuLabel>

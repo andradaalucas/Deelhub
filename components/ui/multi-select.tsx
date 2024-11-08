@@ -43,7 +43,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
       : selectedOptions.filter((value) => value !== optionValue);
 
     setSelectedOptions(updatedSelectedOptions);
-    onChange(updatedSelectedOptions); // Callback çağrısı
+    onChange(updatedSelectedOptions);
   };
 
   return (
@@ -68,19 +68,23 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className={`w-full ${contentClass}`} align="start">
-        {options.map((option) => (
-          <DropdownMenuCheckboxItem
-            className="w-full"
-            key={option.value}
-            disabled={option.disabled}
-            checked={selectedOptions.includes(option.value)}
-            onCheckedChange={(checked: Checked) =>
-              handleCheckedChange(option.value, checked)
-            }
-          >
-            {option.label}
-          </DropdownMenuCheckboxItem>
-        ))}
+        {options.length === 0 ? (
+          <div className="text-center text-sm text-[#3f3f46]">No results</div>
+        ) : (
+          options.map((option) => (
+            <DropdownMenuCheckboxItem
+              className="w-full"
+              key={option.value}
+              disabled={option.disabled}
+              checked={selectedOptions.includes(option.value)}
+              onCheckedChange={(checked: Checked) =>
+                handleCheckedChange(option.value, checked)
+              }
+            >
+              {option.label}
+            </DropdownMenuCheckboxItem>
+          ))
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

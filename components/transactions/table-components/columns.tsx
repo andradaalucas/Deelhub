@@ -21,6 +21,7 @@ import { ConfirmAction } from "@/components/atom/confirm-action";
 import { Details } from "./actions/details";
 import { Edit } from "./actions/edit";
 import { format } from "date-fns";
+import { PDFDownload } from "./actions/pdf-template";
 
 const getStatusStyles = (status: any) => {
   switch (status) {
@@ -51,7 +52,6 @@ const ActionsCell = ({ row }: any) => {
   const [actionExecuteData, setActionExecuteData] = useState({});
 
   const queryClient = useQueryClient();
-
   const deleteTransaction = useMutation({
     mutationFn: (id: any) => deleteTransactions(id), // Se asegura de pasar el `id`
     onSuccess: () => {
@@ -137,12 +137,11 @@ const ActionsCell = ({ row }: any) => {
             >
               Copy Access Token
             </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer"
-              onClick={handleGeneratePDF}
-            >
-              Download PDF
+
+            <DropdownMenuItem className="cursor-pointer">
+              <PDFDownload />
             </DropdownMenuItem>
+
             <DropdownMenuItem
               className="cursor-pointer text-red-500 hover:bg-[red-500] hover:text-white"
               onClick={handleDelete}

@@ -440,7 +440,7 @@ export function CreateForm() {
               </div>
 
               <div className="px-4 pb-4 md:px-8 md:pb-8 lg:px-8">
-                <div className="rounded-lg bg-secondary px-4 py-2">
+                <div className="rounded-md bg-secondary px-4 py-2">
                   <h3 className="mb-2 text-lg font-semibold">Resumen</h3>
                   <div className="grid gap-2 text-sm">
                     <div className="flex justify-between">
