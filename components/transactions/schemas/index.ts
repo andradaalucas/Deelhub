@@ -3,7 +3,7 @@ import { z } from "zod";
 export const formSchemaTransactions = z
   .object({
     customers: z.array(z.string()).min(1, "At least one customer is required"),
-    issueDate: z.date(),
+    issueDate: z.date().optional(),
     dueDate: z.date().optional(),
     currency: z.string(),
     taxRate: z.coerce.number(),

@@ -2,6 +2,7 @@ import {
   ArchiveIcon,
   BarChart2Icon,
   ChevronUp,
+  Cog,
   Command,
   LandmarkIcon,
   LifeBuoy,
@@ -58,7 +59,7 @@ const items = [
   {
     title: "Automation",
     url: "/automation",
-    icon: SettingsIcon,
+    icon: Cog,
   },
   {
     title: "Billing",

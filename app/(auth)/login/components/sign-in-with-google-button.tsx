@@ -11,7 +11,7 @@ const SignInWithGoogleButton = () => {
       onClick={() => {
         signInWithGoogle();
       }}
-      className="flex items-center gap-2 border-2 border-gray-300 bg-white px-6 py-3 text-lg font-medium text-gray-700 transition-all duration-200 hover:border-gray-400 hover:bg-gray-50"
+      className="flex items-center gap-2 border-2 border-gray-300 px-6 py-3 text-lg font-medium text-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400"
     >
       <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
         <path

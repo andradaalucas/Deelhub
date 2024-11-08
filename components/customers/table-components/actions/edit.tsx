@@ -84,7 +84,8 @@ export function EditCustomers({ rowData, isOpen, setIsOpen }: DetailsProps) {
             Edit Customers
           </AlertDialogTitle>
           <AlertDialogDescription className="text-left">
-            Make changes to your profile here. Click Save when you are done.
+            The change will be reflected in the budgets associated with this
+            customer.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <Form {...formCustomers}>

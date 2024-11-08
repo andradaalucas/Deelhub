@@ -72,12 +72,13 @@ export async function signInWithGoogle() {
       queryParams: {
         access_type: "offline",
         prompt: "consent",
+        // Agrega el parámetro 'next' a la URL de redirección
+        next: "/dashboard",
       },
     },
   });
 
   if (error) {
-    console.log(error);
     redirect("/error");
   }
 

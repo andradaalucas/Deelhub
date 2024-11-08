@@ -18,9 +18,10 @@ export default function HomeLayout({
 
   return (
     <html lang="en">
-      {/* <head>
+      <head>
         <title>Deelhub</title>
-      </head> */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
       <body
         className={`${cn(
           "min-h-screen bg-background font-sans antialiased",
@@ -35,7 +36,7 @@ export default function HomeLayout({
           <QueryClientProvider client={queryClient}>
             <NextUIProvider>
               {children}
-              <Toaster closeButton />
+              <Toaster closeButton richColors/>
               <ReactQueryDevtools />
             </NextUIProvider>
           </QueryClientProvider>

@@ -24,17 +24,18 @@ import { FormField, FormItem } from "@/components/ui/form";
 import { toast } from "sonner";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { format } from "date-fns";
+import Image from "next/image";
 
 const formSchema = z.object({
   id: z.string(),
-  status: z.enum(["pending", "confirmed", "rejected"] as const, {
+  status: z.enum(["pending", "paid", "canceled"] as const, {
     required_error: "Please select a status",
   }),
 });
 
 type FormValues = {
   id: string;
-  status: "pending" | "confirmed" | "rejected" | string;
+  status: "pending" | "paid" | "canceled" | string;
 };
 
 export function Edit({
@@ -48,19 +49,18 @@ export function Edit({
 }) {
   const [invoiceData, setInvoiceData] = useState({
     clientInfo: {
-      name: rowData.customer_transaction[0]?.customers?.name || "No Name",
-      address:
-        rowData.customer_transaction[0]?.customers?.address || "No Address",
-      email: rowData.customer_transaction[0]?.customers?.email || "No Email",
-      phone: rowData.customer_transaction[0]?.customers?.phone || "No Phone",
+      name: rowData.customer_transaction[0]?.customers?.name || null,
+      address: rowData.customer_transaction[0]?.customers?.address || null,
+      email: rowData.customer_transaction[0]?.customers?.email || null,
+      phone: rowData.customer_transaction[0]?.customers?.phone || null,
     },
     status: rowData.status,
     companyInfo: {
-      name: "Deelfy",
+      name: "Deelhub",
       logo: "D",
       invoiceNumber: "INV-0001",
       city: "Córdoba, Argentina",
-      email: "hi@deelfy.com",
+      email: "hi@deelhub.com",
     },
     items: rowData.products.map((product) => ({
       description: product.name,
@@ -74,10 +74,13 @@ export function Edit({
       total: rowData.total.toFixed(2),
     },
     date: {
-      issue_date:
-        format(new Date(rowData.issue_date), "MM/dd/yyyy") || "No issue date",
-      due_date:
-        format(new Date(rowData.due_date), "MM/dd/yyyy") || "No due date",
+      issue_date: rowData.issue_date
+        ? format(new Date(rowData.issue_date), "MM/dd/yyyy")
+        : null,
+
+      due_date: rowData.due_date
+        ? format(new Date(rowData.due_date), "MM/dd/yyyy")
+        : null,
     },
   });
 
@@ -125,11 +128,12 @@ export function Edit({
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader className="fflex flex-row items-start justify-between space-y-0 p-0 pb-7 pt-6">
             <div className="flex items-center space-x-4 p-2">
-              <div className="flex h-12 min-h-[48px] w-12 min-w-[48px] items-center justify-center rounded-lg bg-primary">
-                <span className="text-base font-bold text-primary-foreground lg:text-2xl">
-                  {invoiceData.companyInfo.logo}
-                </span>
-              </div>
+              <Image
+                src="/assets/images/logo.png"
+                alt="Logo"
+                height="48"
+                width="48"
+              />
               <div>
                 <h2 className="text-base font-semibold lg:text-lg">
                   {invoiceData.companyInfo.name}
@@ -141,14 +145,22 @@ export function Edit({
               </div>
             </div>
             <div className="flex flex-col space-y-1 p-2 text-xs md:text-sm lg:text-sm">
-              <div className="font-semibold">Issue Date</div>
-              <div className="text-muted-foreground">
-                {invoiceData.date.issue_date}
-              </div>
-              <div className="font-semibold">Due Date</div>
-              <div className="text-muted-foreground">
-                {invoiceData.date.due_date}
-              </div>
+              {invoiceData.date.issue_date && (
+                <>
+                  <div className="font-semibold">Issue Date</div>
+                  <div className="text-muted-foreground">
+                    {invoiceData.date.issue_date}
+                  </div>
+                </>
+              )}
+              {invoiceData.date.due_date && (
+                <>
+                  <div className="font-semibold">Due Date</div>
+                  <div className="text-muted-foreground">
+                    {invoiceData.date.due_date}
+                  </div>
+                </>
+              )}
             </div>
             <FormField
               control={form.control}
@@ -159,13 +171,13 @@ export function Edit({
                     onValueChange={handleStatusChange}
                     defaultValue={field.value}
                   >
-                    <SelectTrigger className="w-auto max-w-32 font-semibold md:max-w-32">
+                    <SelectTrigger className="">
                       <SelectValue
                         placeholder="Select status"
                         className="text-xs font-semibold"
                       />
                     </SelectTrigger>
-                    <SelectContent className="max-w-32 md:max-w-32">
+                    <SelectContent className="">
                       <SelectItem
                         value="pending"
                         className="text-xs font-semibold"
@@ -175,16 +187,16 @@ export function Edit({
                           PENDING
                         </span>
                       </SelectItem>
-                      <SelectItem value="confirmed" className="font-semibold">
+                      <SelectItem value="paid" className="font-semibold">
                         <span className="flex items-center text-xs">
                           <span className="mr-2 h-2 w-2 rounded-full bg-[#56663e] font-semibold" />
-                          CONFIRMED
+                          PAID
                         </span>
                       </SelectItem>
-                      <SelectItem value="rejected" className="font-semibold">
+                      <SelectItem value="canceled" className="font-semibold">
                         <span className="flex items-center text-xs">
                           <span className="mr-2 h-2 w-2 rounded-full bg-[#e14133] font-semibold" />
-                          REJECTED
+                          CANCELED
                         </span>
                       </SelectItem>
                     </SelectContent>
@@ -234,12 +246,12 @@ export function Edit({
               ))}
               <Separator />
               <div className="grid grid-cols-4 text-xs sm:text-sm">
-                <div className="text-left col-span-1 font-semibold">TAX</div>
+                <div className="col-span-1 text-left font-semibold">TAX</div>
                 <div className="col-span-3 text-right">
                   {invoiceData.totals.tax_rate}%
                 </div>
               </div>
-              <div className="grid grid-cols-4 items-center text-xs sm:text-sm ">
+              <div className="grid grid-cols-4 items-center text-xs sm:text-sm">
                 <div className="col-span-1 text-left font-semibold">Total</div>
                 <div className="col-span-3 whitespace-nowrap text-right text-xs font-semibold md:text-sm lg:text-lg">
                   {invoiceData.totals.currency} ${invoiceData.totals.total}

@@ -4,6 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { RowData } from "../../types";
 import { format } from "date-fns";
+import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 
 export function Details({
   isOpen,
@@ -15,19 +17,18 @@ export function Details({
   rowData: RowData;
 }) {
   const clientInfo = {
-    name: rowData.customer_transaction[0]?.customers?.name || "No Name",
-    address:
-      rowData.customer_transaction[0]?.customers?.address || "No Address",
-    email: rowData.customer_transaction[0]?.customers?.email || "No Email",
-    phone: rowData.customer_transaction[0]?.customers?.phone || "No Phone",
+    name: rowData.customer_transaction[0]?.customers?.name || null,
+    address: rowData.customer_transaction[0]?.customers?.address || null,
+    email: rowData.customer_transaction[0]?.customers?.email || null,
+    phone: rowData.customer_transaction[0]?.customers?.phone || null,
   };
 
   const companyInfo = {
-    name: "Deelfy",
+    name: "Deelhub",
     logo: "D",
     invoiceNumber: "INV-0001",
     city: "Córdoba, Argentina",
-    email: "hi@deelfy.com",
+    email: "hi@deelhub.com",
   };
 
   const items = rowData.products.map((product) => ({
@@ -44,10 +45,13 @@ export function Details({
   };
 
   const date = {
-    issue_date:
-      format(new Date(rowData.issue_date), "MM/dd/yyyy") || "No issue date",
+    issue_date: rowData.issue_date
+      ? format(new Date(rowData.issue_date), "MM/dd/yyyy")
+      : null,
 
-    due_date: format(new Date(rowData.due_date), "MM/dd/yyyy") || "No due date",
+    due_date: rowData.due_date
+      ? format(new Date(rowData.due_date), "MM/dd/yyyy")
+      : null,
   };
   const status = rowData?.status || undefined;
 
@@ -59,11 +63,12 @@ export function Details({
         <div>
           <CardHeader className="flex flex-row items-start justify-between space-y-0 p-0 pb-7 pt-6">
             <div className="flex items-center space-x-4 p-2">
-              <div className="flex h-12 min-h-[48px] w-12 min-w-[48px] items-center justify-center rounded-lg bg-primary">
-                <span className="text-base font-bold text-primary-foreground lg:text-2xl">
-                  {companyInfo.logo}
-                </span>
-              </div>
+              <Image
+                src="/assets/images/logo.png"
+                alt="Logo"
+                height="48"
+                width="48"
+              />
               <div>
                 <h2 className="text-base font-semibold lg:text-lg">
                   {companyInfo.name}
@@ -75,35 +80,37 @@ export function Details({
               </div>
             </div>
             <div className="flex flex-col space-y-1 p-2 text-xs md:text-sm lg:text-sm">
-              <div className="font-semibold">Issue Date</div>
-              <div className="text-muted-foreground">{date.issue_date}</div>
-              <div className="font-semibold">Due Date</div>
-              <div className="text-muted-foreground">{date.due_date}</div>
+              {date.issue_date && (
+                <>
+                  <div className="font-semibold">Issue Date</div>
+                  <div className="text-muted-foreground">{date.issue_date}</div>
+                </>
+              )}
+              {date.due_date && (
+                <>
+                  <div className="font-semibold">Due Date</div>
+                  <div className="text-muted-foreground">{date.due_date}</div>
+                </>
+              )}
             </div>
             <div className="flex items-center">
-              <div className="relative w-auto max-w-32 md:max-w-32">
-                <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
-                  <span
-                    className={`h-2 w-2 rounded-full ${
-                      status === "pending"
-                        ? "bg-[#0a85d1]"
-                        : status === "confirmed"
-                          ? "bg-[#56663e]"
-                          : status === "rejected"
-                            ? "bg-[#e14133]"
-                            : ""
-                    }`}
-                  />
-                </div>
-                <div className="relative max-w-full">
-                  <Input
-                    value={status}
-                    className="max-w-full select-none p-0 px-6 pl-6 text-xs font-semibold uppercase"
-                    readOnly
-                    tabIndex={-1}
-                  />
-                </div>
-              </div>
+              <Badge
+                className="pointer-events-none flex items-center gap-2 px-2 py-1"
+                variant="secondary"
+              >
+                <span
+                  className={`h-2 w-2 rounded-full ${
+                    status === "pending"
+                      ? "bg-[#0a85d1]"
+                      : status === "paid"
+                        ? "bg-[#56663e]"
+                        : status === "canceled"
+                          ? "bg-[#e14133]"
+                          : ""
+                  }`}
+                />
+                <div className="uppercase">{status}</div>
+              </Badge>
             </div>
           </CardHeader>
           <CardContent className="grid gap-24 p-0">
