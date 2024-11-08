@@ -21,7 +21,6 @@ import { ConfirmAction } from "@/components/atom/confirm-action";
 import { Details } from "./actions/details";
 import { Edit } from "./actions/edit";
 import { format } from "date-fns";
-import { PDFDownload } from "./actions/pdf-template";
 
 const getStatusStyles = (status: any) => {
   switch (status) {
@@ -139,7 +138,7 @@ const ActionsCell = ({ row }: any) => {
             </DropdownMenuItem>
 
             <DropdownMenuItem className="cursor-pointer">
-              <PDFDownload />
+              Download PDF
             </DropdownMenuItem>
 
             <DropdownMenuItem
