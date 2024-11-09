@@ -1,11 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
-import { signout } from "@/lib/auth-actions";
-import Link from "next/link";
+import { MoveUpRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
 
 const LoginButton = () => {
   const [user, setUser] = useState<any>(null);
@@ -22,7 +22,7 @@ const LoginButton = () => {
   }, [supabase.auth]);
   if (user) {
     return (
-      <div className="mx-auto mt-6 flex max-w-5xl items-center justify-between">
+      <div className="mx-auto mt-6 flex max-w-5xl items-center justify-between px-4">
         <Image
           src="/assets/images/logo.png"
           width={48}
@@ -30,13 +30,15 @@ const LoginButton = () => {
           alt="logo"
         />
         <Link href="/dashboard">
-          <Button variant="outline">Dashboard</Button>
+          <Button variant="outline" size="icon">
+            <MoveUpRight className="h-4 w-4"/>
+          </Button>
         </Link>
       </div>
     );
   }
   return (
-    <div className="mx-auto mt-6 flex max-w-5xl items-center justify-between">
+    <div className="mx-auto mt-6 flex max-w-5xl items-center justify-between px-4">
       <Image src="/assets/images/logo.png" width={48} height={48} alt="logo" />
       <Button
         variant="outline"

@@ -80,6 +80,16 @@ export function Overview() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
+                {[...Array(5)].map((_, index) => (
+                  <div key={index} className="flex items-center">
+                    <div>
+                      <div className="h-8 w-44 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]"></div>
+                    </div>
+                    <div className="pulse ml-auto h-4 w-12 bg-zinc-200 dark:bg-[#2b2b2b]"></div>
+                  </div>
+                ))}
+              </div>
+              {/* <div className="space-y-4">
                 {[
                   "Frank Miller",
                   "Grace Lee",
@@ -111,7 +121,10 @@ export function Overview() {
                     </Badge>
                   </div>
                 ))}
-              </div>
+              </div> */}
+              {/* {[...Array(5)].map((_, i) => (
+                <div key={i} className="h-16 w-full rounded bg-gray-200"></div>
+              ))} */}
             </CardContent>
           </Card>
         </div>

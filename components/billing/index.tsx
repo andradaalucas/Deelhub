@@ -155,7 +155,7 @@ export function Billing() {
   return (
     <div className="mx-auto grid w-full max-w-5xl gap-6 p-2">
       <Card>
-        <CardHeader className="px-20">
+        <CardHeader className="px-">
           <CardTitle>Company Name</CardTitle>
           <CardDescription>
             By default, your team name appears on the invoice. If you want to
@@ -172,7 +172,7 @@ export function Billing() {
                 control={formBrand.control}
                 name="company_name"
                 render={({ field }) => (
-                  <FormItem className="px-20">
+                  <FormItem className="px-6">
                     <FormControl>
                       {isLoadingPresets ? (
                         <Skeleton className="h-10 w-full" />
@@ -193,7 +193,7 @@ export function Billing() {
                 <Button
                   type="submit"
                   size="default"
-                  className="mx-14 bg-blue px-4 py-2 font-semibold text-white hover:bg-hoverBlue"
+                  className="bg-blue px-4 py-2 font-semibold text-white hover:bg-hoverBlue"
                   disabled={isLoading}
                 >
                   {isUpdatingPresets ? "Saving..." : "Save"}
@@ -204,7 +204,7 @@ export function Billing() {
         </CardContent>
       </Card>
       <Card>
-        <CardHeader className="px-20">
+        <CardHeader className="px-6">
           <CardTitle>Billing Address</CardTitle>
           <CardDescription>
             If youd like to add a mailing address to each invoice, enter it
@@ -221,7 +221,7 @@ export function Billing() {
                 control={formAddress.control}
                 name="street_and_number"
                 render={({ field }) => (
-                  <FormItem className="px-20">
+                  <FormItem className="px-6">
                     <FormLabel>Address Line 1</FormLabel>
                     <FormControl>
                       {isLoadingPresets ? (
@@ -244,7 +244,7 @@ export function Billing() {
                 control={formAddress.control}
                 name="apartment"
                 render={({ field }) => (
-                  <FormItem className="px-20">
+                  <FormItem className="px-6">
                     <FormLabel>Address Line 2</FormLabel>
                     <FormControl>
                       {isLoadingPresets ? (
@@ -267,7 +267,7 @@ export function Billing() {
                 control={formAddress.control}
                 name="city"
                 render={({ field }) => (
-                  <FormItem className="px-20">
+                  <FormItem className="px-6">
                     <FormLabel>City</FormLabel>
                     <FormControl>
                       {isLoadingPresets ? (
@@ -285,7 +285,7 @@ export function Billing() {
                   </FormItem>
                 )}
               />
-              <div className="grid grid-cols-2 gap-4 px-20">
+              <div className="grid grid-cols-2 gap-4 px-6">
                 <FormField
                   control={formAddress.control}
                   name="country"
@@ -323,7 +323,7 @@ export function Billing() {
                 control={formAddress.control}
                 name="postal_code"
                 render={({ field }) => (
-                  <FormItem className="px-20">
+                  <FormItem className="px-6">
                     <FormLabel>Postal Code</FormLabel>
                     <FormControl>
                       {isLoadingPresets ? (
@@ -346,7 +346,7 @@ export function Billing() {
                 control={formAddress.control}
                 name="description"
                 render={({ field }) => (
-                  <FormItem className="px-20">
+                  <FormItem className="px-6">
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       {isLoadingPresets ? (
@@ -368,7 +368,7 @@ export function Billing() {
               <CardFooter className="flex justify-end rounded-b-lg border bg-zinc-100/75 py-2 dark:bg-zinc-900/75">
                 <Button
                   type="submit"
-                  className="mx-2 bg-blue px-4 py-2 font-semibold text-white hover:bg-hoverBlue"
+                  className="bg-blue px-4 py-2 font-semibold text-white hover:bg-hoverBlue"
                 >
                   Save
                 </Button>

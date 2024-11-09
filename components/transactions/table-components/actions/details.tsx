@@ -62,7 +62,7 @@ export function Details({
       <DialogContent className="rounded-none lg:min-w-[700px]">
         <div>
           <CardHeader className="flex flex-row items-start justify-between space-y-0 p-0 pb-7 pt-6">
-            <div className="flex items-center space-x-4 p-2">
+            <div className="flex items-start space-x-4">
               <Image
                 src="/assets/images/logo.png"
                 alt="Logo"
@@ -79,7 +79,7 @@ export function Details({
                 </p>
               </div>
             </div>
-            <div className="flex flex-col space-y-1 p-2 text-xs md:text-sm lg:text-sm">
+            <div className="flex flex-col space-y-1 text-xs md:text-sm lg:text-sm">
               {date.issue_date && (
                 <>
                   <div className="font-semibold">Issue Date</div>
@@ -95,7 +95,7 @@ export function Details({
             </div>
             <div className="flex items-center">
               <Badge
-                className="pointer-events-none flex items-center gap-2 px-2 py-1"
+                className="pointer-events-none flex items-center gap-2 py-1"
                 variant="secondary"
               >
                 <span
@@ -114,7 +114,7 @@ export function Details({
             </div>
           </CardHeader>
           <CardContent className="grid gap-24 p-0">
-            <div className="grid gap-4 p-2 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-1.5">
                 <h3 className="text-sm font-semibold">From</h3>
                 <div className="text-sm text-muted-foreground md:text-sm lg:text-sm">
@@ -133,11 +133,11 @@ export function Details({
                 </div>
               </div>
             </div>
-            <div className="space-y-1.5 p-2 pb-6">
+            <div className="space-y-1.5 pb-6">
               <div className="grid grid-cols-4 text-xs font-semibold md:text-sm">
                 <div>Description</div>
                 <div className="text-right">Quantity</div>
-                <div className="text-right">Price</div>
+                <div className="text-right">Unit Price</div>
                 <div className="text-right">Total</div>
               </div>
               <Separator />

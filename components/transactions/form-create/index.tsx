@@ -128,7 +128,7 @@ export function CreateForm() {
     };
     const promise = createTransaction.mutateAsync(enrichedData);
     toast.promise(promise, {
-      loading: "Uploading transaction...",
+      loading: "creating transaction...",
       success: () => {
         return "Transaction created successfully!";
       },
@@ -382,7 +382,7 @@ export function CreateForm() {
                           <TableRow>
                             <TableHead className="h-8">Name</TableHead>
                             <TableHead className="h-8">Quantity</TableHead>
-                            <TableHead className="h-8">Price</TableHead>
+                            <TableHead className="h-8">Unit Price </TableHead>
                             <TableHead className="h-8"></TableHead>
                           </TableRow>
                         </TableHeader>
@@ -440,22 +440,23 @@ export function CreateForm() {
               </div>
 
               <div className="px-4 pb-4 md:px-8 md:pb-8 lg:px-8">
-                <div className="rounded-md bg-secondary px-4 py-2">
-                  <h3 className="mb-2 text-lg font-semibold">Resumen</h3>
-                  <div className="grid gap-2 text-sm">
+                <div className="rounded-sm bg-secondary px-4 py-2">
+                  <div className="grid gap-2 text-xs font-semibold md:text-sm lg:text-sm">
                     <div className="flex justify-between">
                       <div>Subtotal</div>
-                      <div className="font-mono">
+                      <div className="font-mono font-normal">
                         {currency} {calculateSubtotal().toFixed(2)}
                       </div>
                     </div>
                     <div className="flex justify-between">
-                      <div>Tax </div>
-                      <div className="font-mono">{taxRate}%</div>
+                      <div>TAX</div>
+                      <div className="font-mono font-normal">{taxRate}%</div>
                     </div>
                     <div className="mt-2 flex justify-between border-t pt-2 text-lg font-semibold">
-                      <span>Total Cost</span>
-                      <span className="font-mono">$ {calculateTotal()}</span>
+                      <span>Total</span>
+                      <span className="font-mono font-normal">
+                        $ {calculateTotal()}
+                      </span>
                     </div>
                   </div>
                 </div>

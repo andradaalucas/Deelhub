@@ -127,7 +127,7 @@ export function Edit({
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader className="fflex flex-row items-start justify-between space-y-0 p-0 pb-7 pt-6">
-            <div className="flex items-center space-x-4 p-2">
+            <div className="flex items-start space-x-4">
               <Image
                 src="/assets/images/logo.png"
                 alt="Logo"
@@ -144,7 +144,7 @@ export function Edit({
                 </p>
               </div>
             </div>
-            <div className="flex flex-col space-y-1 p-2 text-xs md:text-sm lg:text-sm">
+            <div className="flex flex-col space-y-1 text-xs md:text-sm lg:text-sm">
               {invoiceData.date.issue_date && (
                 <>
                   <div className="font-semibold">Issue Date</div>
@@ -206,7 +206,7 @@ export function Edit({
             />
           </CardHeader>
           <CardContent className="grid gap-24 p-0">
-            <div className="grid gap-4 p-2 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-1.5">
                 <h3 className="text-sm font-semibold">From</h3>
                 <div className="text-sm text-muted-foreground md:text-sm lg:text-sm">
@@ -225,11 +225,11 @@ export function Edit({
                 </div>
               </div>
             </div>
-            <div className="space-y-1.5 p-2 pb-6">
+            <div className="space-y-1.5 pb-6">
               <div className="grid grid-cols-4 text-xs font-semibold sm:text-sm">
                 <div>Description</div>
                 <div className="text-right">Quantity</div>
-                <div className="text-right">Price</div>
+                <div className="text-right">Unit Price</div>
                 <div className="text-right">Total</div>
               </div>
               <Separator />
