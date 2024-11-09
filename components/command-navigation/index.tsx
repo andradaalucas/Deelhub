@@ -24,10 +24,8 @@ interface Message {
 
 export function CommandNavigation() {
   const [open, setOpen] = useState(false);
+  const [input, setInput] = useState("");
   const [showAllItems, setShowAllItems] = useState(true);
-
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
-    useChat();
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -44,12 +42,12 @@ export function CommandNavigation() {
   // Crear una función wrapper para adaptar el formato del cambio de input
   const handleCommandInputChange = (value: string) => {
     // Crear un evento sintético
+    setInput(value);
     // const syntheticEvent = {
     //   target: {
     //     value,
     //   },
     // } as React.ChangeEvent<HTMLInputElement>;
-
     // handleInputChange(syntheticEvent);
   };
 
@@ -59,9 +57,6 @@ export function CommandNavigation() {
       setShowAllItems(false);
 
       const form = e.currentTarget.form;
-      if (form) {
-        handleSubmit(new Event("submit") as any);
-      }
     }
   };
 
@@ -76,17 +71,15 @@ export function CommandNavigation() {
         <CommandIcon className="my-6 h-6 w-6" />
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <form onSubmit={handleSubmit}>
-          <CommandInput
-            placeholder="Ask a question about finance to Claude AI"
-            onKeyDown={handleEnterPress}
-            value={input}
-            onValueChange={handleCommandInputChange}
-          />
-        </form>
+        <CommandInput
+          placeholder="Ask a question about finance to Claude AI"
+          onKeyDown={handleEnterPress}
+          value={input}
+          onValueChange={handleCommandInputChange}
+        />
         <CommandList className="max-h-[400px] overflow-y-auto">
           <CommandGroup>
-            {messages.map((message, i) => (
+            {/* {messages.map((message, i) => (
               <div
                 key={i}
                 className={`px-4 py-2 ${
@@ -102,17 +95,17 @@ export function CommandNavigation() {
                   {message.content}
                 </p>
               </div>
-            ))}
-            {isLoading && (
+            ))} */}
+            {/* {isLoading && (
               <div className="px-4 py-2 text-sm text-muted-foreground">
                 Claude is thinking...
               </div>
-            )}
+            )} */}
           </CommandGroup>
         </CommandList>
         <div className="flex items-center gap-2 px-3 py-2">
           <span className="text-xs text-muted-foreground">
-            {isLoading ? "Claude is responding..." : "Press enter to send"}
+            {"Press enter to send"}
           </span>
           <div className="flex-1" />
           <kbd className="pointer-events-none flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 text-[10px] font-medium opacity-100">
