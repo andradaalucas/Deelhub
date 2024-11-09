@@ -44,13 +44,13 @@ export function CommandNavigation() {
   // Crear una función wrapper para adaptar el formato del cambio de input
   const handleCommandInputChange = (value: string) => {
     // Crear un evento sintético
-    const syntheticEvent = {
-      target: {
-        value,
-      },
-    } as React.ChangeEvent<HTMLInputElement>;
+    // const syntheticEvent = {
+    //   target: {
+    //     value,
+    //   },
+    // } as React.ChangeEvent<HTMLInputElement>;
 
-    handleInputChange(syntheticEvent);
+    // handleInputChange(syntheticEvent);
   };
 
   const handleEnterPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
