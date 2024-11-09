@@ -1,19 +1,4 @@
 import {
-  ArchiveIcon,
-  BarChart2Icon,
-  ChevronUp,
-  Cog,
-  Command,
-  LandmarkIcon,
-  LifeBuoy,
-  MessageSquareText,
-  SettingsIcon,
-  Tags,
-  User2,
-  UsersIcon,
-  Workflow,
-} from "lucide-react";
-import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -25,19 +10,27 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { createClient } from "@/utils/supabase/server";
+import {
+  BarChart2Icon,
+  ChevronUp,
+  Cog,
+  LandmarkIcon,
+  LifeBuoy,
+  MessageSquareText,
+  User2,
+  UsersIcon
+} from "lucide-react";
+import Link from "next/link";
+import { SignOutButton } from "../auth";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "../ui/dropdown-menu";
-import { createClient } from "@/utils/supabase/server";
-import Link from "next/link";
 import { ModeToggle } from "../ui/toggle";
-import { SignOutButton } from "../auth";
-import Image from "next/image";
 
 // Menu items.
 const items = [
@@ -65,11 +58,6 @@ const items = [
     title: "Billing",
     url: "/billing",
     icon: LandmarkIcon,
-  },
-  {
-    title: "Vault",
-    url: "/vault",
-    icon: ArchiveIcon,
   },
 ];
 

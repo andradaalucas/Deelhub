@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { exportCustomerOnSheet } from "@/services/customers";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { FileSpreadsheet } from "lucide-react";
+import { FileSpreadsheet, Folder, FolderKanbanIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { DropAndDrag } from "./drop-and-drag";
@@ -48,7 +48,7 @@ export function OptionsTable() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="h-8 w-8 p-0">
-            <DotsVerticalIcon className="h-4 w-4" />
+            <Folder className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent

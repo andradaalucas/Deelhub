@@ -1,31 +1,27 @@
 "use client";
 
-import * as React from "react";
-import {
-  CalendarIcon,
-  EnvelopeClosedIcon,
-  FaceIcon,
-  GearIcon,
-  PersonIcon,
-  RocketIcon,
-} from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
 import {
   CommandDialog,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
-  CommandItem,
   CommandList,
-  CommandSeparator,
-  CommandShortcut,
 } from "@/components/ui/command";
-import { Button } from "@/components/ui/button";
-import { Calendar, CommandIcon, Search, Settings } from "lucide-react";
+import {
+  BarChart2Icon,
+  Cog,
+  CommandIcon,
+  LifeBuoy,
+  UsersIcon,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 export function CommandNavigation() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [showAllItems, setShowAllItems] = useState(true);
+  const [inputValue, setInputValue] = useState("");
 
-  React.useEffect(() => {
+  useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "j" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
@@ -36,6 +32,21 @@ export function CommandNavigation() {
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
   }, []);
+  const handleInputChange = (value: string) => {
+    setInputValue(value)
+  }
+  const handleEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setShowAllItems(false);
+
+      // Aquí puedes hacer algo con el valor del input
+      console.log("Input value:", inputValue);
+
+      // Opcional: limpiar el input después de enviar
+      setInputValue("");
+    }
+  };
 
   return (
     <>
@@ -43,40 +54,27 @@ export function CommandNavigation() {
         onClick={() => setOpen((open) => !open)}
         variant="outline"
         size="icon"
-        className="fixed bottom-4 right-4 flex rounded-full shadow-2xl print:hidden"
+        className="fixed bottom-4 right-4 flex rounded-full p-4 shadow-2xl"
       >
         <CommandIcon className="my-6 h-6 w-6" />
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Actions">
-            <CommandItem>
-              <Calendar className="mr-2 h-4 w-4" />
-              <span>Upload Budget</span>
-            </CommandItem>
-            <CommandItem>
-              <Search className="mr-2 h-4 w-4" />
-              <span>Search Users</span>
-            </CommandItem>
-            <CommandItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>AI Insights</span>
-            </CommandItem>
-          </CommandGroup>
-          <CommandGroup heading="Settings">
-            <CommandItem>
-              <span>Automate Budget Sending</span>
-            </CommandItem>
-            <CommandItem>
-              <span>Export Data</span>
-            </CommandItem>
-            <CommandItem>
-              <span>Import Data</span>
-            </CommandItem>
-          </CommandGroup>
-        </CommandList>
+        <CommandInput
+          placeholder="Ask a question about finance to Claude AI"
+          onKeyDown={handleEnterPress}
+          onValueChange={handleInputChange}
+          value={inputValue} // Asegura que el valor del input esté sincronizado con el estado
+        />
+        <CommandList></CommandList>
+        <div className="flex items-center gap-2 px-3 py-2">
+          <span className="text-xs text-muted-foreground">
+            Press enter to send
+          </span>
+          <div className="flex-1" />
+          <kbd className="pointer-events-none flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 text-[10px] font-medium opacity-100">
+            ↵
+          </kbd>
+        </div>
       </CommandDialog>
     </>
   );
