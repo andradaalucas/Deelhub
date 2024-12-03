@@ -6,8 +6,11 @@ import { NextUIProvider } from "@nextui-org/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { GeistMono } from "geist/font/mono";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { GeistSans } from "geist/font/sans";
+import { usePathname } from "next/navigation";
 import "./globals.css";
+import { AppSidebar } from "@/components/app-sidebar";
 
 export default function HomeLayout({
   children,
@@ -15,12 +18,10 @@ export default function HomeLayout({
   children: React.ReactNode;
 }) {
   const queryClient = new QueryClient();
+  const pathname = usePathname();
 
   return (
     <html lang="en">
-      {/* <head>
-        <title>Deelhub</title>
-      </head> */}
       <body
         className={`${cn(
           "min-h-screen bg-background font-sans antialiased",
@@ -34,7 +35,21 @@ export default function HomeLayout({
         >
           <QueryClientProvider client={queryClient}>
             <NextUIProvider>
-              {children}
+              <SidebarProvider>
+                {pathname === "/login" ? (
+                  <main className="w-full h-full">
+                    {children}
+                  </main>
+                ) : (
+                  <>
+                    <AppSidebar />
+                    <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+                      <SidebarTrigger />
+                      {children}
+                    </main>
+                  </>
+                )}
+              </SidebarProvider>
               <Toaster closeButton />
               <ReactQueryDevtools />
             </NextUIProvider>

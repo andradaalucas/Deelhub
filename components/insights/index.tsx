@@ -69,7 +69,7 @@ export function Insights() {
     <div className="mx-auto w-full max-w-5xl grid-cols-2 gap-6 space-y-6 p-2">
       <div className="flex items-center justify-between">
         <span className="text-sm text-gray-500 dark:text-gray-400">
-          Powered by Deelfy AI
+          Powered by Deelhub AI
         </span>
       </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">

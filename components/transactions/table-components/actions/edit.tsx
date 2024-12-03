@@ -56,11 +56,11 @@ export function Edit({
     },
     status: rowData.status,
     companyInfo: {
-      name: "Deelfy",
+      name: "Deelhub",
       logo: "D",
       invoiceNumber: "INV-0001",
       city: "Córdoba, Argentina",
-      email: "hi@deelfy.com",
+      email: "hi@Deelhub.com",
     },
     items: rowData.products.map((product) => ({
       description: product.name,

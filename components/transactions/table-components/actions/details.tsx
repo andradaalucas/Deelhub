@@ -23,11 +23,11 @@ export function Details({
   };
 
   const companyInfo = {
-    name: "Deelfy",
+    name: "Deelhub",
     logo: "D",
     invoiceNumber: "INV-0001",
     city: "Córdoba, Argentina",
-    email: "hi@deelfy.com",
+    email: "hi@Deelhub.com",
   };
 
   const items = rowData.products.map((product) => ({

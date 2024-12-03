@@ -175,8 +175,8 @@ export function CreateForm() {
                         control={form.control}
                         name="customers"
                         render={({ field }) => (
-                          <FormItem className="w-full">
-                            <FormLabel>Customers</FormLabel>
+                          <FormItem className="w-full text-xs">
+                            <FormLabel className="text-xs">Customers</FormLabel>
                             <FormControl>
                               <MultiSelect
                                 options={customers.map((customer) => ({
@@ -202,7 +202,7 @@ export function CreateForm() {
                       className="flex cursor-pointer items-center text-xs font-medium hover:underline md:text-sm lg:text-sm"
                       href="/customers"
                     >
-                      <span>To add customers</span>
+                      <span className="text-xs">To add customers</span>
                       <ArrowUpRight className="ml-1 h-4 w-4" />
                     </Link>
                   </div>
@@ -215,7 +215,7 @@ export function CreateForm() {
                     name="issueDate"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Issue Date</FormLabel>
+                        <FormLabel className="text-xs">Issue Date</FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
                             <FormControl>
@@ -252,7 +252,7 @@ export function CreateForm() {
 
                       return (
                         <FormItem>
-                          <FormLabel>Due Date</FormLabel>
+                          <FormLabel className="text-xs">Due Date</FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
                               <FormControl>
@@ -293,7 +293,7 @@ export function CreateForm() {
                     name="currency"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Currency</FormLabel>
+                        <FormLabel className="text-xs">Currency</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
@@ -348,7 +348,7 @@ export function CreateForm() {
                     name="taxRate"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Tax Rate (%)</FormLabel>
+                        <FormLabel className="text-xs">Tax Rate (%)</FormLabel>
                         <FormControl>
                           <Input
                             type="number"
@@ -366,12 +366,12 @@ export function CreateForm() {
 
                 <div className="mt-4 flex-grow">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-semibold">Items</h3>
+                    <h3 className="text-xs font-semibold">Items</h3>
                     <Button
                       onClick={addProduct}
                       type="button"
                       size="sm"
-                      className="font-semibold"
+                      className="text-xs font-semibold"
                     >
                       Add item
                     </Button>
@@ -442,8 +442,7 @@ export function CreateForm() {
               </div>
 
               <div className="mt-12 px-4 pb-4 md:px-8 md:pb-8 lg:px-8">
-                <div className="rounded-lg bg-secondary px-4 py-2">
-                  <h3 className="mb-2 text-lg font-semibold">Resumen</h3>
+                <div className="bg-secondary px-4 py-2">
                   <div className="grid gap-2 text-sm">
                     <div className="flex justify-between">
                       <div>Subtotal</div>
@@ -452,7 +451,7 @@ export function CreateForm() {
                       </div>
                     </div>
                     <div className="flex justify-between">
-                      <div>Tax </div>
+                      <div>Tax</div>
                       <div className="font-mono">{taxRate}%</div>
                     </div>
                     <div className="mt-2 flex justify-between border-t pt-2 text-lg font-semibold">

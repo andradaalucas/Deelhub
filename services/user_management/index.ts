@@ -1,7 +1,7 @@
 "use client";
-import { createClient } from "@/utils/supabase/client";
+import { createSupabaseBrowserClient } from "@/utils/supabase/browser";
 
-const supabase = createClient();
+const supabase = createSupabaseBrowserClient();
 
 export const getUserSession = async () => {
   const { data, error } = await supabase.auth.getUser();
