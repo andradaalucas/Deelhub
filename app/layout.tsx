@@ -22,6 +22,10 @@ export default function HomeLayout({
 
   return (
     <html lang="en">
+      <head>
+        <title>Deelhub</title>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
       <body
         className={`${cn(
           "min-h-screen bg-background font-sans antialiased",

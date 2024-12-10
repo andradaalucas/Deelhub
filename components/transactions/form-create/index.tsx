@@ -64,7 +64,6 @@ export function CreateForm() {
   const form = useForm<FormSchemaTransactions>({
     resolver: zodResolver(formSchemaTransactions),
     defaultValues: {
-      issueDate: new Date(),
       customers: [],
       currency: "USD",
       taxRate: 0,
@@ -248,7 +247,7 @@ export function CreateForm() {
                     control={form.control}
                     name="dueDate"
                     render={({ field }) => {
-                      const issueDate = form.watch("issueDate");
+                      const issueDate = form.watch("issueDate") || true;
 
                       return (
                         <FormItem>
@@ -353,7 +352,6 @@ export function CreateForm() {
                           <Input
                             type="number"
                             className="font-mono"
-                            max={100}
                             min={0}
                             {...field}
                           />
@@ -433,7 +431,7 @@ export function CreateForm() {
                     </div>
                   </ScrollArea>
                   {(form.formState.errors as any)[""] && (
-                    <div className="mt-4 flex items-center gap-2 rounded-lg border p-4 text-xs text-zinc-600">
+                    <div className="mt-2 flex items-center gap-2 rounded-lg border p-4 text-xs text-zinc-600">
                       <TriangleAlert className="h-4 w-4" />
                       <div>{(form.formState.errors as any)[""].message}.</div>
                     </div>
@@ -441,8 +439,9 @@ export function CreateForm() {
                 </div>
               </div>
 
-              <div className="mt-12 px-4 pb-4 md:px-8 md:pb-8 lg:px-8">
-                <div className="bg-secondary px-4 py-2">
+              <div className="px-4 pb-4 md:px-8 md:pb-8 lg:px-8">
+                <div className="rounded-lg bg-secondary px-4 py-2">
+                  <h3 className="mb-2 text-lg font-semibold">Resumen</h3>
                   <div className="grid gap-2 text-sm">
                     <div className="flex justify-between">
                       <div>Subtotal</div>

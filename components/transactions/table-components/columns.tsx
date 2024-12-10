@@ -24,9 +24,9 @@ import { format } from "date-fns";
 
 const getStatusStyles = (status: any) => {
   switch (status) {
-    case "confirmed":
+    case "paid":
       return "bg-green-100 text-[#56663e]";
-    case "rejected":
+    case "canceled":
       return "bg-red-100 text-[#e14133]";
     default:
       return "bg-[#e2ecf3] text-[#0a85d1]";
@@ -34,9 +34,9 @@ const getStatusStyles = (status: any) => {
 };
 const getDotStatusStyles = (status: any) => {
   switch (status) {
-    case "confirmed":
+    case "paid":
       return "bg-[#56663e]";
-    case "rejected":
+    case "canceled":
       return "bg-[#e14133]";
     default:
       return "bg-[#0a85d1]";
@@ -71,7 +71,7 @@ const ActionsCell = ({ row }: any) => {
       },
       error: "Failed to delete transaction. Please try again.",
     });
-    promise.then(() => setIsOpenDelete(!isOpenDelete));
+    promise.then(() => setIsOpenDelete(false));
   };
 
   const handleDetails = () => {
@@ -250,7 +250,7 @@ export const columns: ColumnDef<Transactions>[] = [
       const issueDate = row.getValue("issue_date") as string | Date | null;
       return (
         <div className="flex w-full justify-between whitespace-nowrap text-left lowercase">
-          {issueDate ? format(new Date(issueDate), "MM/dd/yyyy") : ""}
+          {issueDate ? format(new Date(issueDate), "MM/dd/yyyy") : "-"}
         </div>
       );
     },
@@ -265,7 +265,7 @@ export const columns: ColumnDef<Transactions>[] = [
 
       return (
         <div className="flex w-full justify-between whitespace-nowrap text-left lowercase">
-          {dueDate ? format(new Date(dueDate), "MM/dd/yyyy") : ""}
+          {dueDate ? format(new Date(dueDate), "MM/dd/yyyy") : "-"}
         </div>
       );
     },

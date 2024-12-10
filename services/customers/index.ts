@@ -2,6 +2,7 @@ import { createSupabaseBrowserClient } from "@/utils/supabase/browser";
 import { getUserSession } from "../user_management";
 
 const supabase = createSupabaseBrowserClient();
+//TODO: REPOSITORY PATTERN
 
 export const getAllCustomers = async (filters?: any) => {
   try {

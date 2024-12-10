@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/utils/supabase/browser";
 import { signout } from "@/lib/auth-actions";
+import Link from "next/link";
 
 const LoginButton = () => {
   const [user, setUser] = useState<any>(null);
@@ -20,14 +21,17 @@ const LoginButton = () => {
   }, [supabase.auth]);
   if (user) {
     return (
-      <Button
-        onClick={() => {
-          signout();
-          setUser(null);
-        }}
-      >
-        Log out
-      </Button>
+      <div className="flex items-center justify-between max-w-5xl mx-auto">
+        <Link href="/dashboard">Go to dashboard</Link>
+        <Button
+          onClick={() => {
+            signout();
+            setUser(null);
+          }}
+        >
+          Log out
+        </Button>
+      </div>
     );
   }
   return (
