@@ -49,10 +49,10 @@ export function Edit({
 }) {
   const [invoiceData, setInvoiceData] = useState({
     clientInfo: {
-      name: rowData.customer_transaction[0]?.customers?.name || null,
-      address: rowData.customer_transaction[0]?.customers?.address || null,
-      email: rowData.customer_transaction[0]?.customers?.email || null,
-      phone: rowData.customer_transaction[0]?.customers?.phone || null,
+      name: rowData?.customers?.name || null,
+      address: rowData?.customers?.address || null,
+      email: rowData?.customers?.email || null,
+      phone: rowData?.customers?.phone || null,
     },
     status: rowData.status,
     companyInfo: {

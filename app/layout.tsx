@@ -54,7 +54,7 @@ export default function HomeLayout({
                   </>
                 )}
               </SidebarProvider>
-              <Toaster closeButton />
+              <Toaster closeButton richColors />
               <ReactQueryDevtools />
             </NextUIProvider>
           </QueryClientProvider>

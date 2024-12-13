@@ -6,7 +6,10 @@ const supabase = createSupabaseBrowserClient();
 
 export const getAllTransactions = async () => {
   try {
-    const { data, error } = await supabase.from("transactions").select(`
+    const { data, error } = await supabase
+      .from("transactions")
+      .select(
+        `
       id,
       issue_date,
       due_date,
@@ -20,25 +23,27 @@ export const getAllTransactions = async () => {
         price,
         quantity
       ),
-      customer_transaction (
-        customers (
+      customers (
           name,
           email,
           address,
           phone
-        )
       )
-    `).order('created_at', { ascending: false });
+    `,
+      )
+      .order("created_at", { ascending: false });
 
     if (error) {
       throw error;
     }
 
     // Formateamos los datos para que incluyan los detalles de los productos y el nombre del cliente
-    return data.map((transaction: any) => ({
+    const dataFormatted = data.map((transaction: any) => ({
       ...transaction,
-      customer: transaction.customer_transaction[0]?.customers?.name || null,
+      customer: transaction?.customers.name,
     }));
+    console.log("dataa", dataFormatted);
+    return dataFormatted;
   } catch (error) {
     console.log("Error on fetch transactions", error);
   }
@@ -72,6 +77,7 @@ export const createTransactions = async (data: any) => {
           tax_rate: taxRate,
           issue_date: issueDate,
           due_date: dueDate,
+          customer_id: customerID,
           description,
         })
         .select(); // Retorna la fila insertada con el nuevo `id`
@@ -84,22 +90,7 @@ export const createTransactions = async (data: any) => {
 
       const transactionID = transactionData?.[0]?.id;
 
-      // Paso 2: Insertar en la tabla intermedia `customer_transaction`
-      const { error: customerTransactionError } = await supabase
-        .from("customer_transaction")
-        .insert({
-          customer_id: customerID,
-          transaction_id: transactionID, // Vincula al ID de la transacción recién creada
-        });
-
-      if (customerTransactionError) {
-        throw new Error(
-          "Error inserting into customer_transaction: " +
-            customerTransactionError.message,
-        );
-      }
-
-      // Paso 3: Insertar cada producto en `transaction_product` con sus detalles
+      // Paso 2: Insertar cada producto en `transaction_product` con sus detalles
       for (const product of products) {
         const { name, quantity, price } = product;
         const { error: productError } = await supabase.from("products").insert({

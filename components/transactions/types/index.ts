@@ -30,12 +30,10 @@ interface Product {
 }
 
 interface CustomerTransaction {
-  customers: {
     name: string;
     address?: string;
     email?: string;
     phone?: string;
-  };
 }
 
 export interface RowData {
@@ -47,5 +45,5 @@ export interface RowData {
   tax_rate?: number;
   status: string;
   products: Product[];
-  customer_transaction: CustomerTransaction[];
+  customers: CustomerTransaction;
 }
