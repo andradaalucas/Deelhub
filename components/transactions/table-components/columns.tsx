@@ -9,13 +9,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteTransactions } from "@/services/transactions";
+import { deleteTransactions, generatePdf } from "@/services/transactions";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 import { ConfirmDelete } from "../../atom/confirm-delete";
-import { Transactions } from "../types";
+import { RowData, Transactions } from "../types";
 import { toast } from "sonner";
 import { ConfirmAction } from "@/components/atom/confirm-action";
 import { Details } from "./actions/details";
@@ -90,18 +90,19 @@ const ActionsCell = ({ row }: any) => {
     setIsOpenDelete(!isOpenDelete);
   };
 
-  const handleCopyClipboard = (rowData: any) => {
+  const handleCopyClipboard = (rowData: RowData) => {
     navigator.clipboard.writeText(rowData?.id);
     toast.success("Copied to clipboard");
   };
-  const handleGeneratePDF = () => {
-    setIsOpenAction(!isOpenAction);
-    setActionExecuteData({
-      title: "download the PDF of this transaction",
-      description:
-        "This action will generate a PDF file of the transaction's data.",
-      rowData: row.original,
-    });
+  const handleGeneratePDF = (rowData: RowData) => {
+    // setIsOpenAction(!isOpenAction);
+    // setActionExecuteData({
+    //   title: "download the PDF of this transaction",
+    //   description:
+    //     "This action will generate a PDF file of the transaction's data.",
+    //   rowData: row.original,
+    // });
+    generatePdf(rowData)
   };
 
   return (
@@ -139,7 +140,7 @@ const ActionsCell = ({ row }: any) => {
             </DropdownMenuItem>
             <DropdownMenuItem
               className="cursor-pointer"
-              onClick={handleGeneratePDF}
+              onClick={() => handleGeneratePDF(row.original)}
             >
               Download PDF
             </DropdownMenuItem>

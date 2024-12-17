@@ -1,5 +1,6 @@
 "use client";
 import { DataTable } from "@/components/data-table";
+import { PDFPreview } from "@/components/pdf-management/pdf-preview";
 import { OptionsAndCreate } from "@/components/transactions/table-components";
 import { columns } from "@/components/transactions/table-components/columns";
 import { getAllTransactions } from "@/services/transactions";
@@ -14,14 +15,15 @@ export default function Page() {
 
   return (
     <>
-      <DataTable
+      {/* <DataTable
         columns={columns}
         data={transactions || []}
         filter="customer"
         isLoading={isLoading}
         isError={isError}
         Component={OptionsAndCreate}
-      />
+      /> */}
+      <PDFPreview/>
     </>
   );
 }

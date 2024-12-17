@@ -120,7 +120,7 @@ export function Edit({
   };
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-      <DialogContent className="rounded-none lg:min-w-[700px]">
+      <DialogContent className="rounded-none lg:min-w-[400px]">
         <DialogHeader className="sr-only">
           <DialogTitle></DialogTitle>
           <DialogDescription></DialogDescription>
@@ -226,7 +226,7 @@ export function Edit({
               </div>
             </div>
             <div className="space-y-1.5 p-2 pb-6">
-              <div className="grid grid-cols-4 text-xs font-semibold sm:text-sm">
+              <div className="grid grid-cols-4 text-xs font-semibold">
                 <div>Description</div>
                 <div className="text-right">Quantity</div>
                 <div className="text-right">Price</div>
@@ -253,7 +253,7 @@ export function Edit({
               </div>
               <div className="grid grid-cols-4 items-center text-xs sm:text-sm">
                 <div className="col-span-1 text-left font-semibold">Total</div>
-                <div className="col-span-3 whitespace-nowrap text-right text-xs font-semibold md:text-sm lg:text-lg">
+                <div className="col-span-3 whitespace-nowrap text-right text-xs font-semibold md:text-sm">
                   {invoiceData.totals.currency} ${invoiceData.totals.total}
                 </div>
               </div>

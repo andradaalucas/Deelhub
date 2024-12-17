@@ -1,6 +1,17 @@
 "use client";
+import { RowData } from "@/components/transactions/types";
+import { ReactElement } from "react";
 import { createSupabaseBrowserClient } from "@/utils/supabase/browser";
+// import puppeteer from "puppeteer";
 import { getUserSession } from "../user_management";
+import { saveAs } from "file-saver";
+import { pdf } from "@react-pdf/renderer";
+import { InvoiceTemplate } from "@/components/pdf-management";
+
+interface PDFData {
+  nombre: string;
+  email: string;
+}
 
 const supabase = createSupabaseBrowserClient();
 
@@ -48,6 +59,168 @@ export const getAllTransactions = async () => {
     console.log("Error on fetch transactions", error);
   }
 };
+
+export const generatePdf = async (data: any) => {
+  try {
+    // Crear el elemento de documento PDF como ReactElement
+    // const data = {
+    //   nombre: "Lucas",
+    //   email: "andradalucaswork@gmail.com",
+    // }
+    console.log("data", data);
+
+    const documentElement: ReactElement | null = InvoiceTemplate(
+      data,
+    ) as ReactElement | null;
+    if (!documentElement) {
+      throw new Error("Failed to create PDF document element");
+    }
+
+    // Generar el blob del PDF
+    const blob = await pdf(documentElement).toBlob();
+
+    // Crear un enlace temporal para descargar
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "invoice.pdf";
+
+    // Simular click para descargar
+    document.body.appendChild(link);
+    link.click();
+
+    // Limpiar
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+  } catch (error) {
+    console.error("Error al generar el PDF:", error);
+    // Manejar el error según tus necesidades
+  }
+};
+
+// export const generatePdf = async (rowData: RowData) => {
+//   // Crear el contenido HTML del PDF
+//   const htmlContent = `
+//     <!DOCTYPE html>
+//     <html lang="en">
+//       <head>
+//         <meta charset="UTF-8" />
+//         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+//         <title>Invoice</title>
+//         <style>
+//           body {
+//             font-family: Arial, sans-serif;
+//             margin: 0;
+//             padding: 20px;
+//           }
+//           h1 {
+//             font-size: 24px;
+//             margin-bottom: 10px;
+//           }
+//           .header, .footer {
+//             text-align: center;
+//             margin-bottom: 20px;
+//           }
+//           .details, .items, .totals {
+//             width: 100%;
+//             margin-bottom: 20px;
+//           }
+//           .details td {
+//             padding: 5px;
+//             vertical-align: top;
+//           }
+//           .items th, .items td {
+//             text-align: left;
+//             padding: 5px;
+//             border-bottom: 1px solid #ddd;
+//           }
+//           .items th {
+//             font-weight: bold;
+//           }
+//           .totals td {
+//             text-align: right;
+//             padding: 5px;
+//           }
+//           .totals td:last-child {
+//             font-weight: bold;
+//           }
+//         </style>
+//       </head>
+//       <body>
+//         <div class="header">
+//           <h1>Invoice</h1>
+//           <p>Invoice number: ${rowData.id}</p>
+//           <p>Date of issue: March 1, 2024</p>
+//         </div>
+//         <table class="details">
+//           <tr>
+//             <td>
+//               <strong>From:</strong><br />
+//               Vercel Inc.<br />
+//               440 N Barranca Ave #4133<br />
+//               Covina, California 91723<br />
+//               United States<br />
+//               vercel.com
+//             </td>
+//             <td>
+//               <strong>Bill to:</strong><br />
+//             </td>
+//           </tr>
+//         </table>
+//         <table class="items">
+//           <thead>
+//             <tr>
+//               <th>Description</th>
+//               <th>Qty</th>
+//               <th>Unit price</th>
+//               <th>Amount</th>
+//             </tr>
+//           </thead>
+//           <tbody>
+
+//           </tbody>
+//         </table>
+//         <table class="totals">
+//           <tr>
+//             <td>Subtotal:</td>
+//           </tr>
+//           <tr>
+//             <td>Total:</td>
+//             <td>$${rowData.total.toFixed(2)}</td>
+//           </tr>
+//         </table>
+//         <div class="footer">
+//           <p>
+//             To learn more about or to discuss your invoice, please visit
+//             <a href="http://vercel.com/support">Vercel Support</a>.
+//           </p>
+//         </div>
+//       </body>
+//     </html>
+//   `;
+
+//   // Generar el PDF con Puppeteer
+//   const browser = await puppeteer.launch();
+//   const page = await browser.newPage();
+
+//   // Configurar el contenido HTML
+//   await page.setContent(htmlContent, { waitUntil: "load" });
+
+//   // Generar el archivo PDF
+//   const pdfBuffer = await page.pdf({ format: "A4" });
+
+//   await browser.close();
+
+//   // Descargar el PDF en el cliente
+//   const blob = new Blob([pdfBuffer], { type: "application/pdf" });
+//   const url = URL.createObjectURL(blob);
+//   const a = document.createElement("a");
+//   a.href = url;
+//   a.download = `invoice_${rowData.id}.pdf`;
+//   document.body.appendChild(a);
+//   a.click();
+//   document.body.removeChild(a);
+//   URL.revokeObjectURL(url);
+// };
 
 export const createTransactions = async (data: any) => {
   const {
