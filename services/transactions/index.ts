@@ -1,17 +1,9 @@
 "use client";
-import { RowData } from "@/components/transactions/types";
-import { ReactElement } from "react";
 import { createSupabaseBrowserClient } from "@/utils/supabase/browser";
-// import puppeteer from "puppeteer";
-import { getUserSession } from "../user_management";
-import { saveAs } from "file-saver";
-import { pdf } from "@react-pdf/renderer";
+import { ReactElement } from "react";
 import { InvoiceTemplate } from "@/components/pdf-management";
-
-interface PDFData {
-  nombre: string;
-  email: string;
-}
+import { pdf } from "@react-pdf/renderer";
+import { getUserSession } from "../user_management";
 
 const supabase = createSupabaseBrowserClient();
 
@@ -62,13 +54,6 @@ export const getAllTransactions = async () => {
 
 export const generatePdf = async (data: any) => {
   try {
-    // Crear el elemento de documento PDF como ReactElement
-    // const data = {
-    //   nombre: "Lucas",
-    //   email: "andradalucaswork@gmail.com",
-    // }
-    console.log("data", data);
-
     const documentElement: ReactElement | null = InvoiceTemplate(
       data,
     ) as ReactElement | null;

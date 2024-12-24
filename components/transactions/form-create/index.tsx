@@ -363,18 +363,7 @@ export function CreateForm() {
                 </div>
 
                 <div className="mt-4 flex-grow">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-xs font-semibold">Items</h3>
-                    <Button
-                      onClick={addProduct}
-                      type="button"
-                      size="sm"
-                      className="text-xs font-semibold"
-                    >
-                      Add item
-                    </Button>
-                  </div>
-
+                  <h3 className="text-xs font-semibold">Items</h3>
                   <ScrollArea>
                     <div className="mt-4 h-28 overflow-y-auto rounded-lg border md:h-28 lg:h-48">
                       <Table>
@@ -454,7 +443,7 @@ export function CreateForm() {
                       <div className="font-mono">{taxRate}%</div>
                     </div>
                     <div className="mt-2 flex justify-between border-t pt-2 text-lg font-semibold">
-                      <span>Total Cost</span>
+                      <span>Total</span>
                       <span className="font-mono">$ {calculateTotal()}</span>
                     </div>
                   </div>

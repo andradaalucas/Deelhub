@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Document,
   Font,
@@ -29,25 +31,32 @@ interface PDFData {
     address: string;
   };
 }
-
 Font.register({
-  family: "Open Sans",
+  family: "Inter",
   fonts: [
     {
-      src: "https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf",
+      src: "/assets/fonts/Inter/Inter_18pt-Regular.ttf",
     },
     {
-      src: "https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-600.ttf",
+      src: "/assets/fonts/Inter/Inter_18pt-SemiBold.ttf",
       fontWeight: 600,
     },
   ],
 });
 
 const styles = StyleSheet.create({
+  topLine: {
+    height: 4,
+    width: "100%",
+    backgroundColor: "#000", // Negro
+    position: "absolute",
+    top: 0,
+    left: 0,
+  },
   page: {
     backgroundColor: "#fff",
     padding: 40,
-    fontFamily: "Open Sans",
+    fontFamily: "Inter",
   },
   title: {
     fontSize: 12,
@@ -60,8 +69,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   invoiceInfo: {
-    fontSize: 10,
-    fontWeight: "bold",
+    fontSize: 8,
     lineHeight: 1.5,
   },
   triangle: {
@@ -72,24 +80,23 @@ const styles = StyleSheet.create({
     marginTop: 30,
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingRight: 10,
+    paddingRight: 8,
   },
   companyInfo: {
-    fontSize: 10,
+    fontSize: 8,
     lineHeight: 1.5,
   },
   companyName: {
     fontWeight: 800,
   },
   billTo: {
-    fontSize: 10,
+    fontSize: 8,
     lineHeight: 1.5,
   },
   billToTitle: {
     fontWeight: "bold",
   },
   amount: {
-    fontWeight: "bold",
     flex: 1,
     textAlign: "right",
   },
@@ -107,13 +114,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#000",
     paddingBottom: 5,
-    fontSize: 10,
+    fontSize: 8,
   },
   tableRow: {
     flexDirection: "row",
     paddingTop: 8,
     paddingBottom: 8,
-    fontSize: 10,
+    fontSize: 8,
   },
   description: {
     flex: 4,
@@ -134,7 +141,7 @@ const styles = StyleSheet.create({
   subtotalRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    fontSize: 10,
+    fontSize: 8,
     paddingTop: 5,
   },
   footer: {
@@ -142,7 +149,7 @@ const styles = StyleSheet.create({
     bottom: 40,
     left: 40,
     right: 40,
-    fontSize: 10,
+    fontSize: 8,
     textAlign: "left",
   },
 });
@@ -150,6 +157,7 @@ const styles = StyleSheet.create({
 export const InvoiceTemplate: React.FC<PDFData> = (data) => (
   <Document>
     <Page size="A4" style={styles.page}>
+      <View style={styles.topLine}></View>
       <View style={styles.header}>
         <Text style={styles.title}>Invoice</Text>
         <View>
@@ -158,9 +166,23 @@ export const InvoiceTemplate: React.FC<PDFData> = (data) => (
       </View>
 
       <View style={styles.invoiceInfo}>
-        <Text>Invoice number 2A3C21E0-0004</Text>
-        <Text>Date of issue March 1, 2024</Text>
-        <Text>Date due March 1, 2024</Text>
+        <Text>Invoice number {String(data.id).slice(0, 8)}-0001</Text>
+        <Text>
+          Date of issue{" "}
+          {new Date(data.issue_date).toLocaleDateString("en-US", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          })}
+        </Text>
+        <Text>
+          Date due{" "}
+          {new Date(data.due_date).toLocaleDateString("en-US", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          })}
+        </Text>
       </View>
 
       <View style={styles.companySection}>
