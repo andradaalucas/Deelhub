@@ -11,31 +11,19 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import {
-  ArchiveIcon,
   BarChart2Icon,
-  ChevronUp,
   Cog,
+  GitPullRequestCreate,
   LandmarkIcon,
   LifeBuoy,
   MessageSquareText,
-  Flag,
-  User2,
-  GitPullRequestCreate,
+  Plus,
   UsersIcon,
 } from "lucide-react";
 import Link from "next/link";
-// import { SignOutButton } from "../auth";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { ModeToggle } from "../ui/toggle";
-import { SignOutButton } from "../auth";
 import { FeedbackForm } from "../feedback";
+import useSession from "@/utils/supabase/use-session";
+import { NavUser } from "./nav-user";
 
 // Menu items.
 const items = [
@@ -72,6 +60,17 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const user = useSession();
+  const fullName = user?.user.user_metadata.full_name;
+  const fallback = fullName?.slice(0, 2);
+  const data = {
+    user: {
+      name: fullName,
+      email: user?.user.user_metadata.email,
+      avatar: user?.user.user_metadata.picture,
+      fallback: fallback,
+    },
+  };
   return (
     <>
       <Sidebar>
@@ -96,42 +95,26 @@ export function AppSidebar() {
                 ))}
               </SidebarMenu>
             </SidebarGroupContent>
+            <SidebarGroupLabel>Projects</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    {/* <Link href={item.url}> */}
+                    {/* <item.icon /> */}
+                    <Link href="/projects">
+                      <Plus />
+                      <span>Add Project</span>
+                    </Link>
+                    {/* </Link> */}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link href="get-started">
-                  <MessageSquareText />
-                  <span>Help</span>
-                </Link>
-              </SidebarMenuButton>
-              <FeedbackForm/>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton>
-                    <User2 /> Account
-                    <ChevronUp className="ml-auto" />
-                  </SidebarMenuButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  side="top"
-                  className="w-[--radix-popper-anchor-width]"
-                >
-                  <DropdownMenuItem>
-                    <span className="cursor-pointer">Billing</span>
-                  </DropdownMenuItem>
-                  <SignOutButton />
-                  <DropdownMenuSeparator />
-                  <DropdownMenuLabel>Preferences</DropdownMenuLabel>
-                  <ModeToggle />
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </SidebarMenuItem>
-          </SidebarMenu>
+          <NavUser user={data.user} />
         </SidebarFooter>
       </Sidebar>
     </>

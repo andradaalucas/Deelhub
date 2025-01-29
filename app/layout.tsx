@@ -4,7 +4,6 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 import { cn } from "@/lib/utils";
 import { NextUIProvider } from "@nextui-org/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { GeistMono } from "geist/font/mono";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { GeistSans } from "geist/font/sans";
@@ -41,9 +40,7 @@ export default function HomeLayout({
             <NextUIProvider>
               <SidebarProvider>
                 {pathname === "/login" ? (
-                  <main className="w-full h-full">
-                    {children}
-                  </main>
+                  <main className="h-full w-full">{children}</main>
                 ) : (
                   <>
                     <AppSidebar />
@@ -55,7 +52,6 @@ export default function HomeLayout({
                 )}
               </SidebarProvider>
               <Toaster closeButton richColors />
-              <ReactQueryDevtools />
             </NextUIProvider>
           </QueryClientProvider>
         </ThemeProvider>

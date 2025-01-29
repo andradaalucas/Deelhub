@@ -60,7 +60,17 @@ import { toast } from "sonner";
 import { formSchemaTransactions, FormSchemaTransactions } from "../schemas";
 
 export function CreateForm() {
+  const [isFocused, setIsFocused] = useState(false);
+  const [hasContent, setHasContent] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleFocus = () => setIsFocused(true);
+  const handleBlur = (e: any) => {
+    setIsFocused(false);
+    setHasContent(e.target.value.length > 0);
+  };
+  const handleChange = (e: any) => setHasContent(e.target.value.length > 0);
+
   const form = useForm<FormSchemaTransactions>({
     resolver: zodResolver(formSchemaTransactions),
     defaultValues: {
@@ -128,7 +138,7 @@ export function CreateForm() {
     };
     const promise = createTransaction.mutateAsync(enrichedData);
     toast.promise(promise, {
-      loading: "Uploading transaction...",
+      loading: "Creating transaction...",
       success: () => {
         return "Transaction created successfully!";
       },
@@ -382,6 +392,8 @@ export function CreateForm() {
                                 <Input
                                   placeholder="Name"
                                   {...form.register(`products.${index}.name`)}
+                                  className={`mt-1 resize-none rounded-none pb-0.5 shadow-none`}
+                                 
                                 />
                               </TableCell>
                               <TableCell>
@@ -394,6 +406,7 @@ export function CreateForm() {
                                       valueAsNumber: true,
                                     },
                                   )}
+                                  className={`mt-1 resize-none rounded-none pb-0.5 shadow-none`}
                                 />
                               </TableCell>
                               <TableCell>
@@ -403,6 +416,7 @@ export function CreateForm() {
                                   {...form.register(`products.${index}.price`, {
                                     valueAsNumber: true,
                                   })}
+                                  className={`mt-1 resize-none rounded-none pb-0.5 shadow-none`}
                                 />
                               </TableCell>
                               <TableCell>
@@ -419,6 +433,14 @@ export function CreateForm() {
                       </Table>
                     </div>
                   </ScrollArea>
+                  <Button
+                    className="p-0 text-xs"
+                    variant="link"
+                    type="button"
+                    onClick={addProduct}
+                  >
+                    Add Items
+                  </Button>
                   {(form.formState.errors as any)[""] && (
                     <div className="mt-2 flex items-center gap-2 rounded-lg border p-4 text-xs text-zinc-600">
                       <TriangleAlert className="h-4 w-4" />
@@ -429,8 +451,8 @@ export function CreateForm() {
               </div>
 
               <div className="px-4 pb-4 md:px-8 md:pb-8 lg:px-8">
-                <div className="rounded-lg bg-secondary px-4 py-2">
-                  <h3 className="mb-2 text-lg font-semibold">Resumen</h3>
+                <div className="bg-secondary px-4 py-2">
+                  {/* <h3 className="mb-2 text-lg font-semibold">Resumen</h3> */}
                   <div className="grid gap-2 text-sm">
                     <div className="flex justify-between">
                       <div>Subtotal</div>

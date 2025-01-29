@@ -1,23 +1,16 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  RefreshCw,
-  History,
-  Network,
-  GitPullRequestCreate,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 
-export interface Feature {
+import { Button } from "@/components/ui/button";
+import type { LucideIcon } from "lucide-react";
+import { History, Network, RefreshCw } from "lucide-react";
+
+interface Feature {
   icon: LucideIcon;
   title: string;
   description: string;
 }
 
-export const features: Feature[] = [
+const features: Feature[] = [
   {
     icon: RefreshCw,
     title: "Cache, controlled.",

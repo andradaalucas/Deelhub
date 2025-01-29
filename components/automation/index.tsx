@@ -93,7 +93,7 @@ export function Automation() {
 //   hours: number;
 // }
 
-// export default function Page() {
+// export function Automation() {
 //   const [customersID, setCustomersID] = useState<string[]>([]);
 //   const [activeTable, setActiveTable] = useState<boolean>(false);
 //   const [products, setProducts] = useState<Product[]>([]);
@@ -486,14 +486,14 @@ export function Automation() {
 //                   </div>
 
 //                   {/* Tabs para productos y servicios */}
-//                   <div className="mt-4 flex-grow">
+//                   {/* <div className="mt-4 flex-grow">
 //                     <Tabs defaultValue="product">
 //                       <TabsList className="grid w-full grid-cols-2">
 //                         <TabsTrigger value="product">Producto</TabsTrigger>
 //                         <TabsTrigger value="service">Servicio</TabsTrigger>
 //                       </TabsList>
 
-//                       {/* Contenido de Productos */}
+                      
 //                       <TabsContent value="product" className="space-y-4">
 //                         <div className="flex items-center justify-between">
 //                           <div className="font-semibold">Products</div>
@@ -509,7 +509,6 @@ export function Automation() {
 //                           <div className="h-22 mt-4 overflow-y-auto rounded-lg border lg:h-48">
 //                             <ScrollArea className="w-full overflow-x-auto">
 //                               <div className="w-full whitespace-nowrap">
-//                                 {/* Tabla de Productos */}
 //                                 <Table className="min-w-full">
 //                                   <TableHeader>
 //                                     <TableRow>
@@ -589,8 +588,6 @@ export function Automation() {
 //                           </div>
 //                         )}
 //                       </TabsContent>
-
-//                       {/* Contenido de Servicios */}
 //                       <TabsContent value="service" className="space-y-4">
 //                         <div className="flex items-center justify-between">
 //                           <div className="font-semibold">Service</div>
@@ -673,7 +670,7 @@ export function Automation() {
 //                         )}
 //                       </TabsContent>
 //                     </Tabs>
-//                   </div>
+//                   </div> */}
 //                 </div>
 //                 <div className="mt-4">
 //                   <div className="rounded-lg bg-secondary px-4 py-2">

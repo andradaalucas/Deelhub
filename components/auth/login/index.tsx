@@ -1,6 +1,8 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { createSupabaseBrowserClient } from "@/utils/supabase/browser";
+import Image from "next/image";
 
 export default function LoginButton(props: { nextUrl?: string }) {
   const supabase = createSupabaseBrowserClient();
@@ -16,5 +18,15 @@ export default function LoginButton(props: { nextUrl?: string }) {
     });
   };
 
-  return <button onClick={handleLogin}>Login</button>;
+  return (
+    <Button onClick={handleLogin} className="w-full rounded-none">
+      <Image
+        src="/assets/images/google-brand-icon.png"
+        width={20}
+        height={20}
+        alt="google-icon"
+      />
+      Continue with Google
+    </Button>
+  );
 }

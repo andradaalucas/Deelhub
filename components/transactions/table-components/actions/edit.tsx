@@ -120,7 +120,7 @@ export function Edit({
   };
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-      <DialogContent className="rounded-none lg:min-w-[400px]">
+      <DialogContent className="rounded-none lg:min-w-[700px]">
         <DialogHeader className="sr-only">
           <DialogTitle></DialogTitle>
           <DialogDescription></DialogDescription>

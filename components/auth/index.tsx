@@ -3,6 +3,7 @@ import React from "react";
 import { DropdownMenuItem } from "../ui/dropdown-menu";
 import { createSupabaseBrowserClient } from "@/utils/supabase/browser";
 import { useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
 
 export function SignOutButton() {
   const supabase = createSupabaseBrowserClient();
@@ -13,12 +14,13 @@ export function SignOutButton() {
   };
   return (
     <DropdownMenuItem
-      className="cursor-pointer text-red-600"
+      className="flex items-center gap-2"
       onClick={() => {
         handleLogout();
       }}
     >
-      Sign Out
+      <LogOut className="h-4 w-4" />
+      Log out
     </DropdownMenuItem>
   );
 }

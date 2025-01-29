@@ -1,5 +1,6 @@
 "use client";
 import { DataTable } from "@/components/data-table";
+import AnalyticsDashboard from "@/components/transactions/overview/analitics-layout";
 import { OptionsAndCreate } from "@/components/transactions/table-components";
 import { columns } from "@/components/transactions/table-components/columns";
 import { getAllTransactions } from "@/services/transactions";
@@ -10,10 +11,14 @@ export default function Page() {
     data: transactions,
     isLoading,
     isError,
-  } = useQuery(["transactions"], () => getAllTransactions());
+  } = useQuery(["transactions"], () => getAllTransactions(), {
+    staleTime: 1000 * 60,
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <>
+      {/* <AnalyticsDashboard /> */}
       <DataTable
         columns={columns}
         data={transactions || []}

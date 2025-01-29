@@ -1,16 +1,32 @@
 "use client";
 
-import {
-  Document,
-  Font,
-  Page,
-  StyleSheet,
-  Text,
-  View,
-} from "@react-pdf/renderer";
+import dynamic from "next/dynamic";
+
+// Importaciones dinámicas
+const Document = dynamic(
+  () => import("@react-pdf/renderer").then((mod) => mod.Document),
+  { ssr: false },
+);
+
+const Page = dynamic(
+  () => import("@react-pdf/renderer").then((mod) => mod.Page),
+  { ssr: false },
+);
+
+const Text = dynamic(
+  () => import("@react-pdf/renderer").then((mod) => mod.Text),
+  { ssr: false },
+);
+
+const View = dynamic(
+  () => import("@react-pdf/renderer").then((mod) => mod.View),
+  { ssr: false },
+);
+import { StyleSheet, Font } from "@react-pdf/renderer";
+
 import React from "react";
 
-interface PDFData {
+export interface PDFData {
   id: string;
   issue_date: string;
   due_date: string;

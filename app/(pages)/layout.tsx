@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Deelhub Inc",
+  title: "Deelhub",
 };
 
 export default async function InLayout({

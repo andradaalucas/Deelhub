@@ -1,8 +1,14 @@
 "use client";
-import { createSupabaseBrowserClient } from "@/utils/supabase/browser";
-import { ReactElement } from "react";
+
 import { InvoiceTemplate } from "@/components/pdf-management";
-import { pdf } from "@react-pdf/renderer";
+import { createSupabaseBrowserClient } from "@/utils/supabase/browser";
+import dynamic from 'next/dynamic';
+// const pdf = dynamic(
+//   () => import('@react-pdf/renderer').then(mod => mod.pdf),
+//   { ssr: false }
+// );
+
+import { ReactElement } from "react";
 import { getUserSession } from "../user_management";
 
 const supabase = createSupabaseBrowserClient();
@@ -52,35 +58,35 @@ export const getAllTransactions = async () => {
   }
 };
 
-export const generatePdf = async (data: any) => {
-  try {
-    const documentElement: ReactElement | null = InvoiceTemplate(
-      data,
-    ) as ReactElement | null;
-    if (!documentElement) {
-      throw new Error("Failed to create PDF document element");
-    }
+// export const generatePdf = async (data: any) => {
+//   try {
+//     const documentElement: ReactElement | null = InvoiceTemplate(
+//       data,
+//     ) as ReactElement | null;
+//     if (!documentElement) {
+//       throw new Error("Failed to create PDF document element");
+//     }
 
-    // Generar el blob del PDF
-    const blob = await pdf(documentElement).toBlob();
+//     // Generar el blob del PDF
+//     // const blob = await pdf(documentElement).toBlob();
 
-    // Crear un enlace temporal para descargar
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "invoice.pdf";
+//     // Crear un enlace temporal para descargar
+//     const link = document.createElement("a");
+//     // link.href = URL.createObjectURL(blob);
+//     link.download = "invoice.pdf";
 
-    // Simular click para descargar
-    document.body.appendChild(link);
-    link.click();
+//     // Simular click para descargar
+//     document.body.appendChild(link);
+//     link.click();
 
-    // Limpiar
-    document.body.removeChild(link);
-    URL.revokeObjectURL(link.href);
-  } catch (error) {
-    console.error("Error al generar el PDF:", error);
-    // Manejar el error según tus necesidades
-  }
-};
+//     // Limpiar
+//     document.body.removeChild(link);
+//     URL.revokeObjectURL(link.href);
+//   } catch (error) {
+//     console.error("Error al generar el PDF:", error);
+//     // Manejar el error según tus necesidades
+//   }
+// };
 
 // export const generatePdf = async (rowData: RowData) => {
 //   // Crear el contenido HTML del PDF
