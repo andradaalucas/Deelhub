@@ -83,12 +83,11 @@ export function Insights() {
             <div className="flex justify-between px-6 font-mono text-2xl font-semibold">
               <div className="flex flex-col">
                 <span>$3,700</span>
-                <span className="text-xs">Current</span>
               </div>
-              <div className="dark:[#52525b] flex flex-col text-[#333]">
+              {/* <div className="dark:[#52525b] flex flex-col text-[#333]">
                 <span>$3,700</span>
                 <span className="text-xs">Forecast</span>
-              </div>
+              </div> */}
             </div>
             <div className="mt-2 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
               <p className="flex items-center font-mono text-xs text-muted-foreground">
