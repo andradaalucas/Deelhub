@@ -1,14 +1,12 @@
-import React from 'react'
+import React from "react";
 
 export function Automation() {
   return (
-    <div>Coming soon</div>
-  )
+    <div className="relative flex w-[300px] translate-y-4 justify-center gap-2 bg-gradient-to-b from-black/80 to-black bg-clip-text pb-4 text-center text-5xl font-extrabold leading-tight text-transparent dark:from-white dark:to-[#AAAAAA] md:inline-block md:!w-full md:translate-y-[12px] md:py-0 lg:!mt-20 lg:text-6xl xl:leading-snug [&_p]:whitespace-nowrap">
+      Coming soon
+    </div>
+  );
 }
-
-
-
-
 
 // "use client";
 
@@ -493,7 +491,6 @@ export function Automation() {
 //                         <TabsTrigger value="service">Servicio</TabsTrigger>
 //                       </TabsList>
 
-                      
 //                       <TabsContent value="product" className="space-y-4">
 //                         <div className="flex items-center justify-between">
 //                           <div className="font-semibold">Products</div>

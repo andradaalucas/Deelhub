@@ -1,16 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import type { LucideIcon } from "lucide-react";
+import { ComingSoon } from "@/components/coming-soon";
 import { History, Network, RefreshCw } from "lucide-react";
 
-interface Feature {
-  icon: LucideIcon;
-  title: string;
-  description: string;
-}
-
-const features: Feature[] = [
+const features = [
   {
     icon: RefreshCw,
     title: "Cache, controlled.",
@@ -32,26 +25,5 @@ const features: Feature[] = [
 ];
 
 export default function Page() {
-  return (
-    <div className="flex flex-col items-center justify-center px-6 py-8">
-      <div className="flex items-center justify-center px-6 py-8">
-        {features.map((feature, index) => (
-          <div
-            key={index}
-            className="flex flex-col items-center px-6 py-8 text-center"
-          >
-            <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50 shadow-[0_2px_8px_rgba(0,0,0,0.08)] dark:border-zinc-800 dark:bg-zinc-700 dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
-              <feature.icon className="h-6 w-6 text-zinc-700 dark:text-zinc-300" />
-            </div>
-            <h3 className="mb-3 text-xl font-semibold text-zinc-900 dark:text-white">
-              {feature.title}
-            </h3>
-            <p className="max-w-[280px] leading-relaxed text-zinc-600 dark:text-zinc-400">
-              {feature.description}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  return <ComingSoon features={features} />;
 }
