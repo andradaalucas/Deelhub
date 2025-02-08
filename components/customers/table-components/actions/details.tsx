@@ -49,8 +49,8 @@ export function DetailsCustomers({ rowData, isOpen, setIsOpen }: DetailsProps) {
     resolver: zodResolver(formSchema),
   });
 
-  const handleCopyClipboard = (data: any) => {
-    navigator.clipboard.writeText(data);
+  const handleCopyClipboard = () => {
+    // navigator.clipboard.writeText(data);
     toast.success("Copied to clipboard");
   };
   return (
@@ -133,7 +133,7 @@ export function DetailsCustomers({ rowData, isOpen, setIsOpen }: DetailsProps) {
                           {...field}
                         />
                         <div
-                          onClick={() => handleCopyClipboard(field.value)}
+                          onClick={handleCopyClipboard}
                           className="absolute right-3 top-2.5 h-4 w-4 cursor-pointer text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100"
                           aria-label="Copy email"
                         >

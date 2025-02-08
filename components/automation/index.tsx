@@ -1,14 +1,12 @@
-import React from 'react'
+import React from "react";
 
 export function Automation() {
   return (
-    <div>Coming soon</div>
-  )
+    <div className="relative flex w-[300px] translate-y-4 justify-center gap-2 bg-gradient-to-b from-black/80 to-black bg-clip-text pb-4 text-center text-5xl font-extrabold leading-tight text-transparent dark:from-white dark:to-[#AAAAAA] md:inline-block md:!w-full md:translate-y-[12px] md:py-0 lg:!mt-20 lg:text-6xl xl:leading-snug [&_p]:whitespace-nowrap">
+      Coming soon
+    </div>
+  );
 }
-
-
-
-
 
 // "use client";
 
@@ -93,7 +91,7 @@ export function Automation() {
 //   hours: number;
 // }
 
-// export default function Page() {
+// export function Automation() {
 //   const [customersID, setCustomersID] = useState<string[]>([]);
 //   const [activeTable, setActiveTable] = useState<boolean>(false);
 //   const [products, setProducts] = useState<Product[]>([]);
@@ -486,14 +484,13 @@ export function Automation() {
 //                   </div>
 
 //                   {/* Tabs para productos y servicios */}
-//                   <div className="mt-4 flex-grow">
+//                   {/* <div className="mt-4 flex-grow">
 //                     <Tabs defaultValue="product">
 //                       <TabsList className="grid w-full grid-cols-2">
 //                         <TabsTrigger value="product">Producto</TabsTrigger>
 //                         <TabsTrigger value="service">Servicio</TabsTrigger>
 //                       </TabsList>
 
-//                       {/* Contenido de Productos */}
 //                       <TabsContent value="product" className="space-y-4">
 //                         <div className="flex items-center justify-between">
 //                           <div className="font-semibold">Products</div>
@@ -509,7 +506,6 @@ export function Automation() {
 //                           <div className="h-22 mt-4 overflow-y-auto rounded-lg border lg:h-48">
 //                             <ScrollArea className="w-full overflow-x-auto">
 //                               <div className="w-full whitespace-nowrap">
-//                                 {/* Tabla de Productos */}
 //                                 <Table className="min-w-full">
 //                                   <TableHeader>
 //                                     <TableRow>
@@ -589,8 +585,6 @@ export function Automation() {
 //                           </div>
 //                         )}
 //                       </TabsContent>
-
-//                       {/* Contenido de Servicios */}
 //                       <TabsContent value="service" className="space-y-4">
 //                         <div className="flex items-center justify-between">
 //                           <div className="font-semibold">Service</div>
@@ -673,7 +667,7 @@ export function Automation() {
 //                         )}
 //                       </TabsContent>
 //                     </Tabs>
-//                   </div>
+//                   </div> */}
 //                 </div>
 //                 <div className="mt-4">
 //                   <div className="rounded-lg bg-secondary px-4 py-2">

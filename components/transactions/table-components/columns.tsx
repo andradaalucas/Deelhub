@@ -10,23 +10,34 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { deleteTransactions } from "@/services/transactions";
+// import { PDFDownloadLink } from '@react-pdf/renderer';
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { pdf } from "@react-pdf/renderer";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
+import { saveAs } from "file-saver";
+import dynamic from "next/dynamic";
 import { useState } from "react";
-import { ConfirmDelete } from "../../atom/confirm-delete";
-import { Transactions } from "../types";
 import { toast } from "sonner";
-import { ConfirmAction } from "@/components/atom/confirm-action";
+import { ConfirmDelete } from "../../atom/confirm-delete";
+import { PDFData } from "../../pdf-management";
+import { RowData, Transactions } from "../types";
 import { Details } from "./actions/details";
 import { Edit } from "./actions/edit";
-import { format } from "date-fns";
+// Carga dinámica del componente de la plantilla PDF
+// const InvoiceTemplate = dynamic<PDFData>(
+//   () => import("../../pdf-management/index").then((mod) => mod.InvoiceTemplate),
+//   {
+//     ssr: false,
+//   },
+// );
 
 const getStatusStyles = (status: any) => {
   switch (status) {
-    case "confirmed":
+    case "paid":
       return "bg-green-100 text-[#56663e]";
-    case "rejected":
+    case "canceled":
       return "bg-red-100 text-[#e14133]";
     default:
       return "bg-[#e2ecf3] text-[#0a85d1]";
@@ -34,18 +45,33 @@ const getStatusStyles = (status: any) => {
 };
 const getDotStatusStyles = (status: any) => {
   switch (status) {
-    case "confirmed":
+    case "paid":
       return "bg-[#56663e]";
-    case "rejected":
+    case "canceled":
       return "bg-[#e14133]";
     default:
       return "bg-[#0a85d1]";
   }
 };
 
+const handleDownloadPDF = async (invoiceData: PDFData) => {
+  // try {
+  //   // Primero generamos el documento
+  //   const pdfDoc = <InvoiceTemplate {...invoiceData} />;
+
+  //   // Luego lo convertimos a blob
+  //   const blob = await pdf(pdfDoc).toBlob();
+
+  //   // Finalmente lo descargamos
+  //   saveAs(blob, `invoice_${invoiceData.id}.pdf`);
+  // } catch (error) {
+  //   console.error("Error al generar el PDF:", error);
+  //   // Aquí puedes agregar alguna notificación al usuario
+  // }
+};
+
 const ActionsCell = ({ row }: any) => {
   const [isOpenDetails, setIsOpenDetails] = useState(false);
-  const [isOpenAction, setIsOpenAction] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [actionExecuteData, setActionExecuteData] = useState({});
@@ -53,12 +79,12 @@ const ActionsCell = ({ row }: any) => {
   const queryClient = useQueryClient();
 
   const deleteTransaction = useMutation({
-    mutationFn: (id: any) => deleteTransactions(id), // Se asegura de pasar el `id`
+    mutationFn: (id: any) => deleteTransactions(id),
     onSuccess: () => {
       queryClient.invalidateQueries(["transactions"]);
     },
     onError: () => {
-      queryClient.invalidateQueries(["transactions"]); // Para asegurarse de actualizar el estado en caso de error también
+      queryClient.invalidateQueries(["transactions"]);
     },
   });
 
@@ -66,20 +92,14 @@ const ActionsCell = ({ row }: any) => {
     const promise = deleteTransaction.mutateAsync(row.original.id);
     toast.promise(promise, {
       loading: "Deleting transaction...",
-      success: () => {
-        return "Transaction deleted successfully!";
-      },
+      success: "Transaction deleted successfully!",
       error: "Failed to delete transaction. Please try again.",
     });
-    promise.then(() => setIsOpenDelete(!isOpenDelete));
+    promise.then(() => setIsOpenDelete(false));
   };
 
-  const handleDetails = () => {
-    setIsOpenDetails(!isOpenDetails);
-  };
-  const handleEdit = () => {
-    setIsOpenEdit(!isOpenEdit);
-  };
+  const handleDetails = () => setIsOpenDetails(!isOpenDetails);
+  const handleEdit = () => setIsOpenEdit(!isOpenEdit);
   const handleDelete = () => {
     setActionExecuteData({
       title: "delete this payment",
@@ -90,18 +110,9 @@ const ActionsCell = ({ row }: any) => {
     setIsOpenDelete(!isOpenDelete);
   };
 
-  const handleCopyClipboard = (rowData: any) => {
+  const handleCopyClipboard = (rowData: RowData) => {
     navigator.clipboard.writeText(rowData?.id);
     toast.success("Copied to clipboard");
-  };
-  const handleGeneratePDF = () => {
-    setIsOpenAction(!isOpenAction);
-    setActionExecuteData({
-      title: "download the PDF of this transaction",
-      description:
-        "This action will generate a PDF file of the transaction's data.",
-      rowData: row.original,
-    });
   };
 
   return (
@@ -131,20 +142,11 @@ const ActionsCell = ({ row }: any) => {
             >
               Copy ID
             </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer"
-              onClick={() => handleCopyClipboard(row.original)}
-            >
-              Copy Access Token
+            <DropdownMenuItem onClick={() => handleDownloadPDF(row.original)}>
+              Download Invoice
             </DropdownMenuItem>
             <DropdownMenuItem
-              className="cursor-pointer"
-              onClick={handleGeneratePDF}
-            >
-              Download PDF
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer text-red-500 hover:bg-[red-500] hover:text-white"
+              className="cursor-pointer text-red-500 hover:bg-red-500 hover:text-white"
               onClick={handleDelete}
             >
               Delete
@@ -157,14 +159,6 @@ const ActionsCell = ({ row }: any) => {
         setIsOpen={setIsOpenDelete}
         actionExecuteData={actionExecuteData}
         actionToExecuteFunction={actionToExecuteFunction}
-      />
-      <ConfirmAction
-        isOpen={isOpenAction}
-        setIsOpen={setIsOpenAction}
-        actionExecuteData={actionExecuteData}
-        actionToExecuteFunction={() => {
-          console.log("Action Excecuted");
-        }}
       />
       <Details
         isOpen={isOpenDetails}
@@ -179,6 +173,8 @@ const ActionsCell = ({ row }: any) => {
     </div>
   );
 };
+
+export default ActionsCell;
 
 export const columns: ColumnDef<Transactions>[] = [
   {
@@ -250,7 +246,7 @@ export const columns: ColumnDef<Transactions>[] = [
       const issueDate = row.getValue("issue_date") as string | Date | null;
       return (
         <div className="flex w-full justify-between whitespace-nowrap text-left lowercase">
-          {issueDate ? format(new Date(issueDate), "MM/dd/yyyy") : ""}
+          {issueDate ? format(new Date(issueDate), "MM/dd/yyyy") : "-"}
         </div>
       );
     },
@@ -265,7 +261,7 @@ export const columns: ColumnDef<Transactions>[] = [
 
       return (
         <div className="flex w-full justify-between whitespace-nowrap text-left lowercase">
-          {dueDate ? format(new Date(dueDate), "MM/dd/yyyy") : ""}
+          {dueDate ? format(new Date(dueDate), "MM/dd/yyyy") : "-"}
         </div>
       );
     },

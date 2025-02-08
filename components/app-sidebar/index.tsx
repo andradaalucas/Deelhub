@@ -1,18 +1,4 @@
 import {
-  ArchiveIcon,
-  BarChart2Icon,
-  ChevronUp,
-  Command,
-  LandmarkIcon,
-  LifeBuoy,
-  MessageSquareText,
-  SettingsIcon,
-  Tags,
-  User2,
-  UsersIcon,
-  Workflow,
-} from "lucide-react";
-import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -25,117 +11,112 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { createClient } from "@/utils/supabase/server";
+  BarChart2Icon,
+  Cog,
+  GitPullRequestCreate,
+  LandmarkIcon,
+  LifeBuoy,
+  MessageSquareText,
+  Plus,
+  UsersIcon,
+} from "lucide-react";
 import Link from "next/link";
-import { ModeToggle } from "../ui/toggle";
+import { FeedbackForm } from "../feedback";
+import useSession from "@/utils/supabase/use-session";
+import { NavUser } from "./nav-user";
 
 // Menu items.
 const items = [
   {
     title: "Home",
-    url: "/in/dashboard",
+    url: "/",
     icon: LifeBuoy,
   },
   {
     title: "Customers",
-    url: "/in/customers",
+    url: "/customers",
     icon: UsersIcon,
   },
   {
     title: "Insights AI",
-    url: "/in/insights",
+    url: "/insights",
     icon: BarChart2Icon,
   },
   {
     title: "Automation",
-    url: "/in/automation",
-    icon: SettingsIcon,
+    url: "/automation",
+    icon: Cog,
   },
   {
     title: "Billing",
-    url: "/in/billing",
+    url: "/billing",
     icon: LandmarkIcon,
   },
   {
-    title: "Vault",
-    url: "/in/vault",
-    icon: ArchiveIcon,
+    title: "Features",
+    url: "/features",
+    icon: GitPullRequestCreate,
   },
 ];
 
-export async function AppSidebar() {
-  const supabase = createClient();
-
-  // Obtén el usuario del servidor
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+export function AppSidebar() {
+  const user = useSession();
+  const fullName = user?.user.user_metadata.full_name;
+  const fallback = fullName?.slice(0, 2);
+  const data = {
+    user: {
+      name: fullName,
+      email: user?.user.user_metadata.email,
+      avatar: user?.user.user_metadata.picture,
+      fallback: fallback,
+    },
+  };
   return (
-    <Sidebar>
-      <SidebarHeader></SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
+    <>
+      <Sidebar>
+        <SidebarHeader></SidebarHeader>
+        <SidebarContent>
+          <SidebarGroup className="flex px-4 pb-0">
+            <div className="font-semibold">Deelhub</div>
+          </SidebarGroup>
+          <SidebarGroup>
+            <SidebarGroupLabel>Application</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {items.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+            <SidebarGroupLabel>Projects</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
+                    {/* <Link href={item.url}> */}
+                    {/* <item.icon /> */}
+                    <Link href="/projects">
+                      <Plus />
+                      <span>Add Project</span>
                     </Link>
+                    {/* </Link> */}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href="get-started">
-                <MessageSquareText />
-                <span>Help</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton>
-                  <User2 /> Account
-                  <ChevronUp className="ml-auto" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                side="top"
-                className="w-[--radix-popper-anchor-width]"
-              >
-                <DropdownMenuItem>
-                  <span className="cursor-pointer">Billing</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span className="cursor-pointer text-red-600">Sign out</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel>Preferences</DropdownMenuLabel>
-                <ModeToggle />
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-    </Sidebar>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter>
+          <NavUser user={data.user} />
+        </SidebarFooter>
+      </Sidebar>
+    </>
   );
 }

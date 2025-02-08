@@ -1,12 +1,56 @@
-import { type NextRequest } from 'next/server'
-import { updateSession } from '@/utils/supabase/middleware'
+import { NextResponse, type NextRequest } from "next/server";
+import { createSupabaseReqResClient } from "./utils/supabase/server";
 
 export async function middleware(request: NextRequest) {
-  const updatedSession = await updateSession(request)
-  console.log("user desde middleware", updatedSession);
-  return updatedSession
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  });
+
+  const supabase = createSupabaseReqResClient(request, response);
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Protect root route and other routes except public routes
+  if (!user && request.nextUrl.pathname === '/') {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  // Protect account and other private routes
+  if (!user && request.nextUrl.pathname.startsWith("/customers")) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+  if (!user && request.nextUrl.pathname.startsWith("/insights")) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+  if (!user && request.nextUrl.pathname.startsWith("/automation")) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+  if (!user && request.nextUrl.pathname.startsWith("/billing")) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  // You can add more route protections here as needed
+  // For example:
+  // if (!user && request.nextUrl.pathname.startsWith("/dashboard")) {
+  //   return NextResponse.redirect(new URL("/login", request.url));
+  // }
+
+  return response;
 }
 
 export const config = {
-  matcher: '/',
-}
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public routes
+     */
+    '/((?!_next/static|_next/image|favicon.ico|login|signup|reset-password).*)'
+  ],
+};

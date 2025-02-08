@@ -5,13 +5,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowUpIcon, ShoppingBag } from "lucide-react";
+import { ArrowUpIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
 export function Overview() {
   const [isLoadingOverview, setIsLoadingOverview] = useState(true);
+
+
 
   const cardData = [
     {
@@ -35,25 +37,23 @@ export function Overview() {
       description: "This month",
     },
   ];
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoadingOverview(false);
-    }, 2000);
-  }, []);
+
+  const topCustomers = [
+    "Frank Miller",
+    "Grace Lee",
+    "Henry Wilson",
+    "Ivy Chen",
+    "Jack Taylor",
+  ];
 
   return (
     <div className="mx-auto w-full max-w-5xl grid-cols-2 gap-6">
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {cardData.map((card, index) => (
-            <Card
-              key={index}
-              className="flex flex-col justify-between shadow-md"
-            >
+            <Card key={index} className="flex flex-col justify-between shadow-md">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
-                  {card.title}
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <div className="px-6 font-mono text-2xl font-semibold">
@@ -76,46 +76,44 @@ export function Overview() {
         <div className="lg:col-span-1">
           <Card className="flex flex-col justify-between shadow-md">
             <CardHeader>
-              <CardTitle className="text-sm font-medium">
-                Top Spenders
-              </CardTitle>
-              <CardDescription className="text-xs">
-                Customers with highest total spend
-              </CardDescription>
+              <CardTitle className="text-sm font-medium">Top Spenders</CardTitle>
+              <CardDescription className="text-xs">Customers with highest total spend</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {[
-                  "Frank Miller",
-                  "Grace Lee",
-                  "Henry Wilson",
-                  "Ivy Chen",
-                  "Jack Taylor",
-                ].map((name, index) => (
-                  <div key={name} className="flex items-center">
-                    <Avatar className="h-9 w-9">
-                      <AvatarImage
-                        src={`/placeholder.svg?height=36&width=36`}
-                        alt={name}
-                      />
-                      <AvatarFallback>
-                        {name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="ml-4 space-y-1">
-                      <p className="text-sm font-medium leading-none">{name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        ${(5000 - index * 500).toLocaleString()}
-                      </p>
-                    </div>
-                    <Badge className="ml-auto" variant="secondary">
-                      Top {index + 1}
-                    </Badge>
-                  </div>
-                ))}
+                {isLoadingOverview
+                  ? Array.from({ length: 5 }).map((_, index) => (
+                      <div key={index} className="flex items-center animate-pulse">
+                        <div className="h-9 w-9 rounded-full bg-zinc-200 dark:bg-[#2b2b2b]" />
+                        <div className="ml-4 space-y-1 w-full">
+                          <div className="h-4 w-32 bg-zinc-200 dark:bg-[#2b2b2b]" />
+                          <div className="h-3 w-24 bg-zinc-200 dark:bg-[#2b2b2b]" />
+                        </div>
+                        <div className="h-6 w-12 bg-zinc-200 dark:bg-[#2b2b2b] ml-auto" />
+                      </div>
+                    ))
+                  : topCustomers.map((name, index) => (
+                      <div key={name} className="flex items-center">
+                        <Avatar className="h-9 w-9">
+                          <AvatarImage src={""} alt={name} />
+                          <AvatarFallback>
+                            {name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="ml-4 space-y-1">
+                          <p className="text-sm font-medium leading-none">{name}</p>
+                          <p className="text-sm text-muted-foreground">
+                            ${(5000 - index * 500).toLocaleString()}
+                          </p>
+                        </div>
+                        <Badge className="ml-auto" variant="secondary">
+                          Top {index + 1}
+                        </Badge>
+                      </div>
+                    ))}
               </div>
             </CardContent>
           </Card>

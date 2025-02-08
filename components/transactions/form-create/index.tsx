@@ -60,11 +60,20 @@ import { toast } from "sonner";
 import { formSchemaTransactions, FormSchemaTransactions } from "../schemas";
 
 export function CreateForm() {
+  const [isFocused, setIsFocused] = useState(false);
+  const [hasContent, setHasContent] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleFocus = () => setIsFocused(true);
+  const handleBlur = (e: any) => {
+    setIsFocused(false);
+    setHasContent(e.target.value.length > 0);
+  };
+  const handleChange = (e: any) => setHasContent(e.target.value.length > 0);
+
   const form = useForm<FormSchemaTransactions>({
     resolver: zodResolver(formSchemaTransactions),
     defaultValues: {
-      issueDate: new Date(),
       customers: [],
       currency: "USD",
       taxRate: 0,
@@ -129,7 +138,7 @@ export function CreateForm() {
     };
     const promise = createTransaction.mutateAsync(enrichedData);
     toast.promise(promise, {
-      loading: "Uploading transaction...",
+      loading: "Creating transaction...",
       success: () => {
         return "Transaction created successfully!";
       },
@@ -175,8 +184,8 @@ export function CreateForm() {
                         control={form.control}
                         name="customers"
                         render={({ field }) => (
-                          <FormItem className="w-full">
-                            <FormLabel>Customers</FormLabel>
+                          <FormItem className="w-full text-xs">
+                            <FormLabel className="text-xs">Customers</FormLabel>
                             <FormControl>
                               <MultiSelect
                                 options={customers.map((customer) => ({
@@ -200,9 +209,9 @@ export function CreateForm() {
                   <div className="mt-2">
                     <Link
                       className="flex cursor-pointer items-center text-xs font-medium hover:underline md:text-sm lg:text-sm"
-                      href="/in/customers"
+                      href="/customers"
                     >
-                      <span>To add customers</span>
+                      <span className="text-xs">To add customers</span>
                       <ArrowUpRight className="ml-1 h-4 w-4" />
                     </Link>
                   </div>
@@ -215,7 +224,7 @@ export function CreateForm() {
                     name="issueDate"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Issue Date</FormLabel>
+                        <FormLabel className="text-xs">Issue Date</FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
                             <FormControl>
@@ -248,11 +257,11 @@ export function CreateForm() {
                     control={form.control}
                     name="dueDate"
                     render={({ field }) => {
-                      const issueDate = form.watch("issueDate");
+                      const issueDate = form.watch("issueDate") || true;
 
                       return (
                         <FormItem>
-                          <FormLabel>Due Date</FormLabel>
+                          <FormLabel className="text-xs">Due Date</FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
                               <FormControl>
@@ -293,7 +302,7 @@ export function CreateForm() {
                     name="currency"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Currency</FormLabel>
+                        <FormLabel className="text-xs">Currency</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
@@ -348,12 +357,11 @@ export function CreateForm() {
                     name="taxRate"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Tax Rate (%)</FormLabel>
+                        <FormLabel className="text-xs">Tax Rate (%)</FormLabel>
                         <FormControl>
                           <Input
                             type="number"
                             className="font-mono"
-                            max={100}
                             min={0}
                             {...field}
                           />
@@ -365,18 +373,7 @@ export function CreateForm() {
                 </div>
 
                 <div className="mt-4 flex-grow">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-semibold">Items</h3>
-                    <Button
-                      onClick={addProduct}
-                      type="button"
-                      size="sm"
-                      className="font-semibold"
-                    >
-                      Add item
-                    </Button>
-                  </div>
-
+                  <h3 className="text-xs font-semibold">Items</h3>
                   <ScrollArea>
                     <div className="mt-4 h-28 overflow-y-auto rounded-lg border md:h-28 lg:h-48">
                       <Table>
@@ -395,6 +392,8 @@ export function CreateForm() {
                                 <Input
                                   placeholder="Name"
                                   {...form.register(`products.${index}.name`)}
+                                  className={`mt-1 resize-none rounded-none pb-0.5 shadow-none`}
+                                 
                                 />
                               </TableCell>
                               <TableCell>
@@ -407,6 +406,7 @@ export function CreateForm() {
                                       valueAsNumber: true,
                                     },
                                   )}
+                                  className={`mt-1 resize-none rounded-none pb-0.5 shadow-none`}
                                 />
                               </TableCell>
                               <TableCell>
@@ -416,6 +416,7 @@ export function CreateForm() {
                                   {...form.register(`products.${index}.price`, {
                                     valueAsNumber: true,
                                   })}
+                                  className={`mt-1 resize-none rounded-none pb-0.5 shadow-none`}
                                 />
                               </TableCell>
                               <TableCell>
@@ -432,8 +433,16 @@ export function CreateForm() {
                       </Table>
                     </div>
                   </ScrollArea>
+                  <Button
+                    className="p-0 text-xs"
+                    variant="link"
+                    type="button"
+                    onClick={addProduct}
+                  >
+                    Add Items
+                  </Button>
                   {(form.formState.errors as any)[""] && (
-                    <div className="mt-4 flex items-center gap-2 rounded-lg border p-4 text-xs text-zinc-600">
+                    <div className="mt-2 flex items-center gap-2 rounded-lg border p-4 text-xs text-zinc-600">
                       <TriangleAlert className="h-4 w-4" />
                       <div>{(form.formState.errors as any)[""].message}.</div>
                     </div>
@@ -441,9 +450,9 @@ export function CreateForm() {
                 </div>
               </div>
 
-              <div className="mt-12 px-4 pb-4 md:px-8 md:pb-8 lg:px-8">
-                <div className="rounded-lg bg-secondary px-4 py-2">
-                  <h3 className="mb-2 text-lg font-semibold">Resumen</h3>
+              <div className="px-4 pb-4 md:px-8 md:pb-8 lg:px-8">
+                <div className="bg-secondary px-4 py-2">
+                  {/* <h3 className="mb-2 text-lg font-semibold">Resumen</h3> */}
                   <div className="grid gap-2 text-sm">
                     <div className="flex justify-between">
                       <div>Subtotal</div>
@@ -452,11 +461,11 @@ export function CreateForm() {
                       </div>
                     </div>
                     <div className="flex justify-between">
-                      <div>Tax </div>
+                      <div>Tax</div>
                       <div className="font-mono">{taxRate}%</div>
                     </div>
                     <div className="mt-2 flex justify-between border-t pt-2 text-lg font-semibold">
-                      <span>Total Cost</span>
+                      <span>Total</span>
                       <span className="font-mono">$ {calculateTotal()}</span>
                     </div>
                   </div>
