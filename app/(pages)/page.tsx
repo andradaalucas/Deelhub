@@ -1,6 +1,5 @@
 "use client";
 import { DataTable } from "@/components/data-table";
-import AnalyticsDashboard from "@/components/transactions/overview/analitics-layout";
 import { OptionsAndCreate } from "@/components/transactions/table-components";
 import { columns } from "@/components/transactions/table-components/columns";
 import { getAllTransactions } from "@/services/transactions";
@@ -18,7 +17,6 @@ export default function Page() {
 
   return (
     <>
-      {/* <AnalyticsDashboard /> */}
       <DataTable
         columns={columns}
         data={transactions || []}

@@ -36,7 +36,7 @@ export default function HomeLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <QueryClientProvider client={queryClient}>
+          <QueryClientProvider client={queryClient}> 
             <NextUIProvider>
               <SidebarProvider>
                 {pathname === "/login" ? (

@@ -14,15 +14,6 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Define public routes that don't require authentication
-  const publicRoutes = ['/login', '/signup', '/reset-password'];
-
-  // Check if the current path is a public route
-  const isPublicRoute = publicRoutes.some(route => 
-    request.nextUrl.pathname === route || 
-    request.nextUrl.pathname.startsWith(`${route}/`)
-  );
-
   // Protect root route and other routes except public routes
   if (!user && request.nextUrl.pathname === '/') {
     return NextResponse.redirect(new URL("/login", request.url));
