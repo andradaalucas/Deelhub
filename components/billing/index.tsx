@@ -365,10 +365,10 @@ export function Billing() {
                 )}
               />
 
-              <CardFooter className="flex justify-end rounded-b-lg border bg-zinc-100/75 py-2 dark:bg-zinc-900/75">
+              <CardFooter className="flex justify-end rounded-b-lg border bg-zinc-100/75 p-6 py-2 dark:bg-zinc-900/75">
                 <Button
                   type="submit"
-                  className="mx-2 bg-blue px-4 py-2 font-semibold text-white hover:bg-hoverBlue"
+                  className="mx-14 bg-blue px-4 py-2 font-semibold text-white hover:bg-hoverBlue"
                 >
                   Save
                 </Button>
