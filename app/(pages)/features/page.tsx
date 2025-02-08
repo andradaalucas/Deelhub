@@ -34,13 +34,6 @@ const features: Feature[] = [
 export default function Page() {
   return (
     <div className="flex flex-col items-center justify-center px-6 py-8">
-      <div className="font-heading text-pretty text-center text-[29px] font-semibold tracking-tighter text-gray-900 sm:text-[32px] md:text-[46px]">
-        What functionality do you need?
-      </div>
-      <div className="mt-16 space-x-4">
-        <Button variant="outline">Schedule a Meeting</Button>
-        <Button>Contact Sales</Button>
-      </div>
       <div className="flex items-center justify-center px-6 py-8">
         {features.map((feature, index) => (
           <div
