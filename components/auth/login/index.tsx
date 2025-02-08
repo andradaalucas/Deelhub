@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { createSupabaseBrowserClient } from "@/utils/supabase/browser";
 import Image from "next/image";
+import { Google } from "@/components/ui/brands";
 
 export default function LoginButton(props: { nextUrl?: string }) {
   const supabase = createSupabaseBrowserClient();
@@ -20,12 +21,7 @@ export default function LoginButton(props: { nextUrl?: string }) {
 
   return (
     <Button onClick={handleLogin} className="w-full rounded-none">
-      <Image
-        src="/assets/images/google-brand-icon.png"
-        width={20}
-        height={20}
-        alt="google-icon"
-      />
+      <Google className=" h-12 w-12 grayscale" />
       Continue with Google
     </Button>
   );
