@@ -10,17 +10,14 @@ export default function Page() {
             Login to Deelhub.
           </h1>
           <p className="mb-6 text-left text-2xl font-medium text-[#878787]">
-            Automate financial tasks, stay organized, and make informed
-            decisions effortlessly.
+            Automate budgets, simplify client management, and stay organized.
           </p>
         </div>
         <div className="flex justify-center">
           <LoginButton />
         </div>
         <div className="mt-6">
-          <div className="font-semibold">
-            Build with
-          </div>
+          <div className="font-semibold">Build with</div>
           <div className="flex gap-4">
             <Vercel className="h-9 w-9 grayscale" />
             <Nextjs className="h-9 w-9 grayscale" />
