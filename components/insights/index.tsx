@@ -7,28 +7,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  DollarSignIcon,
+  TrendingUpIcon
+} from "lucide-react";
 import { useTheme } from "next-themes";
 import {
-  LineChart,
   Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
+  LineChart,
   ResponsiveContainer,
+  Tooltip
 } from "recharts";
-import {
-  ArrowUpIcon,
-  ArrowDownIcon,
-  TrendingUpIcon,
-  DollarSignIcon,
-  UsersIcon,
-  PercentIcon,
-  RefreshCcwIcon,
-  PieChartIcon,
-  ClockIcon,
-} from "lucide-react";
 
 const data = [
   {
