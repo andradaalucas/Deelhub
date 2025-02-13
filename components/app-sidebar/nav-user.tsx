@@ -84,24 +84,8 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4" />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
               <ModeToggle />
-              <DropdownMenuItem className="flex items-center gap-2">
-                <BadgeCheck className="h-4 w-4" />
-                Account
-              </DropdownMenuItem>
-
-              <DropdownMenuItem className="flex items-center gap-2">
-                <CreditCard className="h-4 w-4" />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-2">
+              <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
                 <Bell className="h-4 w-4" />
                 Notifications
               </DropdownMenuItem>
