@@ -56,19 +56,15 @@ const ActionsCell = ({ row }: any) => {
     mutationFn: (id: any) => deleteCustomers(id), // Se asegura de pasar el `id`
     onSuccess: () => {
       queryClient.invalidateQueries(["customers"]);
-    },
-    onError: () => {
-      queryClient.invalidateQueries(["customers"]); // Para asegurarse de actualizar el estado en caso de error también
-    },
+      queryClient.invalidateQueries(["statistics"]);
+    }
   });
   const updateCustomer = useMutation({
     mutationFn: (data: any) => updateCustomers(data), // Se asegura de pasar el `id`
     onSuccess: () => {
       queryClient.invalidateQueries(["customers"]);
-    },
-    onError: () => {
-      queryClient.invalidateQueries(["customers"]); // Para asegurarse de actualizar el estado en caso de error también
-    },
+      queryClient.invalidateQueries(["statistics"]);
+    }
   });
 
   const handleEnabledOrDisabled = () => {
