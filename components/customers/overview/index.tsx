@@ -53,7 +53,7 @@ export function Overview() {
           {cardData.map((card, index) => (
             <Card key={index} className="flex flex-col justify-between shadow-md">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
+                <CardTitle className="text-sm font-semibold">{card.title}</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <div className="px-6 font-mono text-2xl font-semibold">
@@ -76,7 +76,7 @@ export function Overview() {
         <div className="lg:col-span-1">
           <Card className="flex flex-col justify-between shadow-md">
             <CardHeader>
-              <CardTitle className="text-sm font-medium">Top Spenders</CardTitle>
+              <CardTitle className="text-sm font-semibold">Top Spenders</CardTitle>
               <CardDescription className="text-xs">Customers with highest total spend</CardDescription>
             </CardHeader>
             <CardContent>

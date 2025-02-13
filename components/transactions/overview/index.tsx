@@ -44,7 +44,7 @@ export function AnalyticsDashboard({
         <Card className="shadow-md">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-semibold">
-              Budget Quantity
+              Quantity
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0">

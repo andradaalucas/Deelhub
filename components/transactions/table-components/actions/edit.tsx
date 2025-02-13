@@ -96,19 +96,18 @@ export function Edit({
   const updateTransaction = useMutation({
     mutationFn: updateTransactions,
     onSuccess: () => {
-      queryClient.invalidateQueries(["transactions", "statistics"]);
-    },
-    onError: () => {
-      queryClient.invalidateQueries(["transactions", "statistics"]);
+      queryClient.invalidateQueries(["transactions"]);
+      queryClient.invalidateQueries(["statistics"]);
     },
   });
+  
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     const promise = updateTransaction.mutateAsync(data);
     toast.promise(promise, {
       loading: "Uploading transaction...",
       success: () => {
-        return "transaction updated successfully";
+        return "Transaction updated successfully";
       },
       error: "Failed to updated transaction. Please try again.",
     });
