@@ -1,54 +1,121 @@
-import { Card } from "@/components/ui/card";
-import {
-  ArrowUpRight,
-  RotateCw,
-  ArrowDown,
-  Zap,
-  Users,
-  Activity,
-} from "lucide-react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { ArrowUpIcon } from "lucide-react";
 
-interface AnalyticsCardProps {
-  title: string;
-  value: string | number;
-  icon?:
-    | "revenue"
-    | "conversion"
-    | "bounce"
-    | "session"
-    | "newUsers"
-    | "activeUsers";
-  gradient?: "blue" | "purple" | "peach";
+interface AnalyticsDashboardProps {
+  data:
+    | {
+        total: string;
+        paid: { total: string; count: number };
+        pending: { total: string; count: number };
+        canceled: { total: string; count: number };
+        invoices: { total: string; count: number };
+      }
+    | undefined;
+  isLoading: boolean;
+  isError: boolean;
 }
 
-export function AnalyticsCard({
-  title,
-  value,
-  icon,
-  gradient,
-}: AnalyticsCardProps) {
-  const gradientClasses = {
-    blue: "bg-gradient-to-br from-gray-50 to-blue-100",
-    purple: "bg-gradient-to-br from-purple-50 to-purple-100",
-    peach: "bg-gradient-to-br from-orange-50 to-orange-100",
-  };
-
-  const icons = {
-    revenue: <ArrowUpRight className="h-5 w-5" />,
-    conversion: <RotateCw className="h-5 w-5" />,
-    bounce: <ArrowDown className="h-5 w-5" />,
-    session: <Zap className="h-5 w-5" />,
-    newUsers: <Users className="h-5 w-5" />,
-    activeUsers: <Activity className="h-5 w-5" />,
-  };
-
+export function AnalyticsDashboard({
+  data,
+  isLoading,
+  isError,
+}: AnalyticsDashboardProps) {
   return (
-    <Card className={`p-6 ${gradient ? gradientClasses[gradient] : ""}`}>
-      <div className="mb-4 flex items-start justify-between">
-        <h3 className="text-sm font-medium text-gray-600">{title}</h3>
-        {icon && icons[icon]}
+    <div className="mx-auto w-full max-w-5xl p-2">
+      <div className="grid grid-cols-3 grid-rows-2 gap-4">
+        <Card className="col-span-2 flex flex-col justify-between shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-semibold">Revenue</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="flex w-full justify-between px-6 font-mono text-2xl font-semibold">
+              <div className="flex w-full flex-col">
+                {isLoading || isError ? (
+                  <div className="h-8 w-full animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
+                ) : (
+                  <span>USD ${data?.total}</span>
+                )}
+              </div>
+            </div>
+            <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75"></div>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-semibold">
+              Budget Quantity
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="flex w-full justify-between px-6 font-mono text-2xl font-semibold">
+              {isLoading || isError ? (
+                <div className="h-8 w-full animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
+              ) : (
+                <span>{data?.invoices?.count}</span>
+              )}
+            </div>
+            <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75"></div>
+          </CardContent>
+        </Card>
+        <Card className="shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+              <div className="h-2 w-2 rounded-full bg-[#56663e]"></div>
+              <div>Paid</div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="flex w-full justify-between px-6 font-mono text-2xl font-semibold">
+              {isLoading || isError ? (
+                <div className="h-8 w-full animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
+              ) : (
+                <span>USD ${data?.paid?.total}</span>
+              )}
+            </div>
+            <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75"></div>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+              <div className="h-2 w-2 rounded-full bg-[#0a85d1]"></div>
+              <div>Pending</div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="flex w-full justify-between px-6 font-mono text-2xl font-semibold">
+              {isLoading || isError ? (
+                <div className="h-8 w-full animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
+              ) : (
+                <span>USD ${data?.pending?.total}</span>
+              )}
+            </div>
+            <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75"></div>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+              <div className="h-2 w-2 rounded-full bg-[#e14133]"></div>
+
+              <div>Canceled</div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="flex w-full justify-between px-6 font-mono text-2xl font-semibold">
+              {isLoading || isError ? (
+                <div className="h-8 w-full animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
+              ) : (
+                <span>USD ${data?.canceled?.total}</span>
+              )}
+            </div>
+            <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75"></div>
+          </CardContent>
+        </Card>
       </div>
-      <div className="text-3xl font-bold">{value}</div>
-    </Card>
+    </div>
   );
 }

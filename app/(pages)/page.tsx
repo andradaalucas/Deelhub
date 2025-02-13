@@ -1,6 +1,6 @@
 "use client";
 import { DataTable } from "@/components/data-table";
-import AnalyticsDashboard from "@/components/transactions/overview/analitics-layout";
+import { AnalyticsDashboard } from "@/components/transactions/overview";
 import { OptionsAndCreate } from "@/components/transactions/table-components";
 import { columns } from "@/components/transactions/table-components/columns";
 import { getAllStatistics, getAllTransactions } from "@/services/transactions";
@@ -17,7 +17,7 @@ export default function Page() {
   });
   const {
     data: statistics,
-    isLoading : isLoadingStatistics,
+    isLoading: isLoadingStatistics,
     isError: isErrorStatistics,
   } = useQuery(["statistics"], () => getAllStatistics(), {
     staleTime: 1000 * 60,
@@ -26,7 +26,11 @@ export default function Page() {
 
   return (
     <>
-      <AnalyticsDashboard data={statistics} isLoading={isLoadingStatistics} isError={isErrorStatistics} />
+      <AnalyticsDashboard
+        data={statistics}
+        isLoading={isLoadingStatistics}
+        isError={isErrorStatistics}
+      />
       <DataTable
         columns={columns}
         data={transactions || []}
