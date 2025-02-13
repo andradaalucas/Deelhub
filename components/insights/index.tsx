@@ -59,9 +59,6 @@ export function Insights() {
   return (
     <div className="mx-auto w-full max-w-5xl grid-cols-2 gap-6 space-y-6 p-2">
       <div className="flex items-center justify-between">
-        <span className="text-sm text-gray-500 dark:text-gray-400">
-          Powered by Deelhub AI
-        </span>
       </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <Card className="flex flex-col justify-between shadow-md">
@@ -75,10 +72,6 @@ export function Insights() {
               <div className="flex flex-col">
                 <span>$3,700</span>
               </div>
-              {/* <div className="dark:[#52525b] flex flex-col text-[#333]">
-                <span>$3,700</span>
-                <span className="text-xs">Forecast</span>
-              </div> */}
             </div>
             <div className="mt-2 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
               <p className="flex items-center font-mono text-xs text-muted-foreground">

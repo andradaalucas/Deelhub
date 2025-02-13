@@ -1,14 +1,6 @@
 "use client";
 
-import { InvoiceTemplate } from "@/components/pdf-management";
 import { createSupabaseBrowserClient } from "@/utils/supabase/browser";
-import dynamic from 'next/dynamic';
-// const pdf = dynamic(
-//   () => import('@react-pdf/renderer').then(mod => mod.pdf),
-//   { ssr: false }
-// );
-
-import { ReactElement } from "react";
 import { getUserSession } from "../user_management";
 
 const supabase = createSupabaseBrowserClient();
@@ -58,160 +50,69 @@ export const getAllTransactions = async () => {
   }
 };
 
-// export const generatePdf = async (data: any) => {
-//   try {
-//     const documentElement: ReactElement | null = InvoiceTemplate(
-//       data,
-//     ) as ReactElement | null;
-//     if (!documentElement) {
-//       throw new Error("Failed to create PDF document element");
-//     }
+export const getAllStatistics = async () => {
+  try {
+    const { data, error } = await supabase
+      .from("transactions")
+      .select("total, currency, status")
+      .order("created_at", { ascending: false });
 
-//     // Generar el blob del PDF
-//     // const blob = await pdf(documentElement).toBlob();
+    if (error) {
+      throw error;
+    }
 
-//     // Crear un enlace temporal para descargar
-//     const link = document.createElement("a");
-//     // link.href = URL.createObjectURL(blob);
-//     link.download = "invoice.pdf";
+    // Inicializar contadores y sumas
+    let totalSum = 0;
+    let totalPaid = 0, countPaid = 0;
+    let totalPending = 0, countPending = 0;
+    let totalCanceled = 0, countCanceled = 0;
+    let totalInvoices = 0, countInvoices = 0;
 
-//     // Simular click para descargar
-//     document.body.appendChild(link);
-//     link.click();
+    // Recorrer las transacciones y calcular estadísticas
+    data?.forEach(({ total = 0, status }) => {
+      totalSum += total;
+      if (status === "paid") {
+        totalPaid += total;
+        countPaid++;
+      } else if (status === "pending") {
+        totalPending += total;
+        countPending++;
+      } else if (status === "canceled") {
+        totalCanceled += total;
+        countCanceled++;
+      }
 
-//     // Limpiar
-//     document.body.removeChild(link);
-//     URL.revokeObjectURL(link.href);
-//   } catch (error) {
-//     console.error("Error al generar el PDF:", error);
-//     // Manejar el error según tus necesidades
-//   }
-// };
+      // Contar las facturas (asumiendo que 'invoice' es un estado o algún campo)
+      // Si quieres que cuente todas las transacciones (sin importar el estado), puedes agregar una condición aquí
+      totalInvoices += total;
+      countInvoices++;
+    });
 
-// export const generatePdf = async (rowData: RowData) => {
-//   // Crear el contenido HTML del PDF
-//   const htmlContent = `
-//     <!DOCTYPE html>
-//     <html lang="en">
-//       <head>
-//         <meta charset="UTF-8" />
-//         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-//         <title>Invoice</title>
-//         <style>
-//           body {
-//             font-family: Arial, sans-serif;
-//             margin: 0;
-//             padding: 20px;
-//           }
-//           h1 {
-//             font-size: 24px;
-//             margin-bottom: 10px;
-//           }
-//           .header, .footer {
-//             text-align: center;
-//             margin-bottom: 20px;
-//           }
-//           .details, .items, .totals {
-//             width: 100%;
-//             margin-bottom: 20px;
-//           }
-//           .details td {
-//             padding: 5px;
-//             vertical-align: top;
-//           }
-//           .items th, .items td {
-//             text-align: left;
-//             padding: 5px;
-//             border-bottom: 1px solid #ddd;
-//           }
-//           .items th {
-//             font-weight: bold;
-//           }
-//           .totals td {
-//             text-align: right;
-//             padding: 5px;
-//           }
-//           .totals td:last-child {
-//             font-weight: bold;
-//           }
-//         </style>
-//       </head>
-//       <body>
-//         <div class="header">
-//           <h1>Invoice</h1>
-//           <p>Invoice number: ${rowData.id}</p>
-//           <p>Date of issue: March 1, 2024</p>
-//         </div>
-//         <table class="details">
-//           <tr>
-//             <td>
-//               <strong>From:</strong><br />
-//               Vercel Inc.<br />
-//               440 N Barranca Ave #4133<br />
-//               Covina, California 91723<br />
-//               United States<br />
-//               vercel.com
-//             </td>
-//             <td>
-//               <strong>Bill to:</strong><br />
-//             </td>
-//           </tr>
-//         </table>
-//         <table class="items">
-//           <thead>
-//             <tr>
-//               <th>Description</th>
-//               <th>Qty</th>
-//               <th>Unit price</th>
-//               <th>Amount</th>
-//             </tr>
-//           </thead>
-//           <tbody>
+    // Formatear los totales con separadores y 2 decimales
+    const formatNumber = (num: number) =>
+      num.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
 
-//           </tbody>
-//         </table>
-//         <table class="totals">
-//           <tr>
-//             <td>Subtotal:</td>
-//           </tr>
-//           <tr>
-//             <td>Total:</td>
-//             <td>$${rowData.total.toFixed(2)}</td>
-//           </tr>
-//         </table>
-//         <div class="footer">
-//           <p>
-//             To learn more about or to discuss your invoice, please visit
-//             <a href="http://vercel.com/support">Vercel Support</a>.
-//           </p>
-//         </div>
-//       </body>
-//     </html>
-//   `;
-
-//   // Generar el PDF con Puppeteer
-//   const browser = await puppeteer.launch();
-//   const page = await browser.newPage();
-
-//   // Configurar el contenido HTML
-//   await page.setContent(htmlContent, { waitUntil: "load" });
-
-//   // Generar el archivo PDF
-//   const pdfBuffer = await page.pdf({ format: "A4" });
-
-//   await browser.close();
-
-//   // Descargar el PDF en el cliente
-//   const blob = new Blob([pdfBuffer], { type: "application/pdf" });
-//   const url = URL.createObjectURL(blob);
-//   const a = document.createElement("a");
-//   a.href = url;
-//   a.download = `invoice_${rowData.id}.pdf`;
-//   document.body.appendChild(a);
-//   a.click();
-//   document.body.removeChild(a);
-//   URL.revokeObjectURL(url);
-// };
+    return {
+      total: formatNumber(totalSum),
+      paid: { total: formatNumber(totalPaid), count: countPaid },
+      pending: { total: formatNumber(totalPending), count: countPending },
+      canceled: { total: formatNumber(totalCanceled), count: countCanceled },
+      invoices: { total: formatNumber(totalInvoices), count: countInvoices },
+    };
+  } catch (error) {
+    console.log("Error on fetch statistics", error);
+    return {
+      total: "0.00",
+      paid: { total: "0.00", count: 0 },
+      pending: { total: "0.00", count: 0 },
+      canceled: { total: "0.00", count: 0 },
+      invoices: { total: "0.00", count: 0 },
+    };
+  }
+};
 
 export const createTransactions = async (data: any) => {
   const {

@@ -96,10 +96,10 @@ export function Edit({
   const updateTransaction = useMutation({
     mutationFn: updateTransactions,
     onSuccess: () => {
-      queryClient.invalidateQueries(["transactions"]);
+      queryClient.invalidateQueries(["transactions", "statistics"]);
     },
     onError: () => {
-      queryClient.invalidateQueries(["transactions"]);
+      queryClient.invalidateQueries(["transactions", "statistics"]);
     },
   });
 
