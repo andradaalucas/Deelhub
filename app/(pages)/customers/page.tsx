@@ -1,10 +1,14 @@
 "use client";
 import { DataTable } from "@/components/data-table";
 import { columns } from "@/components/customers/table-components/columns";
-import { getAllCustomers } from "@/services/customers";
+import {
+  getAllCustomers,
+  getCustomerStats,
+  getTopSpenders,
+} from "@/services/customers";
 import { useQuery } from "@tanstack/react-query";
 import { OptionsAndCreate } from "@/components/customers/table-components";
-import { Overview } from "@/components/customers/overview";
+import { AnalyticsCustomers } from "@/components/customers/overview";
 import Head from "next/head";
 
 export default function Page() {
@@ -13,13 +17,33 @@ export default function Page() {
     isLoading,
     isError,
   } = useQuery(["customers"], () => getAllCustomers());
+  const {
+    data: statistics,
+    isLoading: isLoadingStatistics,
+    isError: isErrorStatistics,
+  } = useQuery(["statistics"], () => getCustomerStats(), {
+    staleTime: 1000 * 60,
+    refetchOnWindowFocus: false,
+  });
 
+  const {
+    data: topSpenders,
+    isLoading: IsLoadingTopSpenders,
+    isError: isErrorSpenders,
+  } = useQuery(["topspenders"], () => getTopSpenders(), {
+    staleTime: 1000 * 60,
+    refetchOnWindowFocus: false,
+  });
   return (
     <>
-      <Head>
-        <title>My page title</title>
-      </Head>
-      <Overview />
+      <AnalyticsCustomers
+        data={statistics}
+        topSpends={topSpenders}
+        isLoadingSpenders={IsLoadingTopSpenders}
+        isErrorSpenders={isErrorSpenders}
+        isLoading={isLoadingStatistics}
+        isError={isErrorStatistics}
+      />
       <DataTable
         columns={columns}
         data={customers || []}
