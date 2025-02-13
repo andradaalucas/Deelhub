@@ -93,9 +93,7 @@ export function CreateForm() {
     mutationFn: createTransactions,
     onSuccess: () => {
       queryClient.invalidateQueries(["transactions"]);
-    },
-    onError: () => {
-      queryClient.invalidateQueries(["transactions"]);
+      queryClient.invalidateQueries(["statistics"]);
     },
   });
 
@@ -393,7 +391,6 @@ export function CreateForm() {
                                   placeholder="Name"
                                   {...form.register(`products.${index}.name`)}
                                   className={`mt-1 resize-none rounded-none pb-0.5 shadow-none`}
-                                 
                                 />
                               </TableCell>
                               <TableCell>

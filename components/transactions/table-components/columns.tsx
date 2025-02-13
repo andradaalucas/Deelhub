@@ -58,10 +58,8 @@ const handleDownloadPDF = async (invoiceData: PDFData) => {
   // try {
   //   // Primero generamos el documento
   //   const pdfDoc = <InvoiceTemplate {...invoiceData} />;
-
   //   // Luego lo convertimos a blob
   //   const blob = await pdf(pdfDoc).toBlob();
-
   //   // Finalmente lo descargamos
   //   saveAs(blob, `invoice_${invoiceData.id}.pdf`);
   // } catch (error) {
@@ -82,9 +80,7 @@ const ActionsCell = ({ row }: any) => {
     mutationFn: (id: any) => deleteTransactions(id),
     onSuccess: () => {
       queryClient.invalidateQueries(["transactions"]);
-    },
-    onError: () => {
-      queryClient.invalidateQueries(["transactions"]);
+      queryClient.invalidateQueries(["statistics"]);
     },
   });
 
