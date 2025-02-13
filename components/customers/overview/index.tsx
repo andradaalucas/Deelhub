@@ -22,9 +22,9 @@ export function Overview() {
       description: "+5.2% last month",
     },
     {
-      title: "Average Spend",
+      title: "Disabled",
       value: "$345",
-      description: "Per customer",
+      description: "",
     },
     {
       title: "Customer Retention",
@@ -34,7 +34,7 @@ export function Overview() {
     {
       title: "New Customers",
       value: "89",
-      description: "This month",
+      description: "In the last month",
     },
   ];
 
@@ -47,7 +47,7 @@ export function Overview() {
   ];
 
   return (
-    <div className="mx-auto w-full max-w-5xl grid-cols-2 gap-6">
+    <div className="mx-auto w-full max-w-5xl grid-cols-2 gap-6 p-2">
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {cardData.map((card, index) => (
