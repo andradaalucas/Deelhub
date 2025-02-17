@@ -1,87 +1,74 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import {
-  FrownIcon as FaceFrown,
-  Meh as FaceMeh,
-  SmileIcon as FaceSmile,
-  Flag,
-} from "lucide-react";
-import { SidebarMenuButton } from "@/components/ui/sidebar";
-import { Toggle } from "@/components/ui/toggle";
+import * as React from "react"
+import Link from "next/link"
+import { MessageSquare } from "lucide-react"
 
-type Sentiment = "sad" | "neutral" | "happy" | null;
+import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
-export function FeedbackForm() {
-  const [open, setOpen] = useState(false);
-  const [selectedSentiment, setSelectedSentiment] = useState<Sentiment>(null);
-
-  const sentiments = [
-    { icon: FaceFrown, value: "sad" as const },
-    { icon: FaceMeh, value: "neutral" as const },
-    { icon: FaceSmile, value: "happy" as const },
-  ];
+export function FeedbackDropdown() {
+  const [open, setOpen] = React.useState(false)
 
   return (
-    <>
-      <SidebarMenuButton asChild>
-        <button
-          onClick={() => setOpen(true)}
-          className="flex items-center gap-2"
+    <DropdownMenu open={open} onOpenChange={setOpen}>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-white bg-zinc-800 border-zinc-700 hover:bg-zinc-800 hover:border-zinc-600 transition-colors"
         >
-          <Flag />
-          <span>Feedback</span>
-        </button>
-      </SidebarMenuButton>
-      <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogContent className="p-0 sm:max-w-md">
-          <AlertDialogHeader className="p-4">
-            <AlertDialogTitle className="text-xl font-semibold">
-              Leave Feedback
-            </AlertDialogTitle>
-            <p className="text-sm text-muted-foreground">
-              Wed love to hear what went well or how we can improve the product
-              experience.
-            </p>
-          </AlertDialogHeader>
-          <div className="pt-4">
-            <div className="p-4">
-              <Textarea placeholder="Your feedback" className="resize-none" />
-            </div>
-            <AlertDialogFooter className="flex items-center justify-between gap-2 rounded-b-lg border bg-zinc-100/75 px-8 py-6 dark:bg-zinc-900/75">
-              <div className="flex gap-4">
-                {sentiments.map(({ icon: Icon, value }) => (
-                  <Toggle key={value}>
-                    <Icon className="h-6 w-6" />
-                  </Toggle>
-                ))}
-              </div>
-              <div className="flex items-center gap-2">
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <div>
-                  <Button
-                    type="submit"
-                    size="sm"
-                    className="bg-blue text-sm text-white hover:bg-hoverBlue"
-                  >
-                    Continue
-                  </Button>
-                </div>
-              </div>
-            </AlertDialogFooter>
+          <MessageSquare className="h-4 w-4 mr-2" />
+          Feedback
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-[400px] p-4 bg-zinc-900 border border-zinc-800 text-zinc-300">
+        <form
+          className="space-y-4"
+          onSubmit={(e) => {
+            e.preventDefault()
+            // Handle form submission
+            setOpen(false)
+          }}
+        >
+          <Textarea
+            className="min-h-[120px] resize-none bg-zinc-900 border-zinc-800 text-zinc-300 placeholder:text-zinc-600 focus-visible:ring-zinc-700"
+            placeholder="Ideas on how to improve this page. Use the Support Form for technical issues."
+          />
+          <div className="flex items-center gap-2 justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              className="border-zinc-800 bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="border-zinc-800 bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300"
+            >
+              Clear
+            </Button>
+            <Button type="submit" className="bg-[#2c2c2c] text-white hover:bg-[#3a3a3a]">
+              Send feedback
+            </Button>
           </div>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
-  );
+          <div className="text-sm text-zinc-500">
+            Have a technical issue? Contact{" "}
+            <Link href="/" className="text-[#2c2c2c] hover:text-[#3a3a3a]">
+              Supabase support
+            </Link>{" "}
+            or{" "}
+            <Link href="/" className="text-[#2c2c2c] hover:text-[#3a3a3a]">
+              browse our docs
+            </Link>
+            .
+          </div>
+        </form>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
 }
+

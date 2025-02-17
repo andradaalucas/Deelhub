@@ -1,5 +1,6 @@
 "use client";
 
+import { Automation } from "@/components/automation";
 import { ComingSoon } from "@/components/coming-soon";
 import { Brain, Mail, Users } from "lucide-react";
 
@@ -24,7 +25,6 @@ const features = [
   },
 ];
 
-
 export default function Page() {
-  return <ComingSoon features={features} />;
+  return <Automation />;
 }

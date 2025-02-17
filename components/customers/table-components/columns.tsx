@@ -153,7 +153,7 @@ const ActionsCell = ({ row }: any) => {
             {enabledOrDisabled ? "Disable" : "Enable"}
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="cursor-pointer text-red-500"
+            className="cursor-pointer text-red-500 hover:bg-red-500 hover:text-white"
             onClick={handleDelete}
           >
             Delete

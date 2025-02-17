@@ -33,7 +33,7 @@ export const formSchemaTransactions = z
       return hasProducts;
     },
     {
-      message: "At least one product or service is required",
+      message: "At least one item is required.",
     },
   );
 
