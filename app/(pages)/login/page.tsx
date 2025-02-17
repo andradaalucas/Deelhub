@@ -1,6 +1,5 @@
 import LoginButton from "@/components/auth/login";
 import { StatusChecker } from "@/components/status-checker";
-import { Vercel, Nextjs, Supabase, TypeScript } from "@/components/ui/brands";
 
 export default function Page() {
   return (
@@ -21,15 +20,6 @@ export default function Page() {
         <div className="flex justify-center">
           <LoginButton />
         </div>
-        <section>
-          <h2 className="font-semibold">Build with</h2>
-          <div className="flex gap-4">
-            <Vercel className="h-9 w-9 grayscale" />
-            <Nextjs className="h-9 w-9 grayscale" />
-            <Supabase className="h-9 w-9 grayscale" />
-            <TypeScript className="h-9 w-9 grayscale" />
-          </div>
-        </section>
         <div className="flex-grow" />
         <section>
           <StatusChecker slug="deelhub" />
