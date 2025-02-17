@@ -21,7 +21,6 @@ import {
   UsersIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { FeedbackForm } from "../feedback";
 import useSession from "@/utils/supabase/use-session";
 import { NavUser } from "./nav-user";
 
