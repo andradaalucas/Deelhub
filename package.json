@@ -12,6 +12,7 @@
     "@geist-ui/react": "^2.2.5",
     "@hookform/resolvers": "^3.4.2",
     "@nextui-org/react": "^2.4.1",
+    "@openstatus/react": "^0.0.3",
     "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-checkbox": "^1.0.4",
