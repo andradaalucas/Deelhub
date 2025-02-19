@@ -94,22 +94,6 @@ export function AppSidebar() {
                 ))}
               </SidebarMenu>
             </SidebarGroupContent>
-            <SidebarGroupLabel>Projects</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    {/* <Link href={item.url}> */}
-                    {/* <item.icon /> */}
-                    <Link href="/projects">
-                      <Plus />
-                      <span>Add Project</span>
-                    </Link>
-                    {/* </Link> */}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>

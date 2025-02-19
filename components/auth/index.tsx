@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { DropdownMenuItem } from "../ui/dropdown-menu";
-import { createSupabaseBrowserClient } from "@/utils/supabase/browser";
+import { createSupabaseBrowserClient } from "@/utils/supabase/supabase-browser";
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 

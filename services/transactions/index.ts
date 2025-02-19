@@ -1,6 +1,6 @@
 "use client";
 
-import { createSupabaseBrowserClient } from "@/utils/supabase/browser";
+import { createSupabaseBrowserClient } from "@/utils/supabase/supabase-browser";
 import { getUserSession } from "../user_management";
 
 const supabase = createSupabaseBrowserClient();
@@ -90,7 +90,7 @@ export const getAllStatistics = async () => {
 
     // Formatear los totales con separadores y 2 decimales
     const formatNumber = (num: number) =>
-      num.toLocaleString("en-US", {
+      num?.toLocaleString("en-US", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       });

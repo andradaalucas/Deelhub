@@ -1,36 +1,9 @@
 "use client";
 
-import * as z from "zod";
 import { useEffect, useState } from "react";
-
-const statusEnum = z.enum([
-  "operational",
-  "degraded_performance",
-  "partial_outage",
-  "major_outage",
-  "under_maintenance",
-  "unknown",
-  "incident",
-]);
-
-const statusSchema = z.object({ status: statusEnum });
-
-const dictionary = {
-  operational: { label: "Operational", color: "bg-green-500" },
-  degraded_performance: {
-    label: "Degraded Performance",
-    color: "bg-yellow-500",
-  },
-  partial_outage: { label: "Partial Outage", color: "bg-yellow-500" },
-  major_outage: { label: "Major Outage", color: "bg-red-500" },
-  unknown: { label: "Unknown", color: "bg-gray-500" },
-  incident: { label: "Incident", color: "bg-yellow-500" },
-  under_maintenance: { label: "Under Maintenance", color: "bg-blue-500" },
-};
-
-interface StatusCheckerProps {
-  slug: string;
-}
+import { statusSchema } from "./schema";
+import { StatusCheckerProps } from "./types";
+import { dictionary } from "./dictionary";
 
 export function StatusChecker({ slug }: StatusCheckerProps) {
   const [status, setStatus] = useState<{ label: string; color: string } | null>(

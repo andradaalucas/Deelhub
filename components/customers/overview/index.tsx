@@ -56,7 +56,7 @@ export function AnalyticsCustomers({
                 {isLoading || isError ? (
                   <div className="h-8 w-24 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
                 ) : (
-                  data?.totalCustomers.toLocaleString()
+                  data?.totalCustomers?.toLocaleString()
                 )}
               </div>
               <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75"></div>
@@ -71,7 +71,7 @@ export function AnalyticsCustomers({
                 {isLoading || isError ? (
                   <div className="h-8 w-24 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
                 ) : (
-                  data?.disabled.toLocaleString()
+                  data?.disabled?.toLocaleString()
                 )}
               </div>
               <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75"></div>
@@ -89,7 +89,7 @@ export function AnalyticsCustomers({
                 {isLoading || isError ? (
                   <div className="h-8 w-24 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
                 ) : (
-                  data?.customerRetention.toLocaleString() + "%"
+                  data?.customerRetention?.toLocaleString() + "%"
                 )}
               </div>
               <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
@@ -110,7 +110,7 @@ export function AnalyticsCustomers({
                 {isLoading || isError ? (
                   <div className="h-8 w-24 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
                 ) : (
-                  data?.newCustomers.toLocaleString()
+                  data?.newCustomers?.toLocaleString()
                 )}
               </div>
               <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
@@ -147,7 +147,7 @@ export function AnalyticsCustomers({
                         <div className="ml-auto h-6 w-12 bg-zinc-200 dark:bg-[#2b2b2b]" />
                       </div>
                     ))
-                  : topSpends.map((customer: any, index: any) => (
+                  : topSpends?.map((customer: any, index: any) => (
                       <div key={customer.name} className="flex items-center">
                         <Avatar className="h-9 w-9">
                           <AvatarImage src={""} alt={customer.name} />
@@ -163,7 +163,7 @@ export function AnalyticsCustomers({
                             {customer.name}
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            ${customer.totalSpent.toLocaleString()}
+                            ${customer.totalSpent?.toLocaleString()}
                           </p>
                         </div>
                         <Badge className="ml-auto" variant="secondary">

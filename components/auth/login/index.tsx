@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { createSupabaseBrowserClient } from "@/utils/supabase/browser";
+import { createSupabaseBrowserClient } from "@/utils/supabase/supabase-browser";
 import Image from "next/image";
 import { Google } from "@/components/ui/brands";
 

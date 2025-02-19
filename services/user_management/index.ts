@@ -1,5 +1,5 @@
 "use client";
-import { createSupabaseBrowserClient } from "@/utils/supabase/browser";
+import { createSupabaseBrowserClient } from "@/utils/supabase/supabase-browser";
 
 const supabase = createSupabaseBrowserClient();
 

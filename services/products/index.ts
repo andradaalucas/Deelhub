@@ -1,4 +1,4 @@
-import { createSupabaseBrowserClient } from "@/utils/supabase/browser";
+import { createSupabaseBrowserClient } from "@/utils/supabase/supabase-browser";
 import { getUserSession } from "../user_management";
 
 const supabase = createSupabaseBrowserClient();
