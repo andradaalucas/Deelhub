@@ -1,44 +1,37 @@
-"use client";
 import { DataTable } from "@/components/data-table";
 import { AnalyticsDashboard } from "@/components/transactions/overview";
 import { OptionsAndCreate } from "@/components/transactions/table-components";
 import { columns } from "@/components/transactions/table-components/columns";
-import { getAllStatistics, getAllTransactions } from "@/services/transactions";
-import { useQuery } from "@tanstack/react-query";
+import {
+  getAllStatistics,
+  getTransactions,
+} from "@/services/transactions/server";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+import { Hydrate } from "@tanstack/react-query";
 
-export default function Page() {
-  const {
-    data: transactions,
-    isLoading,
-    isError,
-  } = useQuery(["transactions"], () => getAllTransactions(), {
-    staleTime: 1000 * 60,
-    refetchOnWindowFocus: false,
+export default async function Page() {
+  const queryClient = new QueryClient();
+
+  const statistics = await queryClient.fetchQuery({
+    queryKey: ["statistics"],
+    queryFn: getAllStatistics,
   });
-  const {
-    data: statistics,
-    isLoading: isLoadingStatistics,
-    isError: isErrorStatistics,
-  } = useQuery(["statistics"], () => getAllStatistics(), {
-    staleTime: 1000 * 60,
-    refetchOnWindowFocus: false,
+  const transactions = await queryClient.fetchQuery({
+    queryKey: ["transactions"],
+    queryFn: getTransactions,
   });
 
   return (
-    <>
-      <AnalyticsDashboard
-        data={statistics}
-        isLoading={isLoadingStatistics}
-        isError={isErrorStatistics}
-      />
+    <Hydrate state={dehydrate(queryClient)}>
+      <AnalyticsDashboard data={statistics} isLoading={false} isError={false} />
       <DataTable
         columns={columns}
-        data={transactions || []}
-        filter="customer"
-        isLoading={isLoading}
-        isError={isError}
+        data={transactions}
+        filter="name"
+        isLoading={false}
+        isError={false}
         Component={OptionsAndCreate}
       />
-    </>
+    </Hydrate>
   );
 }

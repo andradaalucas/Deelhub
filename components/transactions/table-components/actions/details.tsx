@@ -55,7 +55,6 @@ export function Details({
   };
   const status = rowData?.status || undefined;
 
-  console.log("rowData", rowData);
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
