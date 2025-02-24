@@ -11,7 +11,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { createCustomersFromCsv } from "@/services/customers";
+import { createCustomersFromCsv } from "@/queries/client/customers";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { File, Upload, X } from "lucide-react";
 import Papa from "papaparse";

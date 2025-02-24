@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { exportTransactionsOnSheet } from "@/services/transactions";
+import { exportTransactionsOnSheet } from "@/queries/client/transactions";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { FileSpreadsheet } from "lucide-react";
 import { useState } from "react";

@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteTransactions } from "@/services/transactions";
+import { deleteTransactions } from "@/queries/client/transactions";
 // import { PDFDownloadLink } from '@react-pdf/renderer';
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { pdf } from "@react-pdf/renderer";

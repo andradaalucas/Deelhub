@@ -16,7 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { RowData } from "../../types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateTransactions } from "@/services/transactions";
+import { updateTransactions } from "@/queries/client/transactions";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";

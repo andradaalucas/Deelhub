@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { getUserPresets, updateUserPresets } from "@/services/user_management";
+import { getUserPresets, updateUserPresets } from "@/queries/client/user_management";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
@@ -33,7 +33,7 @@ import {
   SelectValue,
   SelectItem,
 } from "@/components/ui/select";
-import { getAllCountries } from "@/services/countries";
+import { getAllCountries } from "@/queries/client/countries";
 
 const formSchemaBrand = z.object({
   company_name: z

@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
-import { exportTransactionsOnSheet } from "@/services/transactions";
+import { exportTransactionsOnSheet } from "@/queries/client/transactions";
 
 export function AuthorizationOption({ isOpen, setIsOpen }: any) {
   const handleExport = async () => {

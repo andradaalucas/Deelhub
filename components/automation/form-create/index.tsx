@@ -45,8 +45,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { getWithoutTrashedCustomers } from "@/services/customers";
-import { createTransactions } from "@/services/transactions";
+import { getWithoutTrashedCustomers } from "@/queries/client/customers";
+import { createTransactions } from "@/queries/client/transactions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";

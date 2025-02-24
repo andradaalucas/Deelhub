@@ -1,8 +1,11 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { ArrowUpIcon } from "lucide-react";
+'use client'; // Asegúrate de que esto esté al inicio si es un Client Component
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getAllStatistics } from "@/queries/client/transactions";
+import { useQuery } from "@tanstack/react-query";
 
 interface AnalyticsDashboardProps {
-  data:
+  initialStatistics:
     | {
         total: string;
         paid: { total: string; count: number };
@@ -11,21 +14,39 @@ interface AnalyticsDashboardProps {
         invoices: { total: string; count: number };
       }
     | undefined;
-  isLoading: boolean;
-  isError: boolean;
 }
 
-export function AnalyticsDashboard({
-  data,
-  isLoading,
-  isError,
-}: AnalyticsDashboardProps) {
+export function AnalyticsDashboard({ initialStatistics }: AnalyticsDashboardProps) {
+  const { 
+    data: statistics, 
+    isLoading, 
+    isError 
+  } = useQuery({
+    queryKey: ["statistics"],
+    queryFn: async () => {
+      return getAllStatistics();
+    },
+    initialData: initialStatistics,
+  });
+
   const cardData = [
-    { title: "Revenue", value: data?.total, color: "" },
-    { title: "Quantity", value: data?.invoices?.count, color: "" },
-    { title: "Paid", value: data?.paid?.total, color: "bg-[#56663e]" },
-    { title: "Pending", value: data?.pending?.total, color: "bg-[#0a85d1]" },
-    { title: "Canceled", value: data?.canceled?.total, color: "bg-[#e14133]" },
+    { title: "Revenue", value: statistics?.total, color: "" },
+    { title: "Quantity", value: statistics?.invoices?.count, color: "" },
+    {
+      title: "Paid",
+      value: statistics?.paid?.total,
+      color: "bg-[#56663e]",
+    },
+    {
+      title: "Pending",
+      value: statistics?.pending?.total,
+      color: "bg-[#0a85d1]",
+    },
+    {
+      title: "Canceled",
+      value: statistics?.canceled?.total,
+      color: "bg-[#e14133]",
+    },
   ];
 
   return (
@@ -46,13 +67,15 @@ export function AnalyticsDashboard({
             </CardHeader>
             <CardContent className="p-0">
               <div className="flex w-full justify-between px-6 font-mono text-2xl font-semibold">
-                {isLoading || isError ? (
+                {isLoading && !statistics ? (
                   <div className="h-8 w-full animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
+                ) : isError ? (
+                  <span>Error</span>
                 ) : (
                   <span>
                     {card.title === "Quantity"
-                      ? card.value
-                      : `USD $${card.value}`}
+                      ? card.value ?? 0
+                      : `USD $${card.value ?? '0'}`}
                   </span>
                 )}
               </div>

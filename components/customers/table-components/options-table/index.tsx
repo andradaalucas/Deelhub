@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { exportCustomerOnSheet } from "@/services/customers";
+import { exportCustomerOnSheet } from "@/queries/client/customers";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { FileSpreadsheet } from "lucide-react";
 import { useState } from "react";

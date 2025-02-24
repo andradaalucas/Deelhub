@@ -1,13 +1,13 @@
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { UsePathName } from "@/hooks/use-pathname";
 import { cn } from "@/lib/utils";
+import Providers from "@/tanstack-provider";
 import { NextUIProvider } from "@nextui-org/react";
 import { GeistMono } from "geist/font/mono";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { UsePathName } from "@/hooks/use-pathname";
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
-import Providers from "./providers";
 
 export default function HomeLayout({
   children,
@@ -31,16 +31,14 @@ export default function HomeLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* <QueryClientProvider client={queryClient}> */}
-          <NextUIProvider>
-            <SidebarProvider>
-              <Providers>
+          <Providers>
+            <NextUIProvider>
+              <SidebarProvider>
                 <UsePathName>{children}</UsePathName>
-              </Providers>
-            </SidebarProvider>
-            <Toaster closeButton richColors />
-          </NextUIProvider>
-          {/* </QueryClientProvider> */}
+              </SidebarProvider>
+              <Toaster closeButton richColors />
+            </NextUIProvider>
+          </Providers>
         </ThemeProvider>
       </body>
     </html>

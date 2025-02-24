@@ -1,44 +1,33 @@
-"use client";
-import { DataTable } from "@/components/data-table";
+import { dehydrate, Hydrate, QueryClient } from "@tanstack/react-query"; // Usa Hydrate en v4
+import {
+  getAllStatistics,
+  getAllTransactions,
+} from "@/queries/server/transactions";
+import { TableTransactions } from "@/components/transactions";
 import { AnalyticsDashboard } from "@/components/transactions/overview";
-import { OptionsAndCreate } from "@/components/transactions/table-components";
-import { columns } from "@/components/transactions/table-components/columns";
-import { getAllStatistics, getAllTransactions } from "@/services/transactions";
-import { useQuery } from "@tanstack/react-query";
 
-export default function Page() {
-  const {
-    data: transactions,
-    isLoading,
-    isError,
-  } = useQuery(["transactions"], () => getAllTransactions(), {
-    staleTime: 1000 * 60,
-    refetchOnWindowFocus: false,
+export default async function Page() {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["transactions"],
+    queryFn: getAllTransactions,
   });
-  const {
-    data: statistics,
-    isLoading: isLoadingStatistics,
-    isError: isErrorStatistics,
-  } = useQuery(["statistics"], () => getAllStatistics(), {
-    staleTime: 1000 * 60,
-    refetchOnWindowFocus: false,
+  await queryClient.prefetchQuery({
+    queryKey: ["statistics"],
+    queryFn: getAllStatistics,
   });
+
+  const dehydratedState = dehydrate(queryClient);
 
   return (
-    <>
+    <Hydrate state={dehydratedState}>
       <AnalyticsDashboard
-        data={statistics}
-        isLoading={isLoadingStatistics}
-        isError={isErrorStatistics}
+        initialStatistics={queryClient.getQueryData(["statistics"])}
       />
-      <DataTable
-        columns={columns}
-        data={transactions || []}
-        filter="customer"
-        isLoading={isLoading}
-        isError={isError}
-        Component={OptionsAndCreate}
+      <TableTransactions
+        initialTransactions={queryClient.getQueryData(["transactions"])}
       />
-    </>
+    </Hydrate>
   );
 }

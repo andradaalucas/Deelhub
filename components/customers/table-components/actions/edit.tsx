@@ -34,7 +34,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "../../schemas";
-import { updateCustomers } from "@/services/customers";
+import { updateCustomers } from "@/queries/client/customers";
 import { DetailsProps } from "../../types";
 import { toast } from "sonner";
 import { Mail, Phone, User } from "lucide-react";

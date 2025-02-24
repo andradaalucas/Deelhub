@@ -1,15 +1,14 @@
 "use client";
-import { DataTable } from "@/components/data-table";
+import { AnalyticsCustomers } from "@/components/customers/overview";
+import { OptionsAndCreate } from "@/components/customers/table-components";
 import { columns } from "@/components/customers/table-components/columns";
+import { DataTable } from "@/components/data-table";
 import {
   getAllCustomers,
   getCustomerStats,
   getTopSpenders,
-} from "@/services/customers";
+} from "@/queries/client/customers";
 import { useQuery } from "@tanstack/react-query";
-import { OptionsAndCreate } from "@/components/customers/table-components";
-import { AnalyticsCustomers } from "@/components/customers/overview";
-import Head from "next/head";
 
 export default function Page() {
   const {

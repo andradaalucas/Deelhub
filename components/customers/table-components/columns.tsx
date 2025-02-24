@@ -15,7 +15,7 @@ import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteCustomers, updateCustomers } from "@/services/customers";
+import { deleteCustomers, updateCustomers } from "@/queries/client/customers";
 import { EditCustomers } from "./actions/edit";
 import { DetailsCustomers } from "./actions/details";
 import { ConfirmDelete } from "@/components/atom/confirm-delete";
