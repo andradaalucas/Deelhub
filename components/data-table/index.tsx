@@ -40,11 +40,8 @@ export function DataTable<TData, TValue>({
   Component,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
@@ -73,9 +70,7 @@ export function DataTable<TData, TValue>({
           <div className="flex items-center justify-between gap-2 py-4">
             <Input
               placeholder={`Filter ${filter}`}
-              value={
-                (table.getColumn(filter)?.getFilterValue() as string) ?? ""
-              }
+              value={(table.getColumn(filter)?.getFilterValue() as string) ?? ""}
               onChange={(event) =>
                 table.getColumn(filter)?.setFilterValue(event.target.value)
               }
@@ -103,7 +98,6 @@ export function DataTable<TData, TValue>({
               </TableHeader>
               <TableBody>
                 {isLoading ? (
-                  // Si `isLoading` es true, muestra 5 filas de skeletons
                   Array.from({ length: 5 }).map((_, index) => (
                     <TableRow key={index}>
                       {columns.map((column, colIndex) => (
@@ -114,7 +108,6 @@ export function DataTable<TData, TValue>({
                     </TableRow>
                   ))
                 ) : isError ? (
-                  // Si isError es true, muestra un mensaje de error
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
@@ -124,7 +117,6 @@ export function DataTable<TData, TValue>({
                     </TableCell>
                   </TableRow>
                 ) : table.getRowModel().rows?.length ? (
-                  // Si hay datos, renderiza las filas
                   table.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
@@ -141,7 +133,6 @@ export function DataTable<TData, TValue>({
                     </TableRow>
                   ))
                 ) : (
-                  // Si no hay datos, muestra "No results"
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}

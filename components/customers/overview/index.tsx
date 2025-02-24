@@ -1,3 +1,5 @@
+'use client'; // Asegúrate de que esto esté al inicio
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -8,9 +10,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ArrowUpIcon } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { getCustomerStats, getTopSpenders } from "@/queries/client/customers"; 
 
 interface AnalyticsCustomersProps {
-  data:
+  initialData:
     | {
         totalCustomers: number;
         disabled: number;
@@ -19,28 +23,37 @@ interface AnalyticsCustomersProps {
       }
     | undefined
     | null;
-  topSpends: any;
-  isLoadingSpenders: boolean;
-  isErrorSpenders: boolean;
-  isLoading: boolean;
-  isError: boolean;
+  initialTopSpends: any;
 }
 
 export function AnalyticsCustomers({
-  data,
-  isLoading,
-  topSpends,
-  isLoadingSpenders,
-  isErrorSpenders,
-  isError,
+  initialData,
+  initialTopSpends,
 }: AnalyticsCustomersProps) {
-  const topCustomers = [
-    "Frank Miller",
-    "Grace Lee",
-    "Henry Wilson",
-    "Ivy Chen",
-    "Jack Taylor",
-  ];
+  const { 
+    data: customerStats, 
+    isLoading: isLoadingStats, 
+    isError: isErrorStats 
+  } = useQuery({
+    queryKey: ["customer-stats"],
+    queryFn: async () => {
+      return getCustomerStats(); 
+    },
+    initialData: initialData,
+  });
+
+  const { 
+    data: topSpends, 
+    isLoading: isLoadingSpenders, 
+    isError: isErrorSpenders 
+  } = useQuery({
+    queryKey: ["top-spenders"],
+    queryFn: async () => {
+      return getTopSpenders(); // Función que obtiene los top spenders
+    },
+    initialData: initialTopSpends,
+  });
+
   return (
     <div className="mx-auto w-full max-w-5xl grid-cols-2 gap-6 p-2">
       <div className="grid gap-6 lg:grid-cols-2">
@@ -53,10 +66,12 @@ export function AnalyticsCustomers({
             </CardHeader>
             <CardContent className="p-0">
               <div className="px-6 font-mono text-2xl font-semibold">
-                {isLoading || isError ? (
+                {isLoadingStats && !customerStats ? (
                   <div className="h-8 w-24 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
+                ) : isErrorStats ? (
+                  <span>Error</span>
                 ) : (
-                  data?.totalCustomers?.toLocaleString()
+                  customerStats?.totalCustomers?.toLocaleString() ?? "0"
                 )}
               </div>
               <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75"></div>
@@ -68,10 +83,12 @@ export function AnalyticsCustomers({
             </CardHeader>
             <CardContent className="p-0">
               <div className="px-6 font-mono text-2xl font-semibold">
-                {isLoading || isError ? (
+                {isLoadingStats && !customerStats ? (
                   <div className="h-8 w-24 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
+                ) : isErrorStats ? (
+                  <span>Error</span>
                 ) : (
-                  data?.disabled?.toLocaleString()
+                  customerStats?.disabled?.toLocaleString() ?? "0"
                 )}
               </div>
               <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75"></div>
@@ -86,10 +103,12 @@ export function AnalyticsCustomers({
             </CardHeader>
             <CardContent className="p-0">
               <div className="px-6 font-mono text-2xl font-semibold">
-                {isLoading || isError ? (
+                {isLoadingStats && !customerStats ? (
                   <div className="h-8 w-24 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
+                ) : isErrorStats ? (
+                  <span>Error</span>
                 ) : (
-                  data?.customerRetention?.toLocaleString() + "%"
+                  `${customerStats?.customerRetention?.toLocaleString() ?? "0"}%`
                 )}
               </div>
               <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
@@ -107,10 +126,12 @@ export function AnalyticsCustomers({
             </CardHeader>
             <CardContent className="p-0">
               <div className="px-6 font-mono text-2xl font-semibold">
-                {isLoading || isError ? (
+                {isLoadingStats && !customerStats ? (
                   <div className="h-8 w-24 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
+                ) : isErrorStats ? (
+                  <span>Error</span>
                 ) : (
-                  data?.newCustomers?.toLocaleString()
+                  customerStats?.newCustomers?.toLocaleString() ?? "0"
                 )}
               </div>
               <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
@@ -133,44 +154,48 @@ export function AnalyticsCustomers({
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {isLoading || isError
-                  ? Array.from({ length: 5 }).map((_, index) => (
-                      <div
-                        key={index}
-                        className="flex animate-pulse items-center"
-                      >
-                        <div className="h-9 w-9 rounded-full bg-zinc-200 dark:bg-[#2b2b2b]" />
-                        <div className="ml-4 w-full space-y-1">
-                          <div className="h-4 w-32 bg-zinc-200 dark:bg-[#2b2b2b]" />
-                          <div className="h-3 w-24 bg-zinc-200 dark:bg-[#2b2b2b]" />
-                        </div>
-                        <div className="ml-auto h-6 w-12 bg-zinc-200 dark:bg-[#2b2b2b]" />
+                {isLoadingSpenders && !topSpends ? (
+                  Array.from({ length: 5 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="flex animate-pulse items-center"
+                    >
+                      <div className="h-9 w-9 rounded-full bg-zinc-200 dark:bg-[#2b2b2b]" />
+                      <div className="ml-4 w-full space-y-1">
+                        <div className="h-4 w-32 bg-zinc-200 dark:bg-[#2b2b2b]" />
+                        <div className="h-3 w-24 bg-zinc-200 dark:bg-[#2b2b2b]" />
                       </div>
-                    ))
-                  : topSpends?.map((customer: any, index: any) => (
-                      <div key={customer.name} className="flex items-center">
-                        <Avatar className="h-9 w-9">
-                          <AvatarImage src={""} alt={customer.name} />
-                          <AvatarFallback>
-                            {customer.name
-                              .split(" ")
-                              .map((n: any) => n[0])
-                              .join("")}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="ml-4 space-y-1">
-                          <p className="text-sm font-medium leading-none">
-                            {customer.name}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            ${customer.totalSpent?.toLocaleString()}
-                          </p>
-                        </div>
-                        <Badge className="ml-auto" variant="secondary">
-                          Top {index + 1}
-                        </Badge>
+                      <div className="ml-auto h-6 w-12 bg-zinc-200 dark:bg-[#2b2b2b]" />
+                    </div>
+                  ))
+                ) : isErrorSpenders ? (
+                  <div className="text-sm text-red-500">Error loading top spenders</div>
+                ) : (
+                  topSpends?.map((customer: any, index: number) => (
+                    <div key={customer.name} className="flex items-center">
+                      <Avatar className="h-9 w-9">
+                        <AvatarImage src={""} alt={customer.name} />
+                        <AvatarFallback>
+                          {customer.name
+                            .split(" ")
+                            .map((n: any) => n[0])
+                            .join("")}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="ml-4 space-y-1">
+                        <p className="text-sm font-medium leading-none">
+                          {customer.name}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          ${customer.totalSpent?.toLocaleString() ?? "0"}
+                        </p>
                       </div>
-                    ))}
+                      <Badge className="ml-auto" variant="secondary">
+                        Top {index + 1}
+                      </Badge>
+                    </div>
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>

@@ -1,4 +1,4 @@
-import { dehydrate, Hydrate, QueryClient } from "@tanstack/react-query"; // Usa Hydrate en v4
+import { dehydrate, Hydrate, QueryClient } from "@tanstack/react-query"; 
 import {
   getAllStatistics,
   getAllTransactions,
