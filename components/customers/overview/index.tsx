@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -7,40 +9,36 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowUpIcon } from "lucide-react";
-
-interface AnalyticsCustomersProps {
-  data:
-    | {
-        totalCustomers: number;
-        disabled: number;
-        customerRetention: number;
-        newCustomers: number;
-      }
-    | undefined
-    | null;
-  topSpends: any;
-  isLoadingSpenders: boolean;
-  isErrorSpenders: boolean;
-  isLoading: boolean;
-  isError: boolean;
-}
+import { useQuery } from "@tanstack/react-query";
+import { getCustomerStats, getTopSpenders } from "@/queries/client/customers";
 
 export function AnalyticsCustomers({
-  data,
-  isLoading,
-  topSpends,
-  isLoadingSpenders,
-  isErrorSpenders,
-  isError,
-}: AnalyticsCustomersProps) {
-  const topCustomers = [
-    "Frank Miller",
-    "Grace Lee",
-    "Henry Wilson",
-    "Ivy Chen",
-    "Jack Taylor",
-  ];
+  initialStatistics,
+  initialTopSpenders,
+}: {
+  initialStatistics: any;
+  initialTopSpenders: any;
+}) {
+  const {
+    data: statistics,
+    isLoading: isLoadingStats,
+    isError: isErrorStats,
+  } = useQuery({
+    queryKey: ["statistics"],
+    queryFn: getCustomerStats,
+    initialData: initialStatistics,
+  });
+
+  const {
+    data: topSpends,
+    isLoading: isLoadingSpenders,
+    isError: isErrorSpenders,
+  } = useQuery({
+    queryKey: ["topSpenders"],
+    queryFn: getTopSpenders,
+    initialData: initialTopSpenders,
+  });
+
   return (
     <div className="mx-auto w-full max-w-5xl grid-cols-2 gap-6 p-2">
       <div className="grid gap-6 lg:grid-cols-2">
@@ -53,10 +51,10 @@ export function AnalyticsCustomers({
             </CardHeader>
             <CardContent className="p-0">
               <div className="px-6 font-mono text-2xl font-semibold">
-                {isLoading || isError ? (
+                {isLoadingStats || isErrorStats ? (
                   <div className="h-8 w-24 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
                 ) : (
-                  data?.totalCustomers?.toLocaleString()
+                  statistics?.totalCustomers?.toLocaleString()
                 )}
               </div>
               <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75"></div>
@@ -68,10 +66,10 @@ export function AnalyticsCustomers({
             </CardHeader>
             <CardContent className="p-0">
               <div className="px-6 font-mono text-2xl font-semibold">
-                {isLoading || isError ? (
+                {isLoadingStats || isErrorStats ? (
                   <div className="h-8 w-24 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
                 ) : (
-                  data?.disabled?.toLocaleString()
+                  statistics?.disabled?.toLocaleString()
                 )}
               </div>
               <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75"></div>
@@ -86,10 +84,10 @@ export function AnalyticsCustomers({
             </CardHeader>
             <CardContent className="p-0">
               <div className="px-6 font-mono text-2xl font-semibold">
-                {isLoading || isError ? (
+                {isLoadingStats || isErrorStats ? (
                   <div className="h-8 w-24 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
                 ) : (
-                  data?.customerRetention?.toLocaleString() + "%"
+                  `${statistics?.customerRetention?.toLocaleString()}%`
                 )}
               </div>
               <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
@@ -107,10 +105,10 @@ export function AnalyticsCustomers({
             </CardHeader>
             <CardContent className="p-0">
               <div className="px-6 font-mono text-2xl font-semibold">
-                {isLoading || isError ? (
+                {isLoadingStats || isErrorStats ? (
                   <div className="h-8 w-24 animate-pulse bg-zinc-200 dark:bg-[#2b2b2b]" />
                 ) : (
-                  data?.newCustomers?.toLocaleString()
+                  statistics?.newCustomers?.toLocaleString()
                 )}
               </div>
               <div className="mt-2 h-9 rounded-b-lg border bg-zinc-100/75 px-6 py-2 dark:bg-zinc-900/75">
@@ -133,7 +131,7 @@ export function AnalyticsCustomers({
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {isLoading || isError
+                {isLoadingSpenders || isErrorSpenders
                   ? Array.from({ length: 5 }).map((_, index) => (
                       <div
                         key={index}
@@ -147,14 +145,14 @@ export function AnalyticsCustomers({
                         <div className="ml-auto h-6 w-12 bg-zinc-200 dark:bg-[#2b2b2b]" />
                       </div>
                     ))
-                  : topSpends?.map((customer: any, index: any) => (
+                  : topSpends?.map((customer: any, index: number) => (
                       <div key={customer.name} className="flex items-center">
                         <Avatar className="h-9 w-9">
-                          <AvatarImage src={""} alt={customer.name} />
+                          <AvatarImage src="" alt={customer.name} />
                           <AvatarFallback>
                             {customer.name
                               .split(" ")
-                              .map((n: any) => n[0])
+                              .map((n: string) => n[0])
                               .join("")}
                           </AvatarFallback>
                         </Avatar>

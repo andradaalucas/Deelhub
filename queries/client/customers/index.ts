@@ -119,7 +119,6 @@ export const getTopSpenders = async () => {
     // Convertir a array
     const formattedData = Object.values(customerExpenses);
 
-    console.log("Customer Expenses:", formattedData);
     return formattedData;
   } catch (error) {
     console.log("Error fetching customer expenses", error);
