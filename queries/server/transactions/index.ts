@@ -43,7 +43,7 @@ export const getAllTransactions = async () => {
     }));
     return dataFormatted;
   } catch (error) {
-    console.log("Error on fetch transactions", error);
+    console.log("Error on fetch transactions from server", error);
     return []; // Devolver un valor por defecto en caso de error
   }
 };

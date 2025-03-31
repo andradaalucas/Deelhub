@@ -46,7 +46,7 @@ export const getAllTransactions = async () => {
     console.log("dataa", dataFormatted);
     return dataFormatted;
   } catch (error) {
-    console.log("Error on fetch transactions", error);
+    console.log("Error on fetch transactions from client", error);
   }
 };
 
