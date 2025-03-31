@@ -51,6 +51,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useState, useEffect } from "react";
 
 export function CreateForm() {
   const form = useForm<FormSchemaTransactions>({
@@ -60,10 +61,14 @@ export function CreateForm() {
       currency: "USD",
       taxRate: 0,
       products: [{ name: "", price: 0, quantity: 0 }],
+      issueDate: undefined,
+      dueDate: undefined,
+      automationStartDate: undefined,
+      automationEndDate: undefined,
     },
   });
 
-  const { control, handleSubmit, setValue, getValues } = form;
+  const { control, handleSubmit, setValue, getValues, watch } = form;
 
   const { fields: productFields, remove: removeProduct } = useFieldArray({
     control,
@@ -92,7 +97,7 @@ export function CreateForm() {
   };
 
   const calculateSubtotal = () => {
-    const products = form.watch("products") || [];
+    const products = watch("products") || [];
     return products.reduce(
       (sum, product) => sum + product.price * product.quantity,
       0,
@@ -101,7 +106,7 @@ export function CreateForm() {
 
   const calculateTotal = (): number => {
     const subtotal = calculateSubtotal();
-    const taxRate = form.watch("taxRate");
+    const taxRate = watch("taxRate");
     const taxAmount = subtotal * (taxRate / 100);
     return subtotal + taxAmount;
   };
@@ -121,22 +126,39 @@ export function CreateForm() {
     // const promise = createTransaction.mutateAsync(enrichedData);
     // toast.promise(promise, {
     //   loading: "Creating transaction...",
-    //   success: () => {
-    //     return "Transaction created successfully!";
-    //   },
+    //   success: () => "Transaction created successfully!",
     //   error: "Failed to upload transaction. Please try again.",
     // });
     // promise.then(() => form.reset());
   };
 
-  const currency = form.watch("currency");
-  const taxRate = form.watch("taxRate");
+  const currency = watch("currency");
+  const taxRate = watch("taxRate");
+
+  // Estado para manejar el formateo de fechas en el cliente
+  const [issueDateDisplay, setIssueDateDisplay] = useState("Pick a date");
+  const [dueDateDisplay, setDueDateDisplay] = useState("Pick a date");
+  const [automationStartDateDisplay, setAutomationStartDateDisplay] = useState("Pick a date");
+  const [automationEndDateDisplay, setAutomationEndDateDisplay] = useState("Pick a date");
+
+  // Extraer los valores observados fuera del useEffect
+  const issueDate = watch("issueDate");
+  const dueDate = watch("dueDate");
+  const automationStartDate = watch("automationStartDate");
+  const automationEndDate = watch("automationEndDate");
+
+  useEffect(() => {
+    setIssueDateDisplay(issueDate ? format(new Date(issueDate), "MM/dd/yyyy") : "Pick a date");
+    setDueDateDisplay(dueDate ? format(new Date(dueDate), "MM/dd/yyyy") : "Pick a date");
+    setAutomationStartDateDisplay(automationStartDate ? format(new Date(automationStartDate), "MM/dd/yyyy") : "Pick a date");
+    setAutomationEndDateDisplay(automationEndDate ? format(new Date(automationEndDate), "MM/dd/yyyy") : "Pick a date");
+  }, [issueDate, dueDate, automationStartDate, automationEndDate]); // Dependencias estáticas
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-grow flex-col overflow-y-auto">
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmit)}
           className="flex h-full flex-col justify-between"
         >
           <div className="space-y-4 px-4 pb-4 pt-8 md:px-8 md:pb-8 lg:px-8">
@@ -192,9 +214,7 @@ export function CreateForm() {
                             variant="outline"
                             className="w-full px-2 py-1 text-sm"
                           >
-                            {field.value
-                              ? format(new Date(field.value), "MM/dd/yyyy")
-                              : "Pick a date"}
+                            {issueDateDisplay}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>
                         </FormControl>
@@ -217,7 +237,7 @@ export function CreateForm() {
                 control={form.control}
                 name="dueDate"
                 render={({ field }) => {
-                  const issueDate = form.watch("issueDate") || true;
+                  const issueDateValue = issueDate || true;
 
                   return (
                     <FormItem>
@@ -229,9 +249,7 @@ export function CreateForm() {
                               variant="outline"
                               className="w-full px-2 py-1 text-sm"
                             >
-                              {field.value
-                                ? format(new Date(field.value), "MM/dd/yyyy")
-                                : "Pick a date"}
+                              {dueDateDisplay}
                               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                             </Button>
                           </FormControl>
@@ -241,11 +259,10 @@ export function CreateForm() {
                             mode="single"
                             selected={field.value}
                             onSelect={field.onChange}
-                            disabled={(date) => date < issueDate}
+                            disabled={(date) => date < issueDateValue}
                           />
                         </PopoverContent>
                       </Popover>
-
                       <FormMessage />
                     </FormItem>
                   );
@@ -258,9 +275,7 @@ export function CreateForm() {
                 name="automationStartDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xs">
-                      Automation Start Date
-                    </FormLabel>
+                    <FormLabel className="text-xs">Automation Start Date</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -268,9 +283,7 @@ export function CreateForm() {
                             variant="outline"
                             className="w-full px-2 py-1 text-sm"
                           >
-                            {field.value
-                              ? format(new Date(field.value), "MM/dd/yyyy")
-                              : "Pick a date"}
+                            {automationStartDateDisplay}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>
                         </FormControl>
@@ -293,13 +306,11 @@ export function CreateForm() {
                 control={form.control}
                 name="automationEndDate"
                 render={({ field }) => {
-                  const issueDate = form.watch("automationStartDate") || true;
+                  const automationStartDateValue = automationStartDate || true;
 
                   return (
                     <FormItem>
-                      <FormLabel className="text-xs">
-                        Automation End Date
-                      </FormLabel>
+                      <FormLabel className="text-xs">Automation End Date</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -307,9 +318,7 @@ export function CreateForm() {
                               variant="outline"
                               className="w-full px-2 py-1 text-sm"
                             >
-                              {field.value
-                                ? format(new Date(field.value), "MM/dd/yyyy")
-                                : "Pick a date"}
+                              {automationEndDateDisplay}
                               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                             </Button>
                           </FormControl>
@@ -319,11 +328,10 @@ export function CreateForm() {
                             mode="single"
                             selected={field.value}
                             onSelect={field.onChange}
-                            disabled={(date) => date < issueDate}
+                            disabled={(date) => date < automationStartDateValue}
                           />
                         </PopoverContent>
                       </Popover>
-
                       <FormMessage />
                     </FormItem>
                   );
@@ -504,7 +512,6 @@ export function CreateForm() {
           </div>
           <div className="px-4 pb-4 md:px-8 md:pb-8 lg:px-8">
             <div className="bg-secondary px-4 py-2">
-              {/* <h3 className="mb-2 text-lg font-semibold">Resumen</h3> */}
               <div className="grid gap-2 text-sm">
                 <div className="flex justify-between">
                   <div>Subtotal</div>
@@ -518,7 +525,7 @@ export function CreateForm() {
                 </div>
                 <div className="mt-2 flex justify-between border-t pt-2 text-lg font-semibold">
                   <span>Total</span>
-                  <span className="font-mono">$ {calculateTotal()}</span>
+                  <span className="font-mono">{currency} {calculateTotal().toFixed(2)}</span>
                 </div>
               </div>
             </div>
