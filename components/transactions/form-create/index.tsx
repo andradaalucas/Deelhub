@@ -58,6 +58,8 @@ import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { formSchemaTransactions, FormSchemaTransactions } from "../schemas";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 export function CreateForm() {
   const [isFocused, setIsFocused] = useState(false);
@@ -438,6 +440,10 @@ export function CreateForm() {
                   >
                     Add Items
                   </Button>
+                  <div className="flex items-center space-x-2">
+                    <Switch id="notify-by-email" />
+                    <Label htmlFor="notify-by-email" className="text-xs">Notify customers by email</Label>
+                  </div>
                   {(form.formState.errors as any)[""] && (
                     <div className="mt-2 flex items-center gap-2 rounded-lg border p-4 text-xs text-zinc-600">
                       <TriangleAlert className="h-4 w-4" />

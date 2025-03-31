@@ -12,7 +12,7 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
-import { CreateForm } from "./form-create";
+import { CreateAutomation } from "./form-create";
 
 export function Automation() {
   const [automations, setAutomations] = useState([
@@ -44,7 +44,9 @@ export function Automation() {
 
   const toggleAutomation = (id: number, checked: boolean) => {
     setAutomations((prev) =>
-      prev.map((auto) => (auto.id === id ? { ...auto, active: checked } : auto))
+      prev.map((auto) =>
+        auto.id === id ? { ...auto, active: checked } : auto,
+      ),
     );
   };
 
@@ -55,7 +57,7 @@ export function Automation() {
 
   const saveEdit = (id: number) => {
     setAutomations((prev) =>
-      prev.map((auto) => (auto.id === id ? { ...auto, name: editName } : auto))
+      prev.map((auto) => (auto.id === id ? { ...auto, name: editName } : auto)),
     );
     setEditingId(null);
   };
@@ -66,19 +68,15 @@ export function Automation() {
 
   return (
     <div className="mx-auto w-full max-w-5xl space-y-6 p-4">
-      {/* Botón para crear nueva automatización */}
       <div className="flex justify-end">
-        <CreateForm />
+        <CreateAutomation />
       </div>
-
-      {/* Lista de automatizaciones */}
       <div className="space-y-4">
         {automations.map((auto) => (
           <div
             key={auto.id}
             className="flex items-center justify-between rounded-lg border bg-muted p-4"
           >
-            {/* Icono y detalles */}
             <div className="flex items-center space-x-4">
               {auto.type === "subscription" && (
                 <RefreshCw className="h-5 w-5 text-primary" />
@@ -119,15 +117,25 @@ export function Automation() {
             <div className="flex items-center space-x-2">
               <Switch
                 checked={auto.active}
-                onCheckedChange={(checked) => toggleAutomation(auto.id, checked)}
+                onCheckedChange={(checked) =>
+                  toggleAutomation(auto.id, checked)
+                }
               />
               {editingId === auto.id ? (
                 <>
-                  <Button variant="ghost" size="icon" onClick={() => saveEdit(auto.id)}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => saveEdit(auto.id)}
+                  >
                     <Check className="h-4 w-4 text-green-500" />
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={() => setEditingId(null)}>
-                    <X className="h-4 w-4 " />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setEditingId(null)}
+                  >
+                    <X className="h-4 w-4" />
                   </Button>
                 </>
               ) : (
@@ -144,7 +152,7 @@ export function Automation() {
                 size="icon"
                 onClick={() => deleteAutomation(auto.id)}
               >
-                <Delete className="h-4 w-4 " />
+                <Delete className="h-4 w-4" />
               </Button>
             </div>
           </div>

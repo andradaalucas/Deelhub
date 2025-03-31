@@ -4,7 +4,6 @@ export const getAllCustomers = async (filters?: any) => {
   try {
     const supabase = createSupabaseServerClient();
     const { data, error } = await supabase
-
       .from("customers")
       .select()
       .order("created_at", { ascending: false });

@@ -5,7 +5,7 @@ import { getAllStatistics } from "@/queries/client/transactions";
 import { useQuery } from "@tanstack/react-query";
 
 interface AnalyticsDashboardProps {
-  initialStatistics:
+  initialStatistics?:
     | {
         total: string;
         paid: { total: string; count: number };

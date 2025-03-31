@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+const frequencyEnum = z.enum([
+  "weekly",
+  "biweekly",
+  "monthly",
+  "quarterly",
+  "yearly",
+]);
+
 export const formSchemaTransactions = z
   .object({
     customers: z.array(z.string()).min(1, "At least one customer is required"),
@@ -7,6 +15,10 @@ export const formSchemaTransactions = z
     dueDate: z.date().optional(),
     currency: z.string(),
     taxRate: z.coerce.number(),
+    automationStartDate: z.date().optional(),
+    automationEndDate: z.date().optional(),
+    frequencyAutomation: frequencyEnum.optional(),
+    automationFrequency: z.string().optional(),
     products: z
       .array(
         z.object({

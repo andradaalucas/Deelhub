@@ -5,18 +5,20 @@ import { OptionsAndCreate } from "@/components/customers/table-components";
 import { columns } from "@/components/customers/table-components/columns";
 import { useQuery } from "@tanstack/react-query";
 
-export function TableCustomers({ initialCustomers }: any) {
+export function TableCustomers() {
   const {
-    data: customers,
+    data: customers = [],
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["customers"],
-    queryFn: async () => {
-      return getAllCustomers();
-    },
-    initialData: initialCustomers,
+    queryKey: ["transactions"] as const,
+    queryFn: getAllCustomers,
+    staleTime: 5 * 60 * 1000,
   });
+
+  if (isError) {
+    return <div>Error al cargar las transacciones</div>;
+  }
 
   return (
     <>

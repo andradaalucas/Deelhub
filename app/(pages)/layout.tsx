@@ -10,8 +10,8 @@ export default async function InLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="flex flex-1 flex-col gap-4 md:gap-8 md:p-6">
+    <div className="flex flex-1 flex-col gap-4 md:gap-8">
       {children}
-    </main>
+    </div>
   );
 }

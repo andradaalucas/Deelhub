@@ -4,7 +4,6 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 import { UsePathName } from "@/hooks/use-pathname";
 import { cn } from "@/lib/utils";
 import Providers from "@/tanstack-provider";
-import { NextUIProvider } from "@nextui-org/react";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
@@ -32,12 +31,10 @@ export default function HomeLayout({
           disableTransitionOnChange
         >
           <Providers>
-            <NextUIProvider>
-              <SidebarProvider>
-                <UsePathName>{children}</UsePathName>
-              </SidebarProvider>
-              <Toaster closeButton richColors />
-            </NextUIProvider>
+            <SidebarProvider>
+              <UsePathName>{children}</UsePathName>
+            </SidebarProvider>
+            <Toaster closeButton richColors />
           </Providers>
         </ThemeProvider>
       </body>

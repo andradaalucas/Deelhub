@@ -11,7 +11,6 @@
   "dependencies": {
     "@geist-ui/react": "^2.2.5",
     "@hookform/resolvers": "^3.4.2",
-    "@nextui-org/react": "^2.4.1",
     "@openstatus/react": "^0.0.3",
     "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-avatar": "^1.1.1",
@@ -24,7 +23,7 @@
     "@radix-ui/react-scroll-area": "^1.2.0",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-separator": "^1.1.0",
-    "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-slot": "^1.1.2",
     "@radix-ui/react-switch": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.1",
     "@radix-ui/react-toast": "^1.2.2",
