@@ -8,6 +8,7 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 
+// Adding comments to the code
 export default function HomeLayout({
   children,
 }: {
